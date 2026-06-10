@@ -530,7 +530,7 @@ let cur='__schedule__';
 let cloud={members:{},results:{},locked:false,password:''};
 function gm(m){if(!cloud.members[m])cloud.members[m]={teams:[]};return cloud.members[m];}
 function gr(){if(!cloud.results)cloud.results={};return cloud.results;}
-function isLocked(){return !!cloud.locked;}
+function isLocked(){return false;} // テスト中はロック無効
 function getPassword(){return localStorage.getItem('koshien_admin_pw')||'';}
 
 // ===== ロック機能 =====
