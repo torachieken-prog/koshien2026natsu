@@ -257,7 +257,7 @@
           <strong style="color:var(--crimson);">▼ コストの決め方（自動計算）</strong><br>
           ・<strong>新聞5紙の評価</strong>（特A=4点 A=3点 B=2点 C=1点、最大20点）<br>
           ・<strong>地方大会成績7項目</strong>（打率・平均得点・本塁打・盗塁・防御率・平均失点・失策を各10点満点、最大70点）<br>
-          ・総合90点満点で全校をランキングし、<strong>上位10校=5点 / 11〜30位=3点 / 31位以下=1点</strong>
+          ・総合90点満点で全校をランキングし、<strong>上位1/3=5点 / 中位1/3=3点 / 下位1/3=1点</strong>
         </div>
       </div>
       <div class="section-card">
@@ -503,7 +503,7 @@ function calcTotalPoint(team){
 }
 
 // ===== コスト判定 =====
-// 総合点の順位で判定: 上位10校→5点、11〜30位→3点、31位以下→1点
+// 総合点の順位で3等分: 上位1/3→5点、中位1/3→3点、下位1/3→1点
 function getTeamCost(no){
   const manual=(cloud.costs||{})[String(no)];
   if(manual)return manual;
@@ -512,8 +512,10 @@ function getTeamCost(no){
   const myPt=calcTotalPoint(team);
   if(myPt===null)return 3; // データ未入力は3点
   const allPts=TEAMS.map(t=>calcTotalPoint(t)).filter(p=>p!==null).sort((a,b)=>b-a);
+  const n=allPts.length;
   const rank=allPts.findIndex(p=>p<=myPt)+1;
-  return rank<=10?5:rank<=30?3:1;
+  const third=n/3;
+  return rank<=Math.ceil(third)?5:rank<=Math.ceil(third*2)?3:1;
 }
 
 const COST_LIMIT=15;
@@ -855,8 +857,10 @@ function renderAdminCost(){
     const totalPt=calcTotalPoint(t);
     const autoCost=totalPt!==null?(function(){
       const allPts=TEAMS.map(x=>calcTotalPoint(x)).filter(p=>p!==null).sort((a,b)=>b-a);
+      const n=allPts.length;
       const rank=allPts.findIndex(p=>p<=totalPt)+1;
-      return rank<=10?5:rank<=30?3:1;
+      const third=n/3;
+      return rank<=Math.ceil(third)?5:rank<=Math.ceil(third*2)?3:1;
     })():null;
 
     const row=document.createElement('div');row.className='admin-row';
