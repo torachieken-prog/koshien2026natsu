@@ -226,65 +226,58 @@
   .tag-safe{background:#d1ecf1;color:#0c5460;}
   .tag-any{background:#e2e3e5;color:#383d41;}
 
-  /* ===== ガイドタブ用スタイル（スコープ限定） ===== */
-.guide-view * {box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%}
-.guide-view {font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP',sans-serif;
-background:#F5EDD8;color:#1a0f08;font-size:17px;line-height:1.85;padding-bottom:60px}
-.guide-view {background:linear-gradient(135deg,#7a0a15,#B01020);color:#fff;padding:26px 18px;text-align:center}
-.guide-view header .sub {font-size:12px;letter-spacing:3px;color:#f0c84a;font-weight:700}
-.guide-view header h1 {font-size:25px;margin-top:6px;line-height:1.4;font-weight:900}
-.guide-view {max-width:600px;margin:0 auto;padding:0 14px}
-.guide-view h2 {font-size:21px;font-weight:900;margin:34px 0 14px;padding:11px 15px;
-background:#1a3a5c;color:#fff;border-radius:10px}
-.guide-view h2.c5 {background:linear-gradient(90deg,#7a0a15,#B01020)}
-.guide-view h2.c3 {background:linear-gradient(90deg,#1a3a5c,#2d5a8c)}
-.guide-view h2.c1 {background:linear-gradient(90deg,#2d5a27,#4a7c4e)}
-.guide-view h3 {font-size:18px;font-weight:900;margin:22px 0 10px;color:#B01020}
-.guide-view p {margin:12px 0}
-.guide-view .box {background:#fff;border-radius:12px;padding:17px;margin:14px 0;
-box-shadow:0 2px 10px rgba(0,0,0,.07)}
-.guide-view .big {font-size:19px;font-weight:900}
-.guide-view b {font-weight:900}
-.guide-view .hl {color:#B01020;font-weight:900}
-.guide-view table {width:100%;border-collapse:collapse;margin:14px 0;font-size:16px}
-.guide-view th, .guide-view td {padding:11px 8px;text-align:center;border-bottom:1px solid #E8D9B8}
-.guide-view th {background:#1a3a5c;color:#fff;font-weight:700;font-size:15px}
-.guide-view td b {color:#B01020}
-.guide-view tr:last-child td {border-bottom:none}
-.guide-view .card {background:#fff;border-radius:12px;padding:15px 16px;margin:11px 0;
-box-shadow:0 2px 9px rgba(0,0,0,.07);border-left:6px solid #ccc}
-.guide-view .c5box .card {border-left-color:#B01020}
-.guide-view .c3box .card {border-left-color:#1a3a5c}
-.guide-view .c1box .card {border-left-color:#4a7c4e}
-.guide-view .ch {display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
-.guide-view .cn {font-size:21px;font-weight:900}
-.guide-view .cp {font-size:14px;color:#888;font-weight:700}
-.guide-view .cs {font-size:13px;color:#999;margin-bottom:9px}
-.guide-view .crow {display:flex;gap:10px;font-size:15px;padding:3px 0;flex-wrap:wrap}
-.guide-view .lbl {color:#888;min-width:74px;font-size:14px}
-.guide-view .val {flex:1}
-.guide-view .tot {margin-top:9px;padding-top:9px;border-top:1px solid #eee;
-font-size:16px;font-weight:700;text-align:right}
-.guide-view .tot b {font-size:23px;color:#B01020}
-.guide-view .max {font-size:13px;color:#aaa;font-weight:400}
-.guide-view .ex {background:#fff;border-radius:12px;padding:15px 17px;margin:11px 0;
-box-shadow:0 2px 9px rgba(0,0,0,.07);border-left:6px solid #D4A017}
-.guide-view .ex .t {font-size:18px;font-weight:900;color:#B01020;margin-bottom:5px}
-.guide-view .ex .d {font-size:16px}
-.guide-view ol, .guide-view ul {margin:12px 0 12px 24px}
-.guide-view li {margin:8px 0}
-.guide-view .note {background:#fff9e6;border:2px solid #D4A017;border-radius:10px;
-padding:14px 16px;margin:15px 0;font-size:16px}
-.guide-view .cnt {font-size:14px;color:#fff;background:rgba(255,255,255,.25);
-padding:2px 10px;border-radius:12px;margin-left:8px;font-weight:700}
-.guide-view .pick {background:#fff;border-radius:12px;padding:15px 17px;margin:11px 0;
-box-shadow:0 2px 9px rgba(0,0,0,.07)}
-.guide-view .pick .n {font-size:19px;font-weight:900;color:#B01020}
-.guide-view .pick .c {font-size:13px;color:#888;font-weight:700;margin-left:7px}
-.guide-view .pick .txt {font-size:16px;margin-top:5px}
+  /* ===== ガイドタブ用スタイル（スコープ限定・手動調整版） ===== */
+  .guide-view{font-family:'M PLUS 1p',sans-serif;font-size:16px;line-height:1.85;color:var(--ink);}
+  .guide-view h2{font-size:20px;font-weight:900;margin:26px 0 12px;padding:11px 15px;
+    background:var(--sky);color:#fff;border-radius:10px;}
+  .guide-view h2.c5{background:linear-gradient(90deg,#7a0a15,var(--crimson));}
+  .guide-view h2.c3{background:linear-gradient(90deg,var(--sky),#2d5a8c);}
+  .guide-view h2.c1{background:linear-gradient(90deg,#2d5a27,#4a7c4e);}
+  .guide-view h3{font-size:17px;font-weight:900;margin:20px 0 8px;color:var(--crimson);}
+  .guide-view p{margin:10px 0;}
+  .guide-view b{font-weight:900;}
+  .guide-view .box{background:#fff;border-radius:12px;padding:15px 16px;margin:12px 0;
+    box-shadow:0 2px 10px rgba(0,0,0,.07);}
+  .guide-view .big{font-size:18px;font-weight:900;}
+  .guide-view .hl{color:var(--crimson);font-weight:900;}
+  .guide-view table{width:100%;border-collapse:collapse;margin:12px 0;font-size:15px;}
+  .guide-view th,.guide-view td{padding:10px 6px;text-align:center;border-bottom:1px solid var(--sand);}
+  .guide-view th{background:var(--sky);color:#fff;font-weight:700;font-size:14px;}
+  .guide-view td b{color:var(--crimson);}
+  .guide-view tr:last-child td{border-bottom:none;}
+  .guide-view .card{background:#fff;border-radius:12px;padding:14px 15px;margin:10px 0;
+    box-shadow:0 2px 9px rgba(0,0,0,.07);border-left:6px solid #ccc;}
+  .guide-view .c5box .card{border-left-color:var(--crimson);}
+  .guide-view .c3box .card{border-left-color:var(--sky);}
+  .guide-view .c1box .card{border-left-color:#4a7c4e;}
+  .guide-view .ch{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .guide-view .cn{font-size:19px;font-weight:900;}
+  .guide-view .cp{font-size:13px;color:#888;font-weight:700;}
+  .guide-view .cs{font-size:12px;color:#999;margin-bottom:8px;}
+  .guide-view .crow{display:flex;gap:8px;font-size:14px;padding:2px 0;flex-wrap:wrap;}
+  .guide-view .lbl{color:#888;min-width:70px;font-size:13px;}
+  .guide-view .val{flex:1;}
+  .guide-view .tot{margin-top:8px;padding-top:8px;border-top:1px solid #eee;
+    font-size:15px;font-weight:700;text-align:right;}
+  .guide-view .tot b{font-size:21px;color:var(--crimson);}
+  .guide-view .max{font-size:12px;color:#aaa;font-weight:400;}
+  .guide-view .ex{background:#fff;border-radius:12px;padding:14px 16px;margin:10px 0;
+    box-shadow:0 2px 9px rgba(0,0,0,.07);border-left:6px solid var(--gold);}
+  .guide-view .ex .t{font-size:17px;font-weight:900;color:var(--crimson);margin-bottom:4px;}
+  .guide-view .ex .d{font-size:15px;}
+  .guide-view ol,.guide-view ul{margin:10px 0 10px 22px;}
+  .guide-view li{margin:6px 0;}
+  .guide-view .note{background:#fff9e6;border:2px solid var(--gold);border-radius:10px;
+    padding:13px 15px;margin:14px 0;font-size:15px;}
+  .guide-view .cnt{font-size:13px;color:#fff;background:rgba(255,255,255,.25);
+    padding:2px 9px;border-radius:12px;margin-left:6px;font-weight:700;}
+  .guide-view .pick{background:#fff;border-radius:12px;padding:14px 16px;margin:10px 0;
+    box-shadow:0 2px 9px rgba(0,0,0,.07);}
+  .guide-view .pick .n{font-size:18px;font-weight:900;color:var(--crimson);}
+  .guide-view .pick .c{font-size:12px;color:#888;font-weight:700;margin-left:6px;}
+  .guide-view .pick .txt{font-size:15px;margin-top:4px;}
   .tab-guide{color:#f0c84a!important;}
-  .tab-guide.active{background:#D4A017;color:var(--ink)!important;}
-</style>
+  .tab-guide.active{background:var(--gold);color:var(--ink)!important;}</style>
 </head>
 <body>
 
@@ -452,70 +445,80 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.1</b> / 失点 <b>0.9</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★★★</span></div>
 <div class="tot">総合 <b>60</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">仙台育英</span><span class="cp">宮城</span></div>
 <div class="cs">2年連続32回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>59</b>得点 <b>2</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>11.8</b> / 失点 <b>0.4</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">攻守万能</b>　下馬評 ★★★★</span></div>
 <div class="tot">総合 <b>58</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">関東第一</span><span class="cp">東東京</span></div>
 <div class="cs">3年連続11回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>72</b>得点 <b>6</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>12.0</b> / 失点 <b>1.0</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">攻守万能</b>　下馬評 ★★★★</span></div>
 <div class="tot">総合 <b>58</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">神村学園</span><span class="cp">鹿児島</span></div>
 <div class="cs">4年連続9回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>50</b>得点 <b>3</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.0</b> / 失点 <b>0.6</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">攻守万能</b>　下馬評 ★★★★</span></div>
 <div class="tot">総合 <b>53</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">花巻東</span><span class="cp">岩手</span></div>
 <div class="cs">4年連続14回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>33</b>得点 <b>1</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.6</b> / 失点 <b>0.2</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★★</span></div>
 <div class="tot">総合 <b>52</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">花咲徳栄</span><span class="cp">埼玉</span></div>
 <div class="cs">2年ぶり9回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>83</b>得点 <b>12</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>11.9</b> / 失点 <b>1.7</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★★★</span></div>
 <div class="tot">総合 <b>52</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">履正社</span><span class="cp">大阪</span></div>
 <div class="cs">3年ぶり6回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>66</b>得点 <b>5</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.4</b> / 失点 <b>0.7</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">攻守万能</b>　下馬評 ★★★★</span></div>
 <div class="tot">総合 <b>51</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">新田</span><span class="cp">愛媛</span></div>
 <div class="cs">5年ぶり2回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>49</b>得点 <b>4</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.8</b> / 失点 <b>0.8</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">攻守万能</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>49</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">天理</span><span class="cp">奈良</span></div>
 <div class="cs">2年連続31回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>38</b>得点 <b>2</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.6</b> / 失点 <b>0.4</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>48</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">佐野日大</span><span class="cp">栃木</span></div>
 <div class="cs">16年ぶり7回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>47</b>得点 <b>4</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.4</b> / 失点 <b>0.8</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">攻守万能</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>46</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">沖縄尚学</span><span class="cp">沖縄</span></div>
 <div class="cs">2年連続12回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>28</b>得点 <b>5</b>失点</span></div>
@@ -524,7 +527,6 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 <div class="tot">総合 <b>46</b><span class="max">/80</span></div>
 </div>
 </div>
-
 <h2 class="c3">コスト3点<span class="cnt">19校</span></h2>
 <p style="font-size:15px;color:#666;margin-bottom:6px">実力校。3口でも9点なので組み合わせやすい。</p>
 <div class="c3box">
@@ -535,126 +537,144 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.2</b> / 失点 <b>2.4</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>44</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">中京</span><span class="cp">岐阜</span></div>
 <div class="cs">7年ぶり8回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>48</b>得点 <b>4</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.0</b> / 失点 <b>0.7</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>43</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">高川学園</span><span class="cp">山口</span></div>
 <div class="cs">2年連続4回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>42</b>得点 <b>6</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.4</b> / 失点 <b>1.2</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>43</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">健大高崎</span><span class="cp">群馬</span></div>
 <div class="cs">3年連続6回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>38</b>得点 <b>5</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.6</b> / 失点 <b>1.0</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>42</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">享栄</span><span class="cp">愛知</span></div>
 <div class="cs">31年ぶり9回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>33</b>得点 <b>8</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.5</b> / 失点 <b>1.3</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>40</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">智辯和歌山</span><span class="cp">和歌山</span></div>
 <div class="cs">3年連続29回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>27</b>得点 <b>10</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.4</b> / 失点 <b>2.0</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★★★</span></div>
 <div class="tot">総合 <b>40</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">聖隷クリストファー</span><span class="cp">静岡</span></div>
 <div class="cs">2年連続2回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>39</b>得点 <b>8</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.5</b> / 失点 <b>1.3</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>39</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">青森山田</span><span class="cp">青森</span></div>
 <div class="cs">2年ぶり13回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>42</b>得点 <b>7</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.4</b> / 失点 <b>1.4</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>38</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">立命館宇治</span><span class="cp">京都</span></div>
 <div class="cs">3年ぶり5回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>54</b>得点 <b>13</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.0</b> / 失点 <b>2.2</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>38</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">鶴岡東</span><span class="cp">山形</span></div>
 <div class="cs">2年ぶり9回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>51</b>得点 <b>4</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.2</b> / 失点 <b>0.8</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">攻守万能</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>37</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">日本文理</span><span class="cp">新潟</span></div>
 <div class="cs">4年ぶり13回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>63</b>得点 <b>13</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.5</b> / 失点 <b>2.2</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>37</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">敦賀気比</span><span class="cp">福井</span></div>
 <div class="cs">2年連続13回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">4試合 <b>29</b>得点 <b>7</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.2</b> / 失点 <b>1.8</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>37</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">社</span><span class="cp">兵庫</span></div>
 <div class="cs">3年ぶり3回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>36</b>得点 <b>3</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.1</b> / 失点 <b>0.4</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>37</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">明徳義塾</span><span class="cp">高知</span></div>
 <div class="cs">2年ぶり24回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">4試合 <b>21</b>得点 <b>6</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.2</b> / 失点 <b>1.5</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>37</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">鳥取城北</span><span class="cp">鳥取</span></div>
 <div class="cs">3年連続8回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">4試合 <b>32</b>得点 <b>3</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.0</b> / 失点 <b>0.8</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>35</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">長崎日大</span><span class="cp">長崎</span></div>
 <div class="cs">16年ぶり10回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>38</b>得点 <b>9</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.6</b> / 失点 <b>1.8</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>35</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">白樺学園</span><span class="cp">北北海道</span></div>
 <div class="cs">2年ぶり5回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>50</b>得点 <b>7</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.3</b> / 失点 <b>1.2</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>34</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">三重</span><span class="cp">三重</span></div>
 <div class="cs">4年ぶり15回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>51</b>得点 <b>14</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.2</b> / 失点 <b>2.8</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>34</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">拓大紅陵</span><span class="cp">千葉</span></div>
 <div class="cs">24年ぶり6回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>38</b>得点 <b>7</b>失点</span></div>
@@ -663,7 +683,6 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 <div class="tot">総合 <b>33</b><span class="max">/80</span></div>
 </div>
 </div>
-
 <h2 class="c1">コスト1点<span class="cnt">19校</span></h2>
 <p style="font-size:15px;color:#666;margin-bottom:6px">ダークホース。3口でも3点。重ね賭けしやすい。</p>
 <div class="c1box">
@@ -672,128 +691,146 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 <div class="cs">9年ぶり7回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>39</b>得点 <b>13</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.5</b> / 失点 <b>2.2</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★★</span></div>
 <div class="tot">総合 <b>32</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">松商学園</span><span class="cp">長野</span></div>
 <div class="cs">2年連続39回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>70</b>得点 <b>12</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>11.7</b> / 失点 <b>2.0</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>31</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">札幌日大</span><span class="cp">南北海道</span></div>
 <div class="cs">2年ぶり2回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>45</b>得点 <b>11</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.5</b> / 失点 <b>1.8</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>30</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">有明</span><span class="cp">熊本</span></div>
 <div class="cs">初出場</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>29</b>得点 <b>5</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.8</b> / 失点 <b>1.0</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>30</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">東海大甲府</span><span class="cp">山梨</span></div>
 <div class="cs">3年ぶり15回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>33</b>得点 <b>11</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.6</b> / 失点 <b>2.2</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>27</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">福山</span><span class="cp">広島</span></div>
 <div class="cs">初出場</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>47</b>得点 <b>10</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.8</b> / 失点 <b>1.7</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>27</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">八王子実践</span><span class="cp">西東京</span></div>
 <div class="cs">初出場</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>39</b>得点 <b>13</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.5</b> / 失点 <b>2.2</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>24</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">岡山学芸館</span><span class="cp">岡山</span></div>
 <div class="cs">3年連続5回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>19</b>得点 <b>8</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>3.8</b> / 失点 <b>1.6</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>24</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">立正大淞南</span><span class="cp">島根</span></div>
 <div class="cs">3年ぶり4回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>24</b>得点 <b>8</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>4.8</b> / 失点 <b>1.6</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>24</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">東日大昌平</span><span class="cp">福島</span></div>
 <div class="cs">初出場</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>42</b>得点 <b>9</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.0</b> / 失点 <b>1.5</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>23</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">八幡商</span><span class="cp">滋賀</span></div>
 <div class="cs">15年ぶり8回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>27</b>得点 <b>7</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.4</b> / 失点 <b>1.4</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>23</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">佐賀商</span><span class="cp">佐賀</span></div>
 <div class="cs">8年ぶり17回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>26</b>得点 <b>7</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.2</b> / 失点 <b>1.4</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>23</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">大分商</span><span class="cp">大分</span></div>
 <div class="cs">13年ぶり16回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>32</b>得点 <b>13</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.4</b> / 失点 <b>2.6</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>23</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">日南学園</span><span class="cp">宮崎</span></div>
 <div class="cs">8年ぶり10回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>31</b>得点 <b>9</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.2</b> / 失点 <b>1.8</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>23</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">霞ケ浦</span><span class="cp">茨城</span></div>
 <div class="cs">2年ぶり4回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>34</b>得点 <b>12</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.7</b> / 失点 <b>2.0</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>22</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">鳴門渦潮</span><span class="cp">徳島</span></div>
 <div class="cs">2年ぶり9回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>23</b>得点 <b>13</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>4.6</b> / 失点 <b>2.6</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>19</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">横手</span><span class="cp">秋田</span></div>
 <div class="cs">57年ぶり2回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>25</b>得点 <b>9</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.0</b> / 失点 <b>1.8</b></span></div>
-<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#999">非力</b>　下馬評 ★</span></div>
 <div class="tot">総合 <b>18</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">遊学館</span><span class="cp">石川</span></div>
 <div class="cs">11年ぶり7回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>29</b>得点 <b>16</b>失点</span></div>
 <div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.8</b> / 失点 <b>3.2</b></span></div>
 <div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★</span></div>
 <div class="tot">総合 <b>17</b><span class="max">/80</span></div>
-</div><div class="card">
+</div>
+<div class="card">
 <div class="ch"><span class="cn">高岡商</span><span class="cp">富山</span></div>
 <div class="cs">4年ぶり23回目</div>
 <div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>42</b>得点 <b>17</b>失点</span></div>
@@ -802,7 +839,6 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 <div class="tot">総合 <b>15</b><span class="max">/80</span></div>
 </div>
 </div>
-
 <h2>注目校</h2>
 
 <h3>5点で狙うなら</h3>
@@ -837,7 +873,7 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 <div class="box">
 <p><b>予選</b>　地方大会の成績</p>
 <p><b>1試合平均</b>　得点は多いほど、失点は<b>少ないほど</b>良い</p>
-<p><b>タイプ</b>　万能＝攻守とも高水準／打撃型＝打ち勝つ／守備型＝守り勝つ／標準＝平均的</p>
+<p><b>タイプ</b>　攻守万能＝攻撃・守備とも高水準／打撃型＝打ち勝つ／守備型＝守り勝つ／標準＝平均的にまとまっている／非力＝攻守とも数字が伸びていない</p>
 <p><b>下馬評</b>　スポーツ紙5紙の評価。★5が最高</p>
 <p><b>総合</b>　80点満点。<b>45点以上が5点校</b>、<b>33点以上が3点校</b>、それ以下が1点校</p>
 </div>
@@ -913,7 +949,7 @@ box-shadow:0 2px 9px rgba(0,0,0,.07)}
 const MASTER_KEY = '$2a$10$RXrA8gi.DwfzFMtF9dS3duywHHTJurX5CMyxGjAZlivp/sEVlFxxa';
 const ACCESS_KEY = '$2a$10$EDw5RmrR2ViisAO1ahgtuOtiOX5USecBuYzyRZBsuho6.0Iwn3yyG';
 // ↓ 初回起動後、自動で書き込まれます（手動変更不要）
-const BIN_ID = '69b1473fb7ec241ddc5c7f39';
+const BIN_ID = '6a711a62f5f4af5e29e72089'; // 夏専用Bin
 
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
