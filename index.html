@@ -44,7 +44,13 @@
   .team-count{display:inline-block;background:var(--crimson);color:white;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:8px;font-weight:700;}
   .teams-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;padding:8px 12px 16px;}
   @media(min-width:480px){.teams-grid{grid-template-columns:repeat(3,1fr);}}
-  .team-btn{display:flex;flex-direction:column;align-items:center;padding:10px 6px 28px;border:2px solid var(--sand);border-radius:10px;background:var(--cream);cursor:pointer;transition:all .18s;font-family:'M PLUS 1p',sans-serif;position:relative;text-align:center;width:100%;}
+  .team-btn{display:flex;flex-direction:column;align-items:center;padding:10px 6px 34px;border:2px solid var(--sand);border-radius:10px;background:var(--cream);cursor:default;transition:all .18s;font-family:'M PLUS 1p',sans-serif;position:relative;text-align:center;width:100%;}
+  .lot-stepper{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;background:rgba(0,0,0,.05);border-radius:20px;padding:3px 8px;}
+  .team-btn.selected .lot-stepper{background:rgba(255,255,255,.2);}
+  .lot-btn{width:26px;height:26px;border-radius:50%;border:none;background:var(--crimson);color:white;font-size:16px;font-weight:900;cursor:pointer;line-height:1;font-family:'M PLUS 1p',sans-serif;}
+  .lot-btn:disabled{opacity:.3;cursor:not-allowed;}
+  .team-btn.selected .lot-btn{background:white;color:var(--crimson);}
+  .lot-num{font-size:13px;font-weight:900;min-width:32px;}
   .team-btn:hover{border-color:var(--crimson);background:#fff5f5;transform:translateY(-1px);box-shadow:0 3px 10px rgba(176,16,32,.15);}
   .team-btn.selected{border-color:var(--crimson);background:var(--crimson);color:white;transform:translateY(-1px);box-shadow:0 4px 14px rgba(176,16,32,.35);}
   .team-btn .num{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:1px;}
@@ -219,6 +225,65 @@
   .tag-lose{background:#f8d7da;color:#721c24;}
   .tag-safe{background:#d1ecf1;color:#0c5460;}
   .tag-any{background:#e2e3e5;color:#383d41;}
+
+  /* ===== ガイドタブ用スタイル（スコープ限定） ===== */
+.guide-view * {box-sizing:border-box;margin:0;padding:0;-webkit-text-size-adjust:100%}
+.guide-view {font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP',sans-serif;
+background:#F5EDD8;color:#1a0f08;font-size:17px;line-height:1.85;padding-bottom:60px}
+.guide-view {background:linear-gradient(135deg,#7a0a15,#B01020);color:#fff;padding:26px 18px;text-align:center}
+.guide-view header .sub {font-size:12px;letter-spacing:3px;color:#f0c84a;font-weight:700}
+.guide-view header h1 {font-size:25px;margin-top:6px;line-height:1.4;font-weight:900}
+.guide-view {max-width:600px;margin:0 auto;padding:0 14px}
+.guide-view h2 {font-size:21px;font-weight:900;margin:34px 0 14px;padding:11px 15px;
+background:#1a3a5c;color:#fff;border-radius:10px}
+.guide-view h2.c5 {background:linear-gradient(90deg,#7a0a15,#B01020)}
+.guide-view h2.c3 {background:linear-gradient(90deg,#1a3a5c,#2d5a8c)}
+.guide-view h2.c1 {background:linear-gradient(90deg,#2d5a27,#4a7c4e)}
+.guide-view h3 {font-size:18px;font-weight:900;margin:22px 0 10px;color:#B01020}
+.guide-view p {margin:12px 0}
+.guide-view .box {background:#fff;border-radius:12px;padding:17px;margin:14px 0;
+box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.guide-view .big {font-size:19px;font-weight:900}
+.guide-view b {font-weight:900}
+.guide-view .hl {color:#B01020;font-weight:900}
+.guide-view table {width:100%;border-collapse:collapse;margin:14px 0;font-size:16px}
+.guide-view th, .guide-view td {padding:11px 8px;text-align:center;border-bottom:1px solid #E8D9B8}
+.guide-view th {background:#1a3a5c;color:#fff;font-weight:700;font-size:15px}
+.guide-view td b {color:#B01020}
+.guide-view tr:last-child td {border-bottom:none}
+.guide-view .card {background:#fff;border-radius:12px;padding:15px 16px;margin:11px 0;
+box-shadow:0 2px 9px rgba(0,0,0,.07);border-left:6px solid #ccc}
+.guide-view .c5box .card {border-left-color:#B01020}
+.guide-view .c3box .card {border-left-color:#1a3a5c}
+.guide-view .c1box .card {border-left-color:#4a7c4e}
+.guide-view .ch {display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.guide-view .cn {font-size:21px;font-weight:900}
+.guide-view .cp {font-size:14px;color:#888;font-weight:700}
+.guide-view .cs {font-size:13px;color:#999;margin-bottom:9px}
+.guide-view .crow {display:flex;gap:10px;font-size:15px;padding:3px 0;flex-wrap:wrap}
+.guide-view .lbl {color:#888;min-width:74px;font-size:14px}
+.guide-view .val {flex:1}
+.guide-view .tot {margin-top:9px;padding-top:9px;border-top:1px solid #eee;
+font-size:16px;font-weight:700;text-align:right}
+.guide-view .tot b {font-size:23px;color:#B01020}
+.guide-view .max {font-size:13px;color:#aaa;font-weight:400}
+.guide-view .ex {background:#fff;border-radius:12px;padding:15px 17px;margin:11px 0;
+box-shadow:0 2px 9px rgba(0,0,0,.07);border-left:6px solid #D4A017}
+.guide-view .ex .t {font-size:18px;font-weight:900;color:#B01020;margin-bottom:5px}
+.guide-view .ex .d {font-size:16px}
+.guide-view ol, .guide-view ul {margin:12px 0 12px 24px}
+.guide-view li {margin:8px 0}
+.guide-view .note {background:#fff9e6;border:2px solid #D4A017;border-radius:10px;
+padding:14px 16px;margin:15px 0;font-size:16px}
+.guide-view .cnt {font-size:14px;color:#fff;background:rgba(255,255,255,.25);
+padding:2px 10px;border-radius:12px;margin-left:8px;font-weight:700}
+.guide-view .pick {background:#fff;border-radius:12px;padding:15px 17px;margin:11px 0;
+box-shadow:0 2px 9px rgba(0,0,0,.07)}
+.guide-view .pick .n {font-size:19px;font-weight:900;color:#B01020}
+.guide-view .pick .c {font-size:13px;color:#888;font-weight:700;margin-left:7px}
+.guide-view .pick .txt {font-size:16px;margin-top:5px}
+  .tab-guide{color:#f0c84a!important;}
+  .tab-guide.active{background:#D4A017;color:var(--ink)!important;}
 </style>
 </head>
 <body>
@@ -252,16 +317,20 @@
         <div style="padding:14px 16px;font-size:12px;line-height:2;">
           <strong style="color:var(--crimson);">▼ チーム選択（コスト制）</strong><br>
           ・各チームには前評判に応じて <span class="cost-badge cost-5">5点</span> <span class="cost-badge cost-3">3点</span> <span class="cost-badge cost-1">1点</span> のコストが付いています<br>
-          ・<strong>合計15点以内</strong>なら何チームでも選択OK（例：5点×3校、5+5+3+1+1、3点×5校 など）<br>
+          ・<strong>合計15点以内</strong>で選択（例：5点×3校、5+5+3+1+1、3点×5校 など）<br>
+          ・<strong>同じ校を最大3口まで</strong>重ねて選択できます。口数を増やすとコスト・得失点差ともに<strong>その口数倍</strong>になります（1点校を3口なら3点消費、得失点差も×3）<br>
           ・本大会の<strong>得失点差の合計</strong>で順位を競います<br>
+          <strong style="color:var(--crimson);">▼ 同点のときの順位</strong><br>
+          ①口数を反映した合計勝利数が多い方　②1試合での最大プラス得失点差が大きい方　③1試合での最大マイナス得失点差が小さい方　④それでも同じなら同順位<br>
           <strong style="color:var(--crimson);">▼ コストの決め方（自動計算）</strong><br>
-          ・<strong>新聞5紙の評価</strong>（特A=4点 A=3点 B=2点 C=1点、最大20点）<br>
-          ・<strong>地方大会成績7項目</strong>（打率・平均得点・本塁打・盗塁・防御率・平均失点・失策を各10点満点、最大70点）<br>
-          ・総合90点満点で全校をランキングし、<strong>上位1/3=5点 / 中位1/3=3点 / 下位1/3=1点</strong>
-        </div>
+          ・<strong>大会成績</strong>（秋季・秋地区・神宮・選抜・春季・春地区の各成績、最大65点）<br>
+          ・<strong>新聞5紙の評価</strong>（特A=4 A=3 B=2 C=1、最大20点）<br>
+          ・<strong>地域性</strong>（都道府県の甲子園通算成績ランク、最大10点）<br>
+          ・<strong>夏予選成績</strong>（1試合平均の得失点差、最大10点）<br>
+          ・総合105点満点で全49校をランキングし、<strong>上位1/3=5点 / 中位1/3=3点 / 下位1/3=1点</strong></div>
       </div>
       <div class="section-card">
-        <div class="section-header">STEP 1｜<span>合計15点でチームを選択</span>　<small style="font-size:10px;opacity:.7;">5点=強豪 3点=中堅 1点=ダークホース</small></div>
+        <div class="section-header">STEP 1｜<span>合計15点でチームを選択</span>　<small style="font-size:10px;opacity:.7;">同じ校は最大3口まで</small></div>
         <div class="step-label">使用コスト <span class="team-count" id="selected-count">0</span> / 15点（残り<span id="cost-remaining">15</span>点）</div>
         <div class="teams-grid" id="teams-grid"></div>
       </div>
@@ -292,6 +361,488 @@
       <button class="reload-btn" onclick="loadCloud(true)">🔄 最新データに更新</button>
       <div class="ranking-view" id="ranking-view"></div>
       <div class="rank-note">得失点差の合計で順位を決定<br>試合結果は管理者タブから入力</div>
+    </div>
+  </div>
+
+  <div class="view" id="view-guide">
+    <div class="guide-view">
+
+
+<h2>ルール</h2>
+<div class="box">
+<p class="big">持ち点は<span class="hl">1人15点</span>です。</p>
+<p>各高校には <b>5点</b> <b>3点</b> <b>1点</b> のコストが付いています。<br>
+合計 <span class="hl">15点以内</span> になるように選んでください。</p>
+<p>本大会での<b>得失点差の合計</b>で順位を 競います。</p>
+</div>
+
+<h3>同じ高校を最大3口まで選べます</h3>
+<div class="box">
+<p>同じ高校に重ねて賭けられます。<br>
+口数が増えると<b>コストも得失点差も同じ倍率</b>になります。</p>
+<table>
+<tr><th>口数</th><th>コスト</th><th>得失点差</th></tr>
+<tr><td><b>1口</b></td><td>×1</td><td>×1</td></tr>
+<tr><td><b>2口</b></td><td>×2</td><td>×2</td></tr>
+<tr><td><b>3口</b></td><td>×3</td><td>×3</td></tr>
+</table>
+</div>
+
+<div class="note">
+<b>例）1点校を3口選んだ場合</b><br>
+使うコストは <b>3点</b>。<br><br>
+その高校が <b>5対0</b> で勝つと<br>
+得失点差 +5 × 3口 = <span class="hl">+15点</span><br><br>
+逆に <b>0対5</b> で負けると<br>
+得失点差 −5 × 3口 = <span class="hl">−15点</span><br><br>
+口数を増やすほど、勝ったときも負けたときも影響が大きくなります。
+</div>
+
+<h3>コスト別の口数早見表</h3>
+<div class="box">
+<table>
+<tr><th>ランク</th><th>1口</th><th>2口</th><th>3口</th></tr>
+<tr><td><b>5点校</b></td><td>5点</td><td>10点</td><td><b>15点</b></td></tr>
+<tr><td><b>3点校</b></td><td>3点</td><td>6点</td><td>9点</td></tr>
+<tr><td><b>1点校</b></td><td>1点</td><td>2点</td><td>3点</td></tr>
+</table>
+<p style="font-size:15px;color:#666">5点校を3口選ぶと、それだけで15点すべてを使います。</p>
+</div>
+
+<h3>同点のときの順位</h3>
+<div class="box">
+<p>得失点差が並んだ場合は、次の順で決めます。</p>
+<ol>
+<li>口数を反映した<b>合計勝利数</b>が多い方</li>
+<li>1試合での<b>最大プラス得失点差</b>が大きい方</li>
+<li>1試合での<b>最大マイナス得失点差</b>が小さい方</li>
+<li>それでも同じなら<b>同順位</b></li>
+</ol>
+</div>
+
+<h2>選び方の例</h2>
+
+<div class="ex"><div class="t">本命一点勝負</div>
+<div class="d">5点校を <b>3口</b><br>
+<span style="font-size:14px;color:#888">当たれば大きい。外すと厳しい。</span></div></div>
+
+<div class="ex"><div class="t">中堅集中</div>
+<div class="d">3点校を <b>3口</b>＋別の3点校を <b>2口</b>（計15点）<br>
+<span style="font-size:14px;color:#888">2校に絞って倍率を効かせる。</span></div></div>
+
+<div class="ex"><div class="t">穴馬集中</div>
+<div class="d">1点校を <b>2〜3口</b> ずつ複数校<br>
+<span style="font-size:14px;color:#888">安いので何校も重ねられる。</span></div></div>
+
+<div class="ex"><div class="t">分散型</div>
+<div class="d">いろいろな高校を <b>1口ずつ</b><br>
+<span style="font-size:14px;color:#888">リスクを散らす堅実型。</span></div></div>
+
+<div class="ex"><div class="t">バランス型</div>
+<div class="d">本命校を <b>1口</b>、穴馬を <b>2〜3口</b><br>
+<span style="font-size:14px;color:#888">安定と一発を両立。</span></div></div>
+
+<h2 class="c5">コスト5点<span class="cnt">11校</span></h2>
+<p style="font-size:15px;color:#666;margin-bottom:6px">優勝候補。3口使うと15点すべてを使います。</p>
+<div class="c5box">
+<div class="card">
+<div class="ch"><span class="cn">横浜</span><span class="cp">神奈川</span></div>
+<div class="cs">2年連続22回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>64</b>得点 <b>6</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.1</b> / 失点 <b>0.9</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★★★</span></div>
+<div class="tot">総合 <b>60</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">仙台育英</span><span class="cp">宮城</span></div>
+<div class="cs">2年連続32回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>59</b>得点 <b>2</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>11.8</b> / 失点 <b>0.4</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>58</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">関東第一</span><span class="cp">東東京</span></div>
+<div class="cs">3年連続11回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>72</b>得点 <b>6</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>12.0</b> / 失点 <b>1.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>58</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">神村学園</span><span class="cp">鹿児島</span></div>
+<div class="cs">4年連続9回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>50</b>得点 <b>3</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.0</b> / 失点 <b>0.6</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>53</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">花巻東</span><span class="cp">岩手</span></div>
+<div class="cs">4年連続14回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>33</b>得点 <b>1</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.6</b> / 失点 <b>0.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>52</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">花咲徳栄</span><span class="cp">埼玉</span></div>
+<div class="cs">2年ぶり9回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>83</b>得点 <b>12</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>11.9</b> / 失点 <b>1.7</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>52</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">履正社</span><span class="cp">大阪</span></div>
+<div class="cs">3年ぶり6回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>66</b>得点 <b>5</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.4</b> / 失点 <b>0.7</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>51</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">新田</span><span class="cp">愛媛</span></div>
+<div class="cs">5年ぶり2回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>49</b>得点 <b>4</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.8</b> / 失点 <b>0.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>49</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">天理</span><span class="cp">奈良</span></div>
+<div class="cs">2年連続31回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>38</b>得点 <b>2</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.6</b> / 失点 <b>0.4</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>48</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">佐野日大</span><span class="cp">栃木</span></div>
+<div class="cs">16年ぶり7回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>47</b>得点 <b>4</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.4</b> / 失点 <b>0.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>46</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">沖縄尚学</span><span class="cp">沖縄</span></div>
+<div class="cs">2年連続12回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>28</b>得点 <b>5</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.6</b> / 失点 <b>1.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>46</b><span class="max">/80</span></div>
+</div>
+</div>
+
+<h2 class="c3">コスト3点<span class="cnt">19校</span></h2>
+<p style="font-size:15px;color:#666;margin-bottom:6px">実力校。3口でも9点なので組み合わせやすい。</p>
+<div class="c3box">
+<div class="card">
+<div class="ch"><span class="cn">英明</span><span class="cp">香川</span></div>
+<div class="cs">2年ぶり5回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>41</b>得点 <b>12</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.2</b> / 失点 <b>2.4</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>44</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">中京</span><span class="cp">岐阜</span></div>
+<div class="cs">7年ぶり8回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>48</b>得点 <b>4</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.0</b> / 失点 <b>0.7</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>43</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">高川学園</span><span class="cp">山口</span></div>
+<div class="cs">2年連続4回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>42</b>得点 <b>6</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.4</b> / 失点 <b>1.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>43</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">健大高崎</span><span class="cp">群馬</span></div>
+<div class="cs">3年連続6回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>38</b>得点 <b>5</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.6</b> / 失点 <b>1.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>42</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">享栄</span><span class="cp">愛知</span></div>
+<div class="cs">31年ぶり9回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>33</b>得点 <b>8</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.5</b> / 失点 <b>1.3</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>40</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">智辯和歌山</span><span class="cp">和歌山</span></div>
+<div class="cs">3年連続29回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>27</b>得点 <b>10</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.4</b> / 失点 <b>2.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★★</span></div>
+<div class="tot">総合 <b>40</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">聖隷クリストファー</span><span class="cp">静岡</span></div>
+<div class="cs">2年連続2回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>39</b>得点 <b>8</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.5</b> / 失点 <b>1.3</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>39</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">青森山田</span><span class="cp">青森</span></div>
+<div class="cs">2年ぶり13回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>42</b>得点 <b>7</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.4</b> / 失点 <b>1.4</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>38</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">立命館宇治</span><span class="cp">京都</span></div>
+<div class="cs">3年ぶり5回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>54</b>得点 <b>13</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>9.0</b> / 失点 <b>2.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>38</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">鶴岡東</span><span class="cp">山形</span></div>
+<div class="cs">2年ぶり9回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>51</b>得点 <b>4</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.2</b> / 失点 <b>0.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#B01020">万能</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>37</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">日本文理</span><span class="cp">新潟</span></div>
+<div class="cs">4年ぶり13回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>63</b>得点 <b>13</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.5</b> / 失点 <b>2.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>37</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">敦賀気比</span><span class="cp">福井</span></div>
+<div class="cs">2年連続13回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">4試合 <b>29</b>得点 <b>7</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.2</b> / 失点 <b>1.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>37</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">社</span><span class="cp">兵庫</span></div>
+<div class="cs">3年ぶり3回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>36</b>得点 <b>3</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.1</b> / 失点 <b>0.4</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>37</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">明徳義塾</span><span class="cp">高知</span></div>
+<div class="cs">2年ぶり24回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">4試合 <b>21</b>得点 <b>6</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.2</b> / 失点 <b>1.5</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>37</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">鳥取城北</span><span class="cp">鳥取</span></div>
+<div class="cs">3年連続8回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">4試合 <b>32</b>得点 <b>3</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.0</b> / 失点 <b>0.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>35</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">長崎日大</span><span class="cp">長崎</span></div>
+<div class="cs">16年ぶり10回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>38</b>得点 <b>9</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.6</b> / 失点 <b>1.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>35</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">白樺学園</span><span class="cp">北北海道</span></div>
+<div class="cs">2年ぶり5回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>50</b>得点 <b>7</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>8.3</b> / 失点 <b>1.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>34</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">三重</span><span class="cp">三重</span></div>
+<div class="cs">4年ぶり15回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>51</b>得点 <b>14</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>10.2</b> / 失点 <b>2.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>34</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">拓大紅陵</span><span class="cp">千葉</span></div>
+<div class="cs">24年ぶり6回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">7試合 <b>38</b>得点 <b>7</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.4</b> / 失点 <b>1.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>33</b><span class="max">/80</span></div>
+</div>
+</div>
+
+<h2 class="c1">コスト1点<span class="cnt">19校</span></h2>
+<p style="font-size:15px;color:#666;margin-bottom:6px">ダークホース。3口でも3点。重ね賭けしやすい。</p>
+<div class="c1box">
+<div class="card">
+<div class="ch"><span class="cn">東筑</span><span class="cp">福岡</span></div>
+<div class="cs">9年ぶり7回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>39</b>得点 <b>13</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.5</b> / 失点 <b>2.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★★</span></div>
+<div class="tot">総合 <b>32</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">松商学園</span><span class="cp">長野</span></div>
+<div class="cs">2年連続39回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>70</b>得点 <b>12</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>11.7</b> / 失点 <b>2.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>31</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">札幌日大</span><span class="cp">南北海道</span></div>
+<div class="cs">2年ぶり2回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>45</b>得点 <b>11</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.5</b> / 失点 <b>1.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>30</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">有明</span><span class="cp">熊本</span></div>
+<div class="cs">初出場</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>29</b>得点 <b>5</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.8</b> / 失点 <b>1.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>30</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">東海大甲府</span><span class="cp">山梨</span></div>
+<div class="cs">3年ぶり15回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>33</b>得点 <b>11</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.6</b> / 失点 <b>2.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>27</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">福山</span><span class="cp">広島</span></div>
+<div class="cs">初出場</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>47</b>得点 <b>10</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.8</b> / 失点 <b>1.7</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>27</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">八王子実践</span><span class="cp">西東京</span></div>
+<div class="cs">初出場</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>39</b>得点 <b>13</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.5</b> / 失点 <b>2.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>24</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">岡山学芸館</span><span class="cp">岡山</span></div>
+<div class="cs">3年連続5回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>19</b>得点 <b>8</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>3.8</b> / 失点 <b>1.6</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>24</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">立正大淞南</span><span class="cp">島根</span></div>
+<div class="cs">3年ぶり4回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>24</b>得点 <b>8</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>4.8</b> / 失点 <b>1.6</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>24</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">東日大昌平</span><span class="cp">福島</span></div>
+<div class="cs">初出場</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>42</b>得点 <b>9</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.0</b> / 失点 <b>1.5</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>23</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">八幡商</span><span class="cp">滋賀</span></div>
+<div class="cs">15年ぶり8回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>27</b>得点 <b>7</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.4</b> / 失点 <b>1.4</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>23</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">佐賀商</span><span class="cp">佐賀</span></div>
+<div class="cs">8年ぶり17回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>26</b>得点 <b>7</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.2</b> / 失点 <b>1.4</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#1a3a5c">守備型</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>23</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">大分商</span><span class="cp">大分</span></div>
+<div class="cs">13年ぶり16回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>32</b>得点 <b>13</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.4</b> / 失点 <b>2.6</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>23</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">日南学園</span><span class="cp">宮崎</span></div>
+<div class="cs">8年ぶり10回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>31</b>得点 <b>9</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>6.2</b> / 失点 <b>1.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>23</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">霞ケ浦</span><span class="cp">茨城</span></div>
+<div class="cs">2年ぶり4回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>34</b>得点 <b>12</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.7</b> / 失点 <b>2.0</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>22</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">鳴門渦潮</span><span class="cp">徳島</span></div>
+<div class="cs">2年ぶり9回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>23</b>得点 <b>13</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>4.6</b> / 失点 <b>2.6</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>19</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">横手</span><span class="cp">秋田</span></div>
+<div class="cs">57年ぶり2回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>25</b>得点 <b>9</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.0</b> / 失点 <b>1.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#666">標準</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>18</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">遊学館</span><span class="cp">石川</span></div>
+<div class="cs">11年ぶり7回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">5試合 <b>29</b>得点 <b>16</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>5.8</b> / 失点 <b>3.2</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★★</span></div>
+<div class="tot">総合 <b>17</b><span class="max">/80</span></div>
+</div><div class="card">
+<div class="ch"><span class="cn">高岡商</span><span class="cp">富山</span></div>
+<div class="cs">4年ぶり23回目</div>
+<div class="crow"><span class="lbl">予選</span><span class="val">6試合 <b>42</b>得点 <b>17</b>失点</span></div>
+<div class="crow"><span class="lbl">1試合平均</span><span class="val">得点 <b>7.0</b> / 失点 <b>2.8</b></span></div>
+<div class="crow"><span class="lbl">タイプ</span><span class="val"><b style="color:#c05621">打撃型</b>　下馬評 ★</span></div>
+<div class="tot">総合 <b>15</b><span class="max">/80</span></div>
+</div>
+</div>
+
+<h2>注目校</h2>
+
+<h3>5点で狙うなら</h3>
+<div class="pick"><span class="n">花巻東</span><span class="c">岩手・5点</span>
+<div class="txt">5試合で<b>わずか1失点</b>。1試合平均0.2失点は全国最少。接戦に強い。</div></div>
+<div class="pick"><span class="n">仙台育英</span><span class="c">宮城・5点</span>
+<div class="txt">平均<b>11.8得点</b>・<b>0.4失点</b>。攻守とも全国トップクラス。</div></div>
+
+<h3>3点の狙い目</h3>
+<div class="pick"><span class="n">社</span><span class="c">兵庫・3点</span>
+<div class="txt">7試合で<b>3失点</b>のみ。激戦の兵庫を守り抜いた。</div></div>
+<div class="pick"><span class="n">鶴岡東</span><span class="c">山形・3点</span>
+<div class="txt">平均<b>10.2得点</b>・<b>0.8失点</b>。5点校に迫る数字。</div></div>
+<div class="pick"><span class="n">中京</span><span class="c">岐阜・3点</span>
+<div class="txt">平均<b>0.7失点</b>。大垣日大を破って7年ぶり出場。</div></div>
+
+<h3>1点の穴馬</h3>
+<div class="pick"><span class="n">松商学園</span><span class="c">長野・1点</span>
+<div class="txt">平均<b>11.7得点</b>は全国3位の破壊力。打線は5点校クラス。</div></div>
+<div class="pick"><span class="n">福山</span><span class="c">広島・1点</span>
+<div class="txt">春夏通じて初出場。<b>呉と広島商との接戦</b>を勝ち切った。</div></div>
+<div class="pick"><span class="n">有明</span><span class="c">熊本・1点</span>
+<div class="txt">初出場だが平均<b>1.0失点</b>。守りは堅い。</div></div>
+
+<h3>注意したい高校</h3>
+<div class="pick"><span class="n">英明</span><span class="c">香川・3点</span>
+<div class="txt">選抜8強・神宮4強の実績はあるが、予選は平均<b>2.4失点</b>と不安定。</div></div>
+<div class="pick"><span class="n">三重</span><span class="c">3点</span>
+<div class="txt">51得点と打つが<b>14失点</b>。打ち合いになると苦しい。</div></div>
+
+<h2>表の見方</h2>
+<div class="box">
+<p><b>予選</b>　地方大会の成績</p>
+<p><b>1試合平均</b>　得点は多いほど、失点は<b>少ないほど</b>良い</p>
+<p><b>タイプ</b>　万能＝攻守とも高水準／打撃型＝打ち勝つ／守備型＝守り勝つ／標準＝平均的</p>
+<p><b>下馬評</b>　スポーツ紙5紙の評価。★5が最高</p>
+<p><b>総合</b>　80点満点。<b>45点以上が5点校</b>、<b>33点以上が3点校</b>、それ以下が1点校</p>
+</div>
+
+
     </div>
   </div>
 
@@ -385,133 +936,178 @@ async function cloudWrite(data) {
   return res.json();
 }
 
-// ===== チームデータ =====
-// テスト中: 春32校の実データ + ダミー17校（夏の出場校決定後に差し替え）
-// 各紙評価: 特A/A/B/C、成績: games,avg(打率x1000),runs,hr,sb,era,ra,err
+// ===== チームデータ（2026夏 49代表校） =====
+// [No, 都道府県, 校名, 出場回数, 秋季, 秋地区, 神宮, 選抜, 春季, 春地区, [日刊,スポ,報知,サン,中日]]
 const TEAMS_RAW=[
-  [1,'北照','北海道',['A','B','B','C','B'],8,306,4.1,1,5,1.32,1.5,5],
-  [2,'花巻東','岩手',['A','A','A','B','B'],11,309,6.8,7,23,2.08,2.3,12],
-  [3,'八戸学院光星','青森',['B','B','B','B','B'],9,275,5.2,4,6,1.18,2.2,12],
-  [4,'東北','宮城',['C','B','C','B','C'],9,310,5.9,0,23,1.87,2.2,6],
-  [5,'山梨学院','山梨',['特A','A','A','A','A'],9,320,7.4,3,10,2.50,2.9,6],
-  [6,'花咲徳栄','埼玉',['A','B','B','B','B'],11,325,7.5,5,12,3.21,3.6,12],
-  [7,'専大松戸','千葉',['B','B','B','B','C'],11,390,8.1,2,26,1.22,1.7,10],
-  [8,'佐野日大','栃木',['B','C','B','C','C'],8,340,5.9,0,9,2.70,3.3,7],
-  [9,'横浜','神奈川',['A','A','A','A','B'],8,327,8.5,7,28,1.83,2.3,4],
-  [10,'帝京','東京',['A','B','B','A','B'],9,354,7.2,7,14,1.61,1.7,6],
-  [11,'帝京長岡','新潟',['A','B','B','C','A'],11,286,5.3,0,37,2.33,2.5,15],
-  [12,'日本文理','新潟',['B','C','C','C','B'],10,343,6.9,1,15,3.41,3.5,9],
-  [13,'中京大中京','愛知',['A','B','B','B','B'],11,283,5.9,1,9,2.20,2.5,6],
-  [14,'三重','三重',['B','B','B','B','C'],8,323,6.8,1,17,2.30,2.4,3],
-  [15,'大垣日大','岐阜',['C','C','B','B','C'],7,350,8.7,1,15,1.71,2.0,5],
-  [16,'神戸国際大付','兵庫',['A','B','A','A','A'],14,286,5.0,8,9,1.54,1.9,11],
-  [17,'智弁学園','奈良',['B','A','B','A','B'],9,296,6.0,5,9,2.08,3.2,17],
-  [18,'大阪桐蔭','大阪',['B','A','B','B','B'],10,355,8.0,4,21,0.85,1.7,11],
-  [19,'滋賀学園','滋賀',['B','B','B','B','B'],8,310,4.4,1,4,2.10,2.6,6],
-  [20,'近江','滋賀',['B','B','B','B','C'],7,371,8.1,2,14,2.62,3.1,2],
-  [21,'東洋大姫路','兵庫',['C','C','B','C','C'],7,239,5.4,1,0,2.73,3.3,6],
-  [22,'崇徳','広島',['A','B','B','B','A'],12,322,6.5,3,30,1.76,1.8,10],
-  [23,'高川学園','山口',['B','C','C','C','B'],9,232,5.0,1,22,2.00,2.8,12],
-  [24,'英明','香川',['A','B','B','B','A'],12,268,4.5,1,17,1.70,2.7,21],
-  [25,'阿南光','徳島',['B','C','B','C','B'],8,285,5.6,0,6,2.12,2.3,4],
-  [26,'九州国際大付','福岡',['特A','A','A','A','A'],14,340,7.1,6,17,2.57,2.9,12],
-  [27,'長崎日大','長崎',['B','B','B','C','B'],9,261,4.6,3,10,1.46,2.0,11],
-  [28,'神村学園','鹿児島',['B','B','B','B','B'],9,382,7.3,4,17,0.99,1.3,4],
-  [29,'熊本工','熊本',['B','C','B','C','B'],8,284,6.1,1,18,1.21,1.1,5],
-  [30,'沖縄尚学','沖縄',['A','A','A','B','C'],7,303,4.6,1,3,1.22,1.4,7],
-  [31,'高知農','高知',['C','C','C','C','C'],3,212,5.0,0,7,1.09,1.7,1],
-  [32,'長崎西','長崎',['C','C','C','C','C'],7,211,3.6,0,11,1.48,2.4,5],
-  // ダミー（夏の出場校決定後に差し替え）
-  [33,'代表校33','未定',null,0,0,0,0,0,0,0,0],
-  [34,'代表校34','未定',null,0,0,0,0,0,0,0,0],
-  [35,'代表校35','未定',null,0,0,0,0,0,0,0,0],
-  [36,'代表校36','未定',null,0,0,0,0,0,0,0,0],
-  [37,'代表校37','未定',null,0,0,0,0,0,0,0,0],
-  [38,'代表校38','未定',null,0,0,0,0,0,0,0,0],
-  [39,'代表校39','未定',null,0,0,0,0,0,0,0,0],
-  [40,'代表校40','未定',null,0,0,0,0,0,0,0,0],
-  [41,'代表校41','未定',null,0,0,0,0,0,0,0,0],
-  [42,'代表校42','未定',null,0,0,0,0,0,0,0,0],
-  [43,'代表校43','未定',null,0,0,0,0,0,0,0,0],
-  [44,'代表校44','未定',null,0,0,0,0,0,0,0,0],
-  [45,'代表校45','未定',null,0,0,0,0,0,0,0,0],
-  [46,'代表校46','未定',null,0,0,0,0,0,0,0,0],
-  [47,'代表校47','未定',null,0,0,0,0,0,0,0,0],
-  [48,'代表校48','未定',null,0,0,0,0,0,0,0,0],
-  [49,'代表校49','未定',null,0,0,0,0,0,0,0,0],
+  [1,'北北海道','白樺学園','2年ぶり5回目',8,6,0,0,0,0,['C','B','B','C','B']],
+  [2,'南北海道','札幌日大','2年ぶり2回目',4,0,0,0,6,6,['C','B','C','B','B']],
+  [3,'青森','青森山田','2年ぶり13回目',6,2,0,0,10,6,['B','B','B','B','B']],
+  [4,'岩手','花巻東','4年連続14回目',10,10,6,4,10,4,['A','A','A','A','A']],
+  [5,'秋田','横手','57年ぶり2回目',0,0,0,0,4,0,['C','C','C','C','C']],
+  [6,'山形','鶴岡東','2年ぶり9回目',6,2,0,0,4,0,['C','C','B','B','B']],
+  [7,'宮城','仙台育英','2年連続32回目',10,4,0,0,10,8,['A','B','A','A','A']],
+  [8,'福島','東日大昌平','初出場',0,0,0,0,4,0,['C','C','B','C','C']],
+  [9,'茨城','霞ケ浦','2年ぶり4回目',0,0,0,0,0,0,['C','B','B','B','C']],
+  [10,'栃木','佐野日大','16年ぶり7回目',10,6,0,4,8,2,['B','C','B','B','B']],
+  [11,'群馬','健大高崎','3年連続6回目',4,0,0,0,10,4,['B','B','A','B','B']],
+  [12,'埼玉','花咲徳栄','2年ぶり9回目',10,8,0,8,8,2,['B','A','A','B','A']],
+  [13,'千葉','拓大紅陵','24年ぶり6回目',0,0,0,0,6,2,['B','B','C','B','B']],
+  [14,'東東京','関東第一','3年連続11回目',8,6,0,0,10,6,['A','A','A','A','A']],
+  [15,'西東京','八王子実践','初出場',0,0,0,0,0,0,['C','C','C','C','C']],
+  [16,'神奈川','横浜','2年連続22回目',10,4,0,4,10,10,['A','特A','A','特A','A']],
+  [17,'山梨','東海大甲府','3年ぶり15回目',4,0,0,0,8,2,['C','B','B','B','B']],
+  [18,'新潟','日本文理','4年ぶり13回目',10,8,0,6,4,0,['B','B','B','B','C']],
+  [19,'長野','松商学園','2年連続39回目',0,0,0,0,4,0,['C','C','C','C','C']],
+  [20,'富山','高岡商','4年ぶり23回目',0,0,0,0,0,0,['C','C','B','C','C']],
+  [21,'石川','遊学館','11年ぶり7回目',6,0,0,0,4,0,['C','C','B','C','B']],
+  [22,'福井','敦賀気比','2年連続13回目',10,6,0,0,10,2,['B','B','B','B','B']],
+  [23,'静岡','聖隷クリストファー','2年連続2回目',10,6,0,0,6,0,['B','B','B','B','B']],
+  [24,'愛知','享栄','31年ぶり9回目',4,0,0,0,10,8,['B','B','B','B','A']],
+  [25,'岐阜','中京','7年ぶり8回目',8,2,0,0,4,0,['B','B','B','B','B']],
+  [26,'三重','三重','4年ぶり15回目',10,8,0,6,6,0,['C','B','B','B','B']],
+  [27,'滋賀','八幡商','15年ぶり8回目',4,0,0,0,4,0,['C','C','B','C','C']],
+  [28,'京都','立命館宇治','3年ぶり5回目',0,0,0,0,8,6,['B','B','B','B','B']],
+  [29,'大阪','履正社','3年ぶり6回目',0,0,0,0,10,2,['B','B','A','A','A']],
+  [30,'兵庫','社','3年ぶり3回目',0,0,0,0,4,0,['C','B','B','B','B']],
+  [31,'奈良','天理','2年連続31回目',8,4,0,0,10,6,['B','B','B','B','B']],
+  [32,'和歌山','智辯和歌山','3年連続29回目',4,0,0,0,10,8,['A','A','A','B','A']],
+  [33,'岡山','岡山学芸館','3年連続5回目',0,0,0,0,6,0,['C','C','B','B','B']],
+  [34,'広島','福山','初出場',0,0,0,0,0,0,['C','C','B','C','C']],
+  [35,'鳥取','鳥取城北','3年連続8回目',10,4,0,0,6,0,['C','B','C','C','C']],
+  [36,'島根','立正大淞南','3年ぶり4回目',6,2,0,0,6,6,['C','C','C','C','C']],
+  [37,'山口','高川学園','2年連続4回目',6,8,0,4,10,2,['B','C','B','B','B']],
+  [38,'香川','英明','2年ぶり5回目',8,10,6,8,8,6,['B','B','B','B','B']],
+  [39,'徳島','鳴門渦潮','2年ぶり9回目',6,0,0,0,0,0,['C','C','C','C','C']],
+  [40,'愛媛','新田','5年ぶり2回目',6,2,0,0,10,10,['B','C','B','B','B']],
+  [41,'高知','明徳義塾','2年ぶり24回目',10,6,0,0,6,0,['B','B','B','B','B']],
+  [42,'福岡','東筑','9年ぶり7回目',4,0,0,0,8,0,['B','B','B','B','B']],
+  [43,'佐賀','佐賀商','8年ぶり17回目',0,0,0,0,10,2,['C','C','C','C','C']],
+  [44,'長崎','長崎日大','16年ぶり10回目',10,8,0,4,6,2,['B','C','C','B','C']],
+  [45,'熊本','有明','初出場',8,2,0,0,4,0,['C','C','C','C','C']],
+  [46,'大分','大分商','13年ぶり16回目',6,0,0,0,0,0,['C','B','B','B','B']],
+  [47,'宮崎','日南学園','8年ぶり10回目',6,0,0,0,4,0,['C','C','C','B','C']],
+  [48,'鹿児島','神村学園','4年連続9回目',10,6,0,6,6,2,['A','A','A','A','A']],
+  [49,'沖縄','沖縄尚学','2年連続12回目',10,4,0,4,6,8,['A','A','A','A','A']],
 ];
 
+// 夏予選成績（試合数, 総得点, 総失点）※取得済みのみ。空は未調査
+const YOSEN_DEFAULT={
+  // 北海道・東北
+  1:[6,50,7],    // 白樺学園（北北海道）
+  2:[6,45,11],   // 札幌日大（南北海道）
+  3:[5,42,7],    // 青森山田（青森）
+  4:[5,33,1],    // 花巻東（岩手）
+  5:[5,25,9],    // 横手（秋田）
+  6:[5,51,4],    // 鶴岡東（山形）
+  7:[5,59,2],    // 仙台育英（宮城）
+  8:[6,42,9],    // 東日大昌平（福島）
+  // 関東・東京
+  9:[6,34,12],   // 霞ケ浦（茨城）
+  10:[5,47,4],   // 佐野日大（栃木）
+  11:[5,38,5],   // 健大高崎（群馬）
+  12:[7,83,12],  // 花咲徳栄（埼玉）
+  13:[7,38,7],   // 拓大紅陵（千葉）
+  14:[6,72,6],   // 関東第一（東東京）
+  15:[6,39,13],  // 八王子実践（西東京）
+  16:[7,64,6],   // 横浜（神奈川）※トーナメント表と照合済
+  17:[5,33,11],  // 東海大甲府（山梨）※準決勝8-7甲府工を照合済
+  // 北信越
+  18:[6,63,13],  // 日本文理（新潟）
+  19:[6,70,12],  // 松商学園（長野）
+  20:[6,42,17],  // 高岡商（富山）
+  21:[5,29,16],  // 遊学館（石川）
+  22:[4,29,7],   // 敦賀気比（福井）
+  // 東海
+  23:[6,39,8],   // 聖隷クリストファー（静岡）
+  24:[6,33,8],   // 享栄（愛知）※準決勝3-1星城を照合済
+  25:[6,48,4],   // 中京（岐阜）※13-0多治見を照合済
+  26:[5,51,14],  // 三重（三重）
+  // 近畿
+  27:[5,27,7],   // 八幡商（滋賀）
+  28:[6,54,13],  // 立命館宇治（京都）
+  29:[7,66,5],   // 履正社（大阪）※決勝16-2箕面学園を照合済
+  30:[7,36,3],   // 社（兵庫）※準決勝10-0須磨学園を照合済
+  31:[5,38,2],   // 天理（奈良）
+  32:[5,27,10],  // 智辯和歌山（和歌山）
+  // 中国
+  33:[5,19,8],   // 岡山学芸館（岡山）
+  34:[6,47,10],  // 福山（広島）※全6試合を独自照合済
+  35:[4,32,3],   // 鳥取城北（鳥取）
+  36:[5,24,8],   // 立正大淞南（島根）
+  37:[5,42,6],   // 高川学園（山口）
+  // 四国
+  38:[5,41,12],  // 英明（香川）※決勝7-5・準決10-4を照合済
+  39:[5,23,13],  // 鳴門渦潮（徳島）
+  40:[5,49,4],   // 新田（愛媛）
+  41:[4,21,6],   // 明徳義塾（高知）
+  // 九州・沖縄
+  42:[6,39,13],  // 東筑（福岡）
+  43:[5,26,7],   // 佐賀商（佐賀）
+  44:[5,38,9],   // 長崎日大（長崎）
+  45:[5,29,5],   // 有明（熊本）
+  46:[5,32,13],  // 大分商（大分）
+  47:[5,31,9],   // 日南学園（宮崎）
+  48:[5,50,3],   // 神村学園（鹿児島）
+  49:[5,28,5],   // 沖縄尚学（沖縄）※決勝4-3エナジックを照合済
+};
+
+// 地域性評価点（過去の甲子園通算成績による都道府県ランク）
+const REGION_PT={'北北海道':3,'南北海道':3,'青森':3,'岩手':2,'秋田':2,'山形':1,'宮城':5,'福島':1,
+'茨城':4,'栃木':5,'群馬':6,'埼玉':6,'千葉':7,'東東京':8,'西東京':8,'神奈川':9,'山梨':4,
+'新潟':1,'長野':5,'富山':1,'石川':2,'福井':4,'静岡':7,'愛知':9,'岐阜':8,'三重':3,'滋賀':2,
+'京都':9,'大阪':10,'兵庫':9,'奈良':7,'和歌山':9,'岡山':5,'広島':6,'鳥取':3,'島根':2,'山口':6,
+'香川':8,'徳島':7,'愛媛':8,'高知':8,'福岡':7,'佐賀':1,'長崎':4,'熊本':5,'大分':4,'宮崎':2,
+'鹿児島':4,'沖縄':6};
+
+const PAPER_PT={'特A':4,'A':3,'B':2,'C':1};
+const PAPER_NAMES=['日刊','スポ','報知','サン','中日'];
+const TOUR_NAMES=['秋季大会','秋・地区大会','神宮大会','選抜大会','春季大会','春・地区大会'];
+
 const TEAMS=TEAMS_RAW.map(r=>({
-  no:r[0],name:r[1],pref:r[2],
-  papers:r[3], // [日刊,スポ,報知,サン,デイ] or null
-  stats:{games:r[4],avg:r[5],runs:r[6],hr:r[7],sb:r[8],era:r[9],ra:r[10],err:r[11]},
+  no:r[0],pref:r[1],name:r[2],hist:r[3],
+  tour:[r[4],r[5],r[6],r[7],r[8],r[9]],
+  papers:r[10],
 }));
 
-// ===== 評価点換算表（スプレッドシート「基準点」より） =====
-// 各紙評価: 特A=4, A=3, B=2, C=1（5紙で最大20点）
-const PAPER_PT={'特A':4,'A':3,'B':2,'C':1};
-
-// 打率（.000表記の整数）→ 点
-function ptAvg(v){
-  if(v>=380)return 10; if(v>=360)return 9; if(v>=350)return 8; if(v>=340)return 7;
-  if(v>=330)return 6; if(v>=310)return 5; if(v>=290)return 4; if(v>=270)return 3;
-  if(v>=260)return 2; return 1;
+// 夏予選の得失点差/試合 → 0〜10点
+function ptYosen(games,runs,ra){
+  if(!games)return null;
+  const d=(runs-ra)/games;
+  if(d>=8)return 10; if(d>=7)return 9; if(d>=6)return 8; if(d>=5)return 7;
+  if(d>=4)return 6; if(d>=3)return 5; if(d>=2)return 4; if(d>=1)return 3;
+  if(d>=0)return 2; return 1;
 }
-// 平均得点 → 点
-function ptRuns(v){
-  if(v>=14)return 10; if(v>=12)return 9; if(v>=11)return 8; if(v>=10)return 7;
-  if(v>=9)return 6; if(v>=8)return 5; if(v>=6)return 4; if(v>=4)return 3;
-  if(v>=2)return 2; return 1;
-}
-// 本塁打 → 点（10本以上で10点）
-function ptHr(v){return Math.min(Math.floor(v),10);}
-// 盗塁 → 点
-function ptSb(v){
-  if(v>=30)return 10; if(v>=25)return 9; if(v>=20)return 8; if(v>=15)return 7;
-  if(v>=10)return 6; if(v>=9)return 5; if(v>=8)return 4; if(v>=7)return 3;
-  if(v>=6)return 2; return 1;
-}
-// 防御率 → 点（低いほど高評価）
-function ptEra(v){
-  if(v<1.0)return 10; if(v<1.5)return 9; if(v<2.0)return 8; if(v<2.5)return 7;
-  if(v<=2.80)return 6; if(v<3.10)return 5; if(v<3.40)return 4; if(v<3.70)return 3;
-  if(v<4.00)return 2; return 1;
-}
-// 平均失点 → 点（低いほど高評価）
-function ptRa(v){
-  if(v<1.5)return 10; if(v<2.0)return 9; if(v<2.5)return 8; if(v<3.0)return 7;
-  if(v<3.5)return 6; if(v<4.0)return 5; if(v<4.5)return 4; if(v<5.0)return 3;
-  if(v<6.0)return 2; return 1;
-}
-// 失策 → 点（少ないほど高評価）
-function ptErr(v){
-  if(v<=3)return 10; if(v<=6)return 9; if(v<=9)return 8; if(v<=12)return 7;
-  if(v<=15)return 6; if(v<=18)return 5; if(v<=21)return 4; if(v<=24)return 3;
-  if(v<=27)return 2; return 1;
+function getYosen(no){
+  const ov=(cloud.yosen||{})[String(no)];
+  if(ov&&+ov[0]>0)return ov.map(v=>+v||0);
+  return YOSEN_DEFAULT[no]||null;
 }
 
-// 総合評価点を計算（最大90点 = 新聞20 + 成績70）
+// ===== 評価点計算 =====
+// 大会成績(最大65) + 新聞評価(最大20) + 地域性(最大10) = 95点満点
 function calcTotalPoint(team){
   const ov=(cloud.teamData||{})[String(team.no)];
+  const tour=(ov&&ov.tour)?ov.tour.map(v=>+v||0):team.tour;
   const papers=(ov&&ov.papers&&ov.papers.some(p=>p))?ov.papers:team.papers;
-  const st=(ov&&ov.stats&&+ov.stats.games>0)?ov.stats:team.stats;
-  if(!papers||!+st.games)return null;
+  const tourPt=tour.reduce((s,v)=>s+v,0);
   const paperPt=papers.reduce((s,p)=>s+(PAPER_PT[p]||0),0);
-  if(paperPt===0)return null;
-  const statPt=ptAvg(+st.avg)+ptRuns(+st.runs)+ptHr(+st.hr)+ptSb(+st.sb)+ptEra(+st.era)+ptRa(+st.ra)+ptErr(+st.err);
-  return paperPt+statPt;
+  const regionPt=REGION_PT[team.pref]||0;
+  const y=getYosen(team.no);
+  const yosenPt=y?ptYosen(y[0],y[1],y[2]):null;
+  // 予選未入力の校は平均値(5)で補正して不利にならないようにする
+  const yp=yosenPt===null?5:yosenPt;
+  return {tour:tourPt,paper:paperPt,region:regionPt,yosen:yosenPt,yosenUsed:yp,
+          total:tourPt+paperPt+regionPt+yp};
 }
 
-// ===== コスト判定 =====
-// 総合点の順位で3等分: 上位1/3→5点、中位1/3→3点、下位1/3→1点
+// ===== コスト判定（総合点で3等分） =====
 function getTeamCost(no){
   const manual=(cloud.costs||{})[String(no)];
   if(manual)return manual;
   const team=TEAMS.find(t=>t.no===no);
   if(!team)return 3;
-  const myPt=calcTotalPoint(team);
-  if(myPt===null)return 3; // データ未入力は3点
-  const allPts=TEAMS.map(t=>calcTotalPoint(t)).filter(p=>p!==null).sort((a,b)=>b-a);
+  const myPt=calcTotalPoint(team).total;
+  const allPts=TEAMS.map(t=>calcTotalPoint(t).total).sort((a,b)=>b-a);
   const n=allPts.length;
   const rank=allPts.findIndex(p=>p<=myPt)+1;
   const third=n/3;
@@ -519,6 +1115,7 @@ function getTeamCost(no){
 }
 
 const COST_LIMIT=15;
+const MAX_LOT=3; // 同一校の最大選択口数
 
 const ROUNDS=[{key:'r1',label:'1回戦'},{key:'r2',label:'2回戦'},{key:'r3',label:'3回戦'},{key:'qf',label:'準々決勝'},{key:'sf',label:'準決勝'},{key:'f',label:'決勝'}];
 
@@ -530,7 +1127,19 @@ const MAX=5;
 // ===== 状態 =====
 let cur='__schedule__';
 let cloud={members:{},results:{},locked:false,password:''};
-function gm(m){if(!cloud.members[m])cloud.members[m]={teams:[]};return cloud.members[m];}
+function gm(m){
+  if(!cloud.members[m])cloud.members[m]={teams:[],picks:{}};
+  if(!cloud.members[m].picks)cloud.members[m].picks={};
+  // 旧データ(teams配列)からの自動移行
+  if(cloud.members[m].teams&&cloud.members[m].teams.length&&Object.keys(cloud.members[m].picks).length===0){
+    cloud.members[m].teams.forEach(no=>{cloud.members[m].picks[no]=(cloud.members[m].picks[no]||0)+1;});
+  }
+  return cloud.members[m];
+}
+function getPicks(m){return gm(m).picks;} // {no: lot}
+function getUsedCostByPicks(picks){
+  return Object.keys(picks).reduce((s,no)=>s+getTeamCost(+no)*picks[no],0);
+}
 function gr(){if(!cloud.results)cloud.results={};return cloud.results;}
 function isLocked(){return false;} // テスト中はロック無効
 function getPassword(){return localStorage.getItem('koshien_admin_pw')||'';}
@@ -670,6 +1279,7 @@ function buildTabs(){
   MEMBERS.forEach(m=>{const b=document.createElement('button');b.className='tab'+(m===cur?' active':'');b.textContent=m;b.onclick=()=>switchMember(m);el.appendChild(b);});
   const schb=document.createElement('button');schb.className='tab tab-schedule';schb.textContent='📅 日程';schb.onclick=()=>switchView('schedule');el.appendChild(schb);
   const rb=document.createElement('button');rb.className='tab tab-rankings';rb.textContent='🏅 順位表';rb.onclick=()=>switchView('rankings');el.appendChild(rb);
+  const gb=document.createElement('button');gb.className='tab tab-guide';gb.textContent='📖 ガイド';gb.onclick=()=>switchView('guide');el.appendChild(gb);
   const ab=document.createElement('button');ab.className='tab tab-admin';ab.textContent='⚙️ 管理';ab.onclick=()=>switchView('admin');el.appendChild(ab);
 }
 function switchMember(m){
@@ -693,7 +1303,8 @@ function switchView(v){
   const ts=document.querySelector('.tab-schedule');if(v==='schedule'&&ts)ts.classList.add('active');
   const tr=document.querySelector('.tab-rankings');if(v==='rankings'&&tr)tr.classList.add('active');
   const ta=document.querySelector('.tab-admin');if(v==='admin'&&ta)ta.classList.add('active');
-  ['member','rankings','admin','schedule'].forEach(x=>{const el=document.getElementById('view-'+x);if(el)el.classList.remove('active');});
+  const tg=document.querySelector('.tab-guide');if(v==='guide'&&tg)tg.classList.add('active');
+  ['member','rankings','admin','schedule','guide'].forEach(x=>{const el=document.getElementById('view-'+x);if(el)el.classList.remove('active');});
   const vEl=document.getElementById('view-'+v);if(vEl)vEl.classList.add('active');
   if(v==='rankings')renderRankings();
   if(v==='admin')renderAdmin();
@@ -704,12 +1315,13 @@ function renderCurrent(){
   if(cur==='__schedule__'){switchView('schedule');return;}
   if(cur==='__rankings__'){switchView('rankings');return;}
   if(cur==='__admin__'){switchView('admin');return;}
+  if(cur==='__guide__'){switchView('guide');return;}
   const m=MEMBERS.includes(cur)?cur:MEMBERS[0];
   cur=m;
   document.querySelectorAll('.tab').forEach(t=>{
     if(t&&t.classList)t.classList.toggle('active',t.textContent===m);
   });
-  ['member','rankings','admin','schedule'].forEach(v=>{
+  ['member','rankings','admin','schedule','guide'].forEach(v=>{
     const el=document.getElementById('view-'+v);
     if(el)el.classList.remove('active');
   });
@@ -721,13 +1333,11 @@ function renderCurrent(){
 }
 
 // ===== TEAMS GRID =====
-function getUsedCost(teams){
-  return teams.reduce((sum,no)=>sum+getTeamCost(no),0);
-}
+
 function renderGrid(){
   if(!MEMBERS.includes(cur))return;
-  const data=gm(cur);
-  const used=getUsedCost(data.teams);
+  const picks=getPicks(cur);
+  const used=getUsedCostByPicks(picks);
   const sc=document.getElementById('selected-count');
   if(sc)sc.textContent=used;
   const remEl=document.getElementById('cost-remaining');
@@ -735,58 +1345,107 @@ function renderGrid(){
   const grid=document.getElementById('teams-grid');grid.innerHTML='';
   TEAMS.forEach(t=>{
     const cost=getTeamCost(t.no);
-    const sel=data.teams.includes(t.no);
-    const wouldExceed=!sel&&(used+cost>COST_LIMIT);
-    const btn=document.createElement('button');
-    btn.className='team-btn'+(sel?' selected':'')+(wouldExceed?' disabled':'');
+    const lot=picks[t.no]||0;
+    const sel=lot>0;
     const costCls=cost===5?'cost-5':cost===3?'cost-3':'cost-1';
-    btn.innerHTML=`<div class="num">No.${t.no}</div><div class="tname">${t.name}</div><div class="pref">${t.pref}</div><span class="cost-badge ${costCls}">${cost}点</span><div class="check">✓</div>`;
-    if(!wouldExceed)btn.onclick=(e)=>{if(e.target.classList.contains('info-btn'))return;toggleTeam(t.no);};
+    const btn=document.createElement('button');
+    btn.className='team-btn'+(sel?' selected':'');
+    // 口数ステッパー
+    const canPlus=lot<MAX_LOT&&(used+cost<=COST_LIMIT);
+    const canMinus=lot>0;
+    btn.innerHTML=`<div class="num">No.${t.no}</div><div class="tname">${t.name}</div><div class="pref">${t.pref}</div><span class="cost-badge ${costCls}">${cost}点</span>
+      <div class="lot-stepper" onclick="event.stopPropagation()">
+        <button class="lot-btn" ${canMinus?'':'disabled'} onclick="changeLot(${t.no},-1)">−</button>
+        <span class="lot-num">${lot}口</span>
+        <button class="lot-btn" ${canPlus?'':'disabled'} onclick="changeLot(${t.no},1)">＋</button>
+      </div>`;
     const ib=document.createElement('button');ib.className='info-btn';ib.textContent='詳細データを見る';ib.onclick=(e)=>{e.stopPropagation();openModal(t.no);};
     btn.appendChild(ib);grid.appendChild(btn);
   });
-  document.getElementById('selected-card').style.display=data.teams.length>0?'block':'none';
+  document.getElementById('selected-card').style.display=Object.keys(picks).length>0?'block':'none';
 }
-function toggleTeam(no){
-  const data=gm(cur);const idx=data.teams.indexOf(no);
-  if(idx>=0){data.teams.splice(idx,1);}
-  else{
-    const used=getUsedCost(data.teams);
-    const cost=getTeamCost(no);
-    if(used+cost>COST_LIMIT){showToast(`⚠️ コスト上限${COST_LIMIT}点を超えます`);return;}
-    data.teams.push(no);
-  }
+function changeLot(no,delta){
+  const picks=getPicks(cur);
+  const cur_lot=picks[no]||0;
+  const next=cur_lot+delta;
+  if(next<0)return;
+  if(next>MAX_LOT){showToast(`⚠️ 同じ校は最大${MAX_LOT}口までです`);return;}
+  const cost=getTeamCost(no);
+  const otherUsed=getUsedCostByPicks(picks)-cost*cur_lot;
+  if(otherUsed+cost*next>COST_LIMIT){showToast(`⚠️ コスト上限${COST_LIMIT}点を超えます`);return;}
+  if(next===0)delete picks[no];
+  else picks[no]=next;
   renderGrid();renderSelectedList();
 }
 
-// ===== 得失点差 =====
-function calcTeamDiff(no){
+// ===== 得失点差（口数対応） =====
+// 1校の全試合結果から: 合計得失点差, 勝利数, 最大プラス差, 最大マイナス差 を返す
+function calcTeamStats(no){
   const res=gr(),key=String(no);if(!res[key])return null;
-  let total=0,played=false;
-  ROUNDS.forEach(r=>{const rd=res[key][r.key];if(rd&&rd.scored!==''&&rd.lost!=''){total+=parseInt(rd.scored||0)-parseInt(rd.lost||0);played=true;}});
-  return played?total:null;
+  let diffSum=0,wins=0,maxPlus=null,maxMinus=null,played=false;
+  ROUNDS.forEach(r=>{
+    const rd=res[key][r.key];
+    if(rd&&rd.scored!==''&&rd.lost!==''){
+      played=true;
+      const d=parseInt(rd.scored||0)-parseInt(rd.lost||0);
+      diffSum+=d;
+      if(d>0)wins++;
+      if(maxPlus===null||d>maxPlus)maxPlus=d;
+      if(maxMinus===null||d<maxMinus)maxMinus=d;
+    }
+  });
+  return played?{diffSum,wins,maxPlus,maxMinus}:null;
+}
+// 後方互換: 単純な得失点差だけ返す
+function calcTeamDiff(no){
+  const s=calcTeamStats(no);
+  return s?s.diffSum:null;
+}
+// メンバー1人分の集計（口数を反映）
+function calcMemberStats(m){
+  const picks=getPicks(m);
+  let total=0,wins=0,maxPlus=null,maxMinus=null,played=false;
+  Object.keys(picks).forEach(no=>{
+    const lot=picks[no];
+    const s=calcTeamStats(+no);
+    if(s){
+      played=true;
+      total+=s.diffSum*lot;
+      wins+=s.wins*lot;
+      // 最大プラス/マイナスは口数を掛けた値で比較（1試合の最大インパクト）
+      const pp=s.maxPlus!==null?s.maxPlus*lot:null;
+      const mm=s.maxMinus!==null?s.maxMinus*lot:null;
+      if(pp!==null&&(maxPlus===null||pp>maxPlus))maxPlus=pp;
+      if(mm!==null&&(maxMinus===null||mm<maxMinus))maxMinus=mm;
+    }
+  });
+  return played?{total,wins,maxPlus,maxMinus}:null;
 }
 function calcMemberTotal(m){
-  const data=gm(m);let total=0,played=false;
-  data.teams.forEach(no=>{const d=calcTeamDiff(no);if(d!==null){total+=d;played=true;}});
-  return played?total:null;
+  const s=calcMemberStats(m);
+  return s?s.total:null;
 }
 
 // ===== SELECTED LIST =====
 function renderSelectedList(){
   if(!MEMBERS.includes(cur))return;
-  const data=gm(cur);const list=document.getElementById('selected-list');if(!list)return;list.innerHTML='';
+  const picks=getPicks(cur);
+  const list=document.getElementById('selected-list');if(!list)return;list.innerHTML='';
+  const noArr=Object.keys(picks);
   let grand=0,anyPlayed=false;
-  data.teams.forEach(no=>{
-    const t=TEAMS.find(x=>x.no===no),diff=calcTeamDiff(no);
+  noArr.forEach(noStr=>{
+    const no=+noStr,lot=picks[noStr];
+    const t=TEAMS.find(x=>x.no===no);
+    const s=calcTeamStats(no);
+    const diff=s?s.diffSum*lot:null;
     if(diff!==null){anyPlayed=true;grand+=diff;}
     const cls=diff===null?'zero':diff>0?'plus':diff<0?'minus':'zero';
     const disp=diff===null?'－':diff>0?`+${diff}`:String(diff);
     const res=gr()[String(no)]||{};
-    const badges=ROUNDS.map(r=>{const rd=res[r.key],p=rd&&rd.scored!==''&&rd.lost!='';return`<span class="sel-round-badge${p?' played':''}">${r.label.slice(0,3)}</span>`;}).join('');
-    list.innerHTML+=`<div class="sel-item"><div style="flex:1"><div class="sel-name">${t.name}</div><div class="sel-rounds">${badges}</div></div><div class="sel-diff ${cls}">${disp}</div></div>`;
+    const badges=ROUNDS.map(r=>{const rd=res[r.key],p=rd&&rd.scored!==''&&rd.lost!=='';return`<span class="sel-round-badge${p?' played':''}">${r.label.slice(0,3)}</span>`;}).join('');
+    list.innerHTML+=`<div class="sel-item"><div style="flex:1"><div class="sel-name">${t.name} <span style="font-size:11px;color:var(--crimson);font-weight:900;">×${lot}口</span></div><div class="sel-rounds">${badges}</div></div><div class="sel-diff ${cls}">${disp}</div></div>`;
   });
-  if(data.teams.length>0){
+  if(noArr.length>0){
     const tcls=!anyPlayed?'zero':grand>0?'plus':grand<0?'minus':'zero';
     const tdisp=!anyPlayed?'試合待ち':grand>0?`+${grand}`:String(grand);
     list.innerHTML+=`<div class="sel-item" style="border-color:var(--crimson);background:#fff5f5"><div style="flex:1"><div class="sel-name" style="color:var(--crimson)">合計得失点差</div></div><div class="sel-diff ${tcls}" style="font-size:24px">${tdisp}</div></div>`;
@@ -807,18 +1466,60 @@ async function saveMember(){
 function renderRankings(){
   const view=document.getElementById('ranking-view');
   const scores=MEMBERS.map(m=>{
-    const data=gm(m),total=calcMemberTotal(m);
-    const names=data.teams.map(no=>{const t=TEAMS.find(x=>x.no===no),d=calcTeamDiff(no);return t?`${t.name}${d===null?'':d>0?`(+${d})`:`(${d})`}`:''});
-    return{member:m,total,teams:names,count:data.teams.length};
-  }).sort((a,b)=>a.total===null&&b.total===null?0:a.total===null?1:b.total===null?-1:b.total-a.total);
+    const picks=getPicks(m);
+    const s=calcMemberStats(m);
+    const names=Object.keys(picks).map(noStr=>{
+      const no=+noStr,lot=picks[noStr];
+      const t=TEAMS.find(x=>x.no===no);
+      const ts=calcTeamStats(no);
+      const d=ts?ts.diffSum*lot:null;
+      const lotTxt=lot>1?`×${lot}`:'';
+      return t?`${t.name}${lotTxt}${d===null?'':d>0?`(+${d})`:`(${d})`}`:'';
+    });
+    return{
+      member:m,
+      total:s?s.total:null,
+      wins:s?s.wins:0,
+      maxPlus:s?s.maxPlus:null,
+      maxMinus:s?s.maxMinus:null,
+      teams:names,
+      count:Object.keys(picks).length
+    };
+  }).sort((a,b)=>{
+    // 1. 得失点差合計（多い方が上位）。null(未消化)は最下位扱い
+    if(a.total===null&&b.total===null)return 0;
+    if(a.total===null)return 1;
+    if(b.total===null)return -1;
+    if(b.total!==a.total)return b.total-a.total;
+    // 2. 口数を反映した合計勝利数が多い方
+    if(b.wins!==a.wins)return b.wins-a.wins;
+    // 3. 1試合での最大プラス得失点差が大きい方
+    const ap=a.maxPlus===null?-Infinity:a.maxPlus;
+    const bp=b.maxPlus===null?-Infinity:b.maxPlus;
+    if(bp!==ap)return bp-ap;
+    // 4. 1試合での最大マイナス得失点差が小さい方（マイナスが浅い＝負けが軽い方が上位）
+    const am=a.maxMinus===null?Infinity:a.maxMinus;
+    const bm=b.maxMinus===null?Infinity:b.maxMinus;
+    if(am!==bm)return am-bm;
+    // 5. 完全に同じなら同順位（安定ソートに任せる）
+    return 0;
+  });
   if(!scores.some(s=>s.count>0)){view.innerHTML='<div class="no-data">まだ誰も選択していません 🌸<br>各参加者のタブからチームを選んでください</div>';return;}
   view.innerHTML='';
+  // 同順位判定のため、直前と全指標が同じ場合は同じ順位番号を振る
+  let dispRank=1;
   scores.forEach((s,i)=>{
+    if(i>0){
+      const p=scores[i-1];
+      const same = p.total===s.total && p.wins===s.wins && p.maxPlus===s.maxPlus && p.maxMinus===s.maxMinus;
+      if(!same) dispRank=i+1;
+    }
     const row=document.createElement('div');
-    row.className='rank-row'+(i===0?' rank-1':i===1?' rank-2':i===2?' rank-3':'');
+    row.className='rank-row'+(dispRank===1?' rank-1':dispRank===2?' rank-2':dispRank===3?' rank-3':'');
     const disp=s.total===null?'試合待':s.total>0?`+${s.total}`:String(s.total);
     const sc=s.total===null?'zero':s.total>0?'plus':s.total<0?'minus':'zero';
-    row.innerHTML=`<div class="rank-num">${['🥇','🥈','🥉'][i]||(i+1)}</div><div class="rank-detail"><div class="rank-name">${s.member}</div><div class="rank-teams">${s.teams.length>0?s.teams.join('　'):'未選択'}</div></div><div style="text-align:right"><div class="rank-score ${sc}">${disp}</div><div class="rank-score-label">得失点差</div></div>`;
+    const medal=dispRank<=3?['🥇','🥈','🥉'][dispRank-1]:dispRank;
+    row.innerHTML=`<div class="rank-num">${medal}</div><div class="rank-detail"><div class="rank-name">${s.member}</div><div class="rank-teams">${s.teams.length>0?s.teams.join('　'):'未選択'}</div></div><div style="text-align:right"><div class="rank-score ${sc}">${disp}</div><div class="rank-score-label">得失点差</div></div>`;
     view.appendChild(row);
   });
 }
@@ -831,7 +1532,7 @@ function renderAdmin(){
   const modeBar=document.getElementById('admin-mode-bar');
   if(modeBar){
     modeBar.innerHTML=`
-      <button class="filter-btn${adminMode==='cost'?' active':''}" onclick="setAdminMode('cost')">📊 地方大会成績・コスト</button>
+      <button class="filter-btn${adminMode==='cost'?' active':''}" onclick="setAdminMode('cost')">📊 評価点・コスト設定</button>
       <button class="filter-btn${adminMode==='score'?' active':''}" onclick="setAdminMode('score')">⚾ 本大会スコア入力</button>
     `;
   }
@@ -840,48 +1541,48 @@ function renderAdmin(){
 }
 function setAdminMode(m){adminMode=m;renderAdmin();}
 
-// --- 地方大会成績・コスト設定 ---
+// --- 大会成績・新聞評価・コスト設定 ---
 function renderAdminCost(){
   document.getElementById('admin-filter').innerHTML='';
   const teamList=document.getElementById('admin-team-list');teamList.innerHTML='';
   const teamData=cloud.teamData||{};
   const costs=cloud.costs||{};
-  const PAPERS_OPT=['','特A','A','B','C'];
-  const PAPER_NAMES=['日刊','スポ','報知','サン','デイ'];
+  const OPT=['','特A','A','B','C'];
+
+  // 全校の総合点でランキングを作る
+  const allPts=TEAMS.map(t=>calcTotalPoint(t).total).sort((a,b)=>b-a);
+  const third=allPts.length/3;
 
   TEAMS.forEach(t=>{
     const ov=teamData[String(t.no)]||{};
-    const papers=ov.papers||t.papers||['','','','',''];
-    const st=ov.stats||t.stats;
+    const papers=(ov.papers&&ov.papers.some(p=>p))?ov.papers:t.papers;
+    const tour=(ov.tour)?ov.tour:t.tour;
     const manualCost=costs[String(t.no)]||'';
-    const totalPt=calcTotalPoint(t);
-    const autoCost=totalPt!==null?(function(){
-      const allPts=TEAMS.map(x=>calcTotalPoint(x)).filter(p=>p!==null).sort((a,b)=>b-a);
-      const n=allPts.length;
-      const rank=allPts.findIndex(p=>p<=totalPt)+1;
-      const third=n/3;
-      return rank<=Math.ceil(third)?5:rank<=Math.ceil(third*2)?3:1;
-    })():null;
+    const pt=calcTotalPoint(t);
+    const y=getYosen(t.no);
+    const rank=allPts.findIndex(p=>p<=pt.total)+1;
+    const autoCost=rank<=Math.ceil(third)?5:rank<=Math.ceil(third*2)?3:1;
 
     const row=document.createElement('div');row.className='admin-row';
     const paperSelects=PAPER_NAMES.map((pn,i)=>
-      `<label style="font-size:9px;display:flex;flex-direction:column;">${pn}<select id="pp-${t.no}-${i}" style="padding:3px;border-radius:5px;border:1px solid var(--sand);font-family:'M PLUS 1p';font-size:11px;font-weight:700;">${PAPERS_OPT.map(o=>`<option value="${o}" ${papers[i]===o?'selected':''}>${o||'-'}</option>`).join('')}</select></label>`
+      `<label style="font-size:9px;display:flex;flex-direction:column;">${pn}<select id="pp-${t.no}-${i}" style="padding:3px;border-radius:5px;border:1px solid var(--sand);font-family:'M PLUS 1p';font-size:11px;font-weight:700;">${OPT.map(o=>`<option value="${o}" ${papers[i]===o?'selected':''}>${o||'-'}</option>`).join('')}</select></label>`
+    ).join('');
+    const tourInputs=TOUR_NAMES.map((tn,i)=>
+      `<label style="font-size:9px;display:flex;flex-direction:column;">${tn}<input class="score-input" style="width:100%" type="number" id="tr-${t.no}-${i}" value="${tour[i]||0}"></label>`
     ).join('');
 
     row.innerHTML=`
       <div class="admin-team-name">No.${t.no} ${t.name} <span class="pref-small">${t.pref}</span>
-        <span style="margin-left:auto;font-size:11px;">評価点:<strong>${totalPt!==null?totalPt:'－'}</strong>　自動:<strong>${autoCost?autoCost+'点':'－'}</strong></span>
+        <span style="margin-left:auto;font-size:11px;">大会${pt.tour}+紙${pt.paper}+地域${pt.region}+予選${pt.yosen!==null?pt.yosen:'('+pt.yosenUsed+')'}=<strong>${pt.total}</strong>　${rank}位→<strong>${autoCost}点</strong></span>
       </div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:6px;">${tourInputs}</div>
       <div style="display:flex;gap:4px;margin-bottom:6px;">${paperSelects}</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px;">
-        <label style="font-size:9px;">試合<input class="score-input" style="width:100%" type="number" id="st-${t.no}-games" value="${st.games||''}"></label>
-        <label style="font-size:9px;">打率(整数)<input class="score-input" style="width:100%" type="number" id="st-${t.no}-avg" value="${st.avg||''}" placeholder="320"></label>
-        <label style="font-size:9px;">平均得点<input class="score-input" style="width:100%" type="number" step="0.1" id="st-${t.no}-runs" value="${st.runs||''}"></label>
-        <label style="font-size:9px;">本塁打<input class="score-input" style="width:100%" type="number" id="st-${t.no}-hr" value="${st.hr||''}"></label>
-        <label style="font-size:9px;">盗塁<input class="score-input" style="width:100%" type="number" id="st-${t.no}-sb" value="${st.sb||''}"></label>
-        <label style="font-size:9px;">防御率<input class="score-input" style="width:100%" type="number" step="0.01" id="st-${t.no}-era" value="${st.era||''}"></label>
-        <label style="font-size:9px;">平均失点<input class="score-input" style="width:100%" type="number" step="0.1" id="st-${t.no}-ra" value="${st.ra||''}"></label>
-        <label style="font-size:9px;">失策<input class="score-input" style="width:100%" type="number" id="st-${t.no}-err" value="${st.err||''}"></label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px;background:#fff8e8;padding:6px;border-radius:8px;">
+        <div style="grid-column:1/-1;font-size:10px;font-weight:900;color:var(--crimson);">☀️ 夏予選成績${y?'':'（未入力）'}</div>
+        <label style="font-size:9px;display:flex;flex-direction:column;">試合数<input class="score-input" style="width:100%" type="number" id="yo-${t.no}-0" value="${y?y[0]:''}"></label>
+        <label style="font-size:9px;display:flex;flex-direction:column;">総得点<input class="score-input" style="width:100%" type="number" id="yo-${t.no}-1" value="${y?y[1]:''}"></label>
+        <label style="font-size:9px;display:flex;flex-direction:column;">総失点<input class="score-input" style="width:100%" type="number" id="yo-${t.no}-2" value="${y?y[2]:''}"></label>
+        <div style="font-size:9px;display:flex;flex-direction:column;justify-content:center;">評価<strong style="font-size:14px;color:var(--crimson);">${pt.yosen!==null?pt.yosen+'点':'－'}</strong></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:11px;font-weight:700;">コスト手動上書き:</span>
@@ -934,22 +1635,17 @@ async function saveAdmin(){
     if(!cloud.teamData)cloud.teamData={};
     if(!cloud.costs)cloud.costs={};
     TEAMS.forEach(t=>{
-      const g=document.getElementById(`st-${t.no}-games`);
-      if(!g)return;
-      const papers=[0,1,2,3,4].map(i=>document.getElementById(`pp-${t.no}-${i}`).value);
+      const first=document.getElementById(`tr-${t.no}-0`);
+      if(!first)return;
       cloud.teamData[String(t.no)]={
-        papers:papers,
-        stats:{
-          games:g.value,
-          avg:document.getElementById(`st-${t.no}-avg`).value,
-          runs:document.getElementById(`st-${t.no}-runs`).value,
-          hr:document.getElementById(`st-${t.no}-hr`).value,
-          sb:document.getElementById(`st-${t.no}-sb`).value,
-          era:document.getElementById(`st-${t.no}-era`).value,
-          ra:document.getElementById(`st-${t.no}-ra`).value,
-          err:document.getElementById(`st-${t.no}-err`).value,
-        }
+        tour:[0,1,2,3,4,5].map(i=>+document.getElementById(`tr-${t.no}-${i}`).value||0),
+        papers:[0,1,2,3,4].map(i=>document.getElementById(`pp-${t.no}-${i}`).value),
       };
+      if(!cloud.yosen)cloud.yosen={};
+      const yg=document.getElementById(`yo-${t.no}-0`).value;
+      if(yg&&+yg>0){
+        cloud.yosen[String(t.no)]=[+yg,+document.getElementById(`yo-${t.no}-1`).value||0,+document.getElementById(`yo-${t.no}-2`).value||0];
+      }else{delete cloud.yosen[String(t.no)];}
       const c=document.getElementById(`cost-${t.no}`).value;
       if(c)cloud.costs[String(t.no)]=parseInt(c);
       else delete cloud.costs[String(t.no)];
@@ -977,27 +1673,22 @@ async function saveAdmin(){
 function openModal(no){
   const t=TEAMS.find(x=>x.no===no);
   const ov=(cloud.teamData||{})[String(no)]||{};
-  const papers=(ov.papers&&ov.papers.some(p=>p))?ov.papers:(t.papers||['','','','','']);
-  const st=(ov.stats&&+ov.stats.games>0)?ov.stats:t.stats;
+  const papers=(ov.papers&&ov.papers.some(p=>p))?ov.papers:t.papers;
+  const tour=(ov.tour)?ov.tour.map(v=>+v||0):t.tour;
+  const pt=calcTotalPoint(t);
+  const cost=getTeamCost(no);
   document.getElementById('m-pref').textContent=t.pref;
   document.getElementById('m-name').textContent=t.name;
-  const totalPt=calcTotalPoint(t);
-  const cost=getTeamCost(no);
-  document.getElementById('m-sub').textContent=totalPt!==null?`評価点 ${totalPt}/90点`:'データ未入力';
-  const PAPER_NAMES=['日刊','スポ','報知','サン','デイ'];
+  document.getElementById('m-sub').textContent=`${t.hist}　評価点 ${pt.total}/95`;
   document.getElementById('m-papers').innerHTML=
     `<div class="paper-item" style="flex:none;padding:6px 14px;background:var(--crimson);"><div class="paper-name" style="color:rgba(255,255,255,.7);">コスト</div><div class="paper-grade" style="font-size:18px;color:white;">${cost}点</div></div>`+
     PAPER_NAMES.map((pn,i)=>`<div class="paper-item"><div class="paper-name">${pn}</div><div class="paper-grade pg-${papers[i]==='特A'?'SA':papers[i]||'C'}">${papers[i]||'-'}</div></div>`).join('');
-  document.getElementById('m-games').textContent=+st.games?`地方大会 ${st.games}試合`:'成績未入力';
-  document.getElementById('m-stats').innerHTML=[
-    {l:'チーム打率',v:st.avg?'.'+st.avg:'-',pt:st.avg?ptAvg(+st.avg):null},
-    {l:'平均得点',v:st.runs?st.runs+'点':'-',pt:st.runs?ptRuns(+st.runs):null},
-    {l:'本塁打',v:st.hr!==''&&st.hr!==undefined?st.hr+'本':'-',pt:st.hr!==''?ptHr(+st.hr):null},
-    {l:'盗塁',v:st.sb!==''&&st.sb!==undefined?st.sb+'個':'-',pt:st.sb!==''?ptSb(+st.sb):null},
-    {l:'防御率',v:st.era||'-',pt:st.era?ptEra(+st.era):null},
-    {l:'平均失点',v:st.ra?st.ra+'点':'-',pt:st.ra?ptRa(+st.ra):null},
-    {l:'失策',v:st.err!==''&&st.err!==undefined?st.err+'個':'-',pt:st.err!==''?ptErr(+st.err):null},
-  ].map(s=>`<div class="stat-item"><div class="stat-label">${s.l}</div><div class="stat-value">${s.v}</div><div style="font-size:9px;color:var(--crimson);font-weight:700;">${s.pt!==null?s.pt+'pt':''}</div></div>`).join('');
+  const yy=getYosen(no);
+  const yTxt=yy?`${yy[0]}試合 ${yy[1]}得点 ${yy[2]}失点（${pt.yosen}点）`:'未入力';
+  document.getElementById('m-games').innerHTML=`<span style="color:var(--crimson);font-weight:900;">大会 ${pt.tour}</span>　新聞 ${pt.paper}　地域 ${pt.region}　予選 ${pt.yosen!==null?pt.yosen:'－'}<br><span style="font-size:10px;color:rgba(0,0,0,.5);">☀️夏予選: ${yTxt}</span>`;
+  document.getElementById('m-stats').innerHTML=TOUR_NAMES.map((tn,i)=>
+    `<div class="stat-item"><div class="stat-label">${tn}</div><div class="stat-value" style="font-size:16px;">${tour[i]||'－'}</div></div>`
+  ).join('');
   document.getElementById('modal-overlay').classList.add('open');
 }
 function closeModal(e){if(e.target.id==='modal-overlay')closeModalBtn();}
@@ -1042,8 +1733,8 @@ function renderSchedule(){
         return;
       }
       if(!g.home&&!g.away)return;
-      const homeMembers=g.homeNo?MEMBERS.filter(m=>gm(m).teams.includes(g.homeNo)):[];
-      const awayMembers=g.awayNo?MEMBERS.filter(m=>gm(m).teams.includes(g.awayNo)):[];
+      const homeMembers=g.homeNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.homeNo)):[];
+      const awayMembers=g.awayNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.awayNo)):[];
       const roundLabel={r1:'1回戦',r2:'2回戦',qf:'準々決勝',sf:'準決勝',f:'決勝'}[g.round]||g.round;
       const scoreHtml=g.done
         ?`<div class="game-score">${g.score}</div>`
@@ -1080,8 +1771,8 @@ function renderSchedule(){
       day.games.forEach(g=>{
         if(g.rest){block.innerHTML+=`<div class="game-row" style="text-align:center;padding:12px;color:rgba(0,0,0,.4);font-size:12px;font-weight:700;">🌸 休養日</div>`;return;}
         if(!g.home&&!g.away)return;
-        const homeMembers=g.homeNo?MEMBERS.filter(m=>gm(m).teams.includes(g.homeNo)):[];
-        const awayMembers=g.awayNo?MEMBERS.filter(m=>gm(m).teams.includes(g.awayNo)):[];
+        const homeMembers=g.homeNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.homeNo)):[];
+        const awayMembers=g.awayNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.awayNo)):[];
         const roundLabel={r1:'1回戦',r2:'2回戦',qf:'準々決勝',sf:'準決勝',f:'決勝'}[g.round]||g.round;
         const scoreHtml=g.done?`<div class="game-score">${g.score}</div>`:`<div class="game-score pending">${g.time||'TBD'}</div>`;
         const homeChips=homeMembers.map(m=>`<span class="game-member-chip home-pick">${m}</span>`).join('');
