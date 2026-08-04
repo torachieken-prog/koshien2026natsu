@@ -300,7 +300,7 @@
       <div class="lock-banner">
         <div class="lock-banner-icon">🔒</div>
         <div class="lock-banner-text">チーム選択はロック中です</div>
-        <button class="lock-unlock-btn" onclick="showPwModal(()=>{cloud.locked=false;saveCloud().then(ok=>{if(ok){renderLockState();showToast('🔓 ロック解除しました');}});})">解除</button>
+        <button class="lock-unlock-btn" onclick="showPwModal(()=>{cloud.locked=false;saveCloud({top:['locked']}).then(ok=>{if(ok){renderLockState();showToast('🔓 ロック解除しました');}});})">解除</button>
       </div>
       <div class="locked-overlay">管理者によってチーム選択がロックされています。<br>変更するにはパスワードが必要です。</div>
     </div>
@@ -1285,12 +1285,12 @@ async function toggleLock(){
   if(!getPassword()){showToast('⚠️ 先にパスワードを設定してください');return;}
   if(!isLocked()){
     cloud.locked=true;
-    const ok=await saveCloud();
+    const ok=await saveCloud({top:['locked']});
     if(ok){renderLockState();showToast('🔒 チーム選択をロックしました');}
   }else{
     showPwModal(()=>{
       cloud.locked=false;
-      saveCloud().then(ok=>{
+      saveCloud({top:['locked']}).then(ok=>{
         if(ok){renderLockState();showToast('🔓 ロックを解除しました');}
       });
     });
@@ -1350,9 +1350,28 @@ async function loadCloud(silent=false){
 }
 
 // ===== クラウド保存 =====
-async function saveCloud(){
+// options: {member:'名前'} → membersの中の指定メンバーだけ最新データにマージして保存
+//          {top:['results','teamData',...]} → トップレベルの指定キーだけマージして保存
+// これにより、他の参加者が保存した内容を上書きしてしまう競合を防ぐ
+async function saveCloud(options){
   setSyncBar('syncing');
   try{
+    const latest=await cloudRead();
+    if(latest&&typeof latest==='object'){
+      const merged={...latest};
+      if(options&&options.member){
+        merged.members={...(latest.members||{})};
+        merged.members[options.member]=cloud.members[options.member];
+      }
+      if(options&&options.top){
+        options.top.forEach(k=>{merged[k]=cloud[k];});
+      }
+      if(!options){
+        // 指定なしの場合のみ全体を反映（フォールバック、通常は使わない）
+        Object.assign(merged,cloud);
+      }
+      cloud=merged;
+    }
     await cloudWrite(cloud);
     setSyncBar('ok');
     return true;
@@ -1556,8 +1575,8 @@ function renderSelectedList(){
 async function saveMember(){
   setBtnDisabled('save-member-btn',true);
   document.getElementById('save-member-btn').textContent='保存中...';
-  const ok=await saveCloud();
-  if(ok)showToast(`✅ ${cur}の選択を保存しました！`);
+  const ok=await saveCloud({member:cur});
+  if(ok){showToast(`✅ ${cur}の選択を保存しました！`);renderGrid();renderSelectedList();}
   document.getElementById('save-member-btn').textContent='☁️ クラウドに保存する';
   setBtnDisabled('save-member-btn',false);
 }
@@ -1791,8 +1810,9 @@ async function saveAdmin(){
   }
   setBtnDisabled('admin-save-btn',true);
   document.getElementById('admin-save-btn').textContent='保存中...';
-  const ok=await saveCloud();
-  if(ok)showToast('✅ 保存しました！');
+  const topKeys=adminMode==='cost'?['teamData','costs','yosen']:['results'];
+  const ok=await saveCloud({top:topKeys});
+  if(ok){showToast('✅ 保存しました！');if(adminMode==='cost')renderAdminCost();else renderAdminScore();}
   document.getElementById('admin-save-btn').textContent='☁️ クラウドに保存';
   setBtnDisabled('admin-save-btn',false);
 }
