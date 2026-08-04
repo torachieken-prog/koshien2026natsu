@@ -60,8 +60,6 @@
   .team-btn.selected .pref{color:rgba(255,255,255,.6);}
   .team-btn .check{display:none;position:absolute;top:5px;right:24px;width:16px;height:16px;background:var(--gold);border-radius:50%;font-size:10px;line-height:16px;text-align:center;color:white;font-weight:900;}
   .team-btn.selected .check{display:block;}
-  .team-btn.disabled{opacity:.35;cursor:not-allowed;transform:none!important;}
-  .team-btn.disabled:hover{border-color:var(--sand);background:var(--cream);box-shadow:none;}
   .grade-badge{display:inline-block;font-size:10px;font-weight:900;padding:1px 7px;border-radius:4px;margin-top:4px;letter-spacing:1px;}
   .grade-SA{background:#7a0a15;color:#f0c84a;}.grade-A{background:#1a3a5c;color:white;}.grade-B{background:#4a7c4e;color:white;}.grade-C{background:#888;color:white;}
   .cost-badge{display:inline-block;font-size:11px;font-weight:900;padding:2px 10px;border-radius:12px;margin-top:4px;letter-spacing:1px;}
@@ -188,7 +186,7 @@
   .day-header{background:linear-gradient(90deg,var(--sky),#254e7a);color:white;padding:8px 14px;font-size:12px;font-weight:900;letter-spacing:2px;display:flex;align-items:center;gap:8px;}
   .day-header .day-date{flex:1;}
   .day-header .day-status{font-size:10px;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px;}
-  .game-row{padding:10px 14px;border-bottom:1px solid var(--sand);last-child{border:none};}
+  .game-row{padding:10px 14px;border-bottom:1px solid var(--sand);}
   .game-row:last-child{border-bottom:none;}
   .game-time{font-size:10px;color:rgba(0,0,0,.4);font-weight:700;margin-bottom:4px;}
   .game-teams{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:900;}
@@ -319,8 +317,8 @@
           ・<strong>大会成績</strong>（秋季・秋地区・神宮・選抜・春季・春地区の各成績、最大65点）<br>
           ・<strong>新聞5紙の評価</strong>（特A=4 A=3 B=2 C=1、最大20点）<br>
           ・<strong>地域性</strong>（都道府県の甲子園通算成績ランク、最大10点）<br>
-          ・<strong>夏予選成績</strong>（1試合平均の得失点差、最大10点）<br>
-          ・総合105点満点で全49校をランキングし、<strong>上位1/3=5点 / 中位1/3=3点 / 下位1/3=1点</strong></div>
+          ・<strong>攻撃力</strong>（1試合平均得点、最大15点）／<strong>守備力</strong>（1試合平均失点、少ないほど高得点、最大15点）<br>
+          ・総合80点満点（攻撃15＋守備15＋大会成績20＋新聞評価20＋地域性10）で判定し、<strong>45点以上=5点 / 33点以上=3点 / それ未満=1点</strong></div>
       </div>
       <div class="section-card">
         <div class="section-header">STEP 1｜<span>合計15点でチームを選択</span>　<small style="font-size:10px;opacity:.7;">同じ校は最大3口まで</small></div>
@@ -1120,34 +1118,45 @@ function getYosen(no){
 }
 
 // ===== 評価点計算 =====
-// 大会成績(最大65) + 新聞評価(最大20) + 地域性(最大10) = 95点満点
+// 攻撃15点 + 守備15点 + 大会成績20点(圧縮) + 新聞評価20点 + 地域性10点 = 80点満点
+// 平均得点 → 0〜15点（3.0点で0、12.0点で15）
+function ptRuns(v){return Math.max(0,Math.min(15,Math.round((v-3)/9*15)));}
+// 平均失点 → 0〜15点（少ないほど高得点。3.0失点で0、0.3失点で15）
+function ptRA(v){return Math.max(0,Math.min(15,Math.round((3.0-v)/2.7*15)));}
+// 大会成績 生65点満点 → 20点に圧縮
+function tourCompress(raw){return Math.round(raw/65*20);}
+
 function calcTotalPoint(team){
   const ov=(cloud.teamData||{})[String(team.no)];
   const tour=(ov&&ov.tour)?ov.tour.map(v=>+v||0):team.tour;
   const papers=(ov&&ov.papers&&ov.papers.some(p=>p))?ov.papers:team.papers;
-  const tourPt=tour.reduce((s,v)=>s+v,0);
+  const tourRaw=tour.reduce((s,v)=>s+v,0);
+  const tourPt=tourCompress(tourRaw);
   const paperPt=papers.reduce((s,p)=>s+(PAPER_PT[p]||0),0);
   const regionPt=REGION_PT[team.pref]||0;
   const y=getYosen(team.no);
-  const yosenPt=y?ptYosen(y[0],y[1],y[2]):null;
-  // 予選未入力の校は平均値(5)で補正して不利にならないようにする
-  const yp=yosenPt===null?5:yosenPt;
-  return {tour:tourPt,paper:paperPt,region:regionPt,yosen:yosenPt,yosenUsed:yp,
-          total:tourPt+paperPt+regionPt+yp};
+  let pr=null,pa=null,ar=null,aa=null;
+  if(y){
+    ar=y[1]/y[0]; aa=y[2]/y[0];
+    pr=ptRuns(ar); pa=ptRA(aa);
+  }
+  // 予選未入力の校は攻守とも平均値(7,7)で補正
+  const prUsed=pr===null?7:pr;
+  const paUsed=pa===null?7:pa;
+  return {tour:tourPt,paper:paperPt,region:regionPt,
+          pr,pa,prUsed,paUsed,ar,aa,
+          yosen:(pr===null?null:pr+pa),yosenUsed:prUsed+paUsed,
+          total:tourPt+paperPt+regionPt+prUsed+paUsed};
 }
 
-// ===== コスト判定（総合点で3等分） =====
+// ===== コスト判定（総合80点満点。45点以上=5点／33点以上=3点／それ未満=1点） =====
 function getTeamCost(no){
   const manual=(cloud.costs||{})[String(no)];
   if(manual)return manual;
   const team=TEAMS.find(t=>t.no===no);
   if(!team)return 3;
   const myPt=calcTotalPoint(team).total;
-  const allPts=TEAMS.map(t=>calcTotalPoint(t).total).sort((a,b)=>b-a);
-  const n=allPts.length;
-  const rank=allPts.findIndex(p=>p<=myPt)+1;
-  const third=n/3;
-  return rank<=Math.ceil(third)?5:rank<=Math.ceil(third*2)?3:1;
+  return myPt>=45?5:myPt>=33?3:1;
 }
 
 const COST_LIMIT=15;
@@ -1156,7 +1165,49 @@ const MAX_LOT=3; // 同一校の最大選択口数
 const ROUNDS=[{key:'r1',label:'1回戦'},{key:'r2',label:'2回戦'},{key:'r3',label:'3回戦'},{key:'qf',label:'準々決勝'},{key:'sf',label:'準決勝'},{key:'f',label:'決勝'}];
 
 // ===== 試合日程データ =====
-const SCHEDULE=[]; // 組み合わせ抽選後に更新
+const SCHEDULE=[
+  {date:'8/5(水)',day:1,today:false,games:[
+    {time:'17:30',round:'r1',home:'札幌日大',away:'仙台育英',homeNo:2,awayNo:7,score:'',done:false}
+  ]},
+  {date:'8/6(木)',day:2,today:false,games:[
+    {time:'16:00',round:'r1',home:'東筑',away:'神村学園',homeNo:42,awayNo:48,score:'',done:false},
+    {time:'18:30',round:'r1',home:'聖隷クリストファー',away:'佐野日大',homeNo:23,awayNo:10,score:'',done:false}
+  ]},
+  {date:'8/7(金)',day:3,today:false,games:[
+    {time:'8:00',round:'r1',home:'東海大甲府',away:'鶴岡東',homeNo:17,awayNo:6,score:'',done:false},
+    {time:'13:30',round:'r1',home:'八幡商',away:'健大高崎',homeNo:27,awayNo:11,score:'',done:false},
+    {time:'16:00',round:'r1',home:'立命館宇治',away:'有明',homeNo:28,awayNo:45,score:'',done:false},
+    {time:'18:30',round:'r1',home:'立正大淞南',away:'長崎日大',homeNo:36,awayNo:44,score:'',done:false}
+  ]},
+  {date:'8/8(土)',day:4,today:false,games:[
+    {time:'8:00',round:'r1',home:'遊学館',away:'青森山田',homeNo:21,awayNo:3,score:'',done:false},
+    {time:'13:30',round:'r1',home:'白樺学園',away:'東日大昌平',homeNo:1,awayNo:8,score:'',done:false},
+    {time:'16:00',round:'r1',home:'日本文理',away:'大分商',homeNo:18,awayNo:46,score:'',done:false},
+    {time:'18:30',round:'r1',home:'英明',away:'関東第一',homeNo:38,awayNo:14,score:'',done:false}
+  ]},
+  {date:'8/9(日)',day:5,today:false,games:[
+    {time:'8:00',round:'r1',home:'新田',away:'花巻東',homeNo:40,awayNo:4,score:'',done:false},
+    {time:'13:30',round:'r1',home:'岡山学芸館',away:'鳥取城北',homeNo:33,awayNo:35,score:'',done:false},
+    {time:'16:00',round:'r1',home:'鳴門渦潮',away:'八王子実践',homeNo:39,awayNo:15,score:'',done:false},
+    {time:'18:30',round:'r1',home:'中京',away:'霞ケ浦',homeNo:25,awayNo:9,score:'',done:false}
+  ]},
+  {date:'8/10(月)',day:6,today:false,games:[
+    {time:'8:00',round:'r1',home:'明徳義塾',away:'日南学園',homeNo:41,awayNo:47,score:'',done:false},
+    {time:'13:30',round:'r1',home:'横浜',away:'沖縄尚学',homeNo:16,awayNo:49,score:'',done:false},
+    {time:'16:00',round:'r2',home:'高岡商',away:'高川学園',homeNo:20,awayNo:37,score:'',done:false},
+    {time:'18:30',round:'r2',home:'天理',away:'福山',homeNo:31,awayNo:34,score:'',done:false}
+  ]},
+  {date:'8/11(火)',day:7,today:false,games:[
+    {time:'8:00',round:'r2',home:'横手',away:'敦賀気比',homeNo:5,awayNo:22,score:'',done:false},
+    {time:'13:30',round:'r2',home:'智辯和歌山',away:'社',homeNo:32,awayNo:30,score:'',done:false},
+    {time:'16:00',round:'r2',home:'履正社',away:'享栄',homeNo:29,awayNo:24,score:'',done:false},
+    {time:'18:30',round:'r2',home:'松商学園',away:'三重',homeNo:19,awayNo:26,score:'',done:false}
+  ]},
+  {date:'8/12(水)',day:8,today:false,games:[
+    {time:'8:00',round:'r2',home:'拓大紅陵',away:'佐賀商',homeNo:13,awayNo:43,score:'',done:false},
+    {time:'13:30',round:'r2',home:'花咲徳栄',away:'TBD',homeNo:12,awayNo:0,score:'',done:false}
+  ]},
+];
 const MEMBERS=['しんちゃん','かっちゃん','だいちゃん','まさちゃん','くろさん','ゆっきー','とみー','うっちー','みたにさん'];
 const MAX=5;
 
@@ -1164,12 +1215,14 @@ const MAX=5;
 let cur='__schedule__';
 let cloud={members:{},results:{},locked:false,password:''};
 function gm(m){
-  if(!cloud.members[m])cloud.members[m]={teams:[],picks:{}};
+  if(!cloud.members[m])cloud.members[m]={teams:[],picks:{},migrated:false};
   if(!cloud.members[m].picks)cloud.members[m].picks={};
-  // 旧データ(teams配列)からの自動移行
-  if(cloud.members[m].teams&&cloud.members[m].teams.length&&Object.keys(cloud.members[m].picks).length===0){
+  // 旧データ(teams配列)からの自動移行（1回のみ。移行後は旧データを空にして復活を防ぐ）
+  if(!cloud.members[m].migrated&&cloud.members[m].teams&&cloud.members[m].teams.length){
     cloud.members[m].teams.forEach(no=>{cloud.members[m].picks[no]=(cloud.members[m].picks[no]||0)+1;});
+    cloud.members[m].teams=[];
   }
+  cloud.members[m].migrated=true;
   return cloud.members[m];
 }
 function getPicks(m){return gm(m).picks;} // {no: lot}
@@ -1177,7 +1230,7 @@ function getUsedCostByPicks(picks){
   return Object.keys(picks).reduce((s,no)=>s+getTeamCost(+no)*picks[no],0);
 }
 function gr(){if(!cloud.results)cloud.results={};return cloud.results;}
-function isLocked(){return false;} // テスト中はロック無効
+function isLocked(){return !!cloud.locked;}
 function getPassword(){return localStorage.getItem('koshien_admin_pw')||'';}
 
 // ===== ロック機能 =====
@@ -1312,10 +1365,10 @@ async function saveCloud(){
 // ===== TABS =====
 function buildTabs(){
   const el=document.getElementById('tabs');el.innerHTML='';
-  MEMBERS.forEach(m=>{const b=document.createElement('button');b.className='tab'+(m===cur?' active':'');b.textContent=m;b.onclick=()=>switchMember(m);el.appendChild(b);});
   const schb=document.createElement('button');schb.className='tab tab-schedule';schb.textContent='📅 日程';schb.onclick=()=>switchView('schedule');el.appendChild(schb);
   const rb=document.createElement('button');rb.className='tab tab-rankings';rb.textContent='🏅 順位表';rb.onclick=()=>switchView('rankings');el.appendChild(rb);
   const gb=document.createElement('button');gb.className='tab tab-guide';gb.textContent='📖 ガイド';gb.onclick=()=>switchView('guide');el.appendChild(gb);
+  MEMBERS.forEach(m=>{const b=document.createElement('button');b.className='tab'+(m===cur?' active':'');b.textContent=m;b.onclick=()=>switchMember(m);el.appendChild(b);});
   const ab=document.createElement('button');ab.className='tab tab-admin';ab.textContent='⚙️ 管理';ab.onclick=()=>switchView('admin');el.appendChild(ab);
 }
 function switchMember(m){
@@ -1384,7 +1437,7 @@ function renderGrid(){
     const lot=picks[t.no]||0;
     const sel=lot>0;
     const costCls=cost===5?'cost-5':cost===3?'cost-3':'cost-1';
-    const btn=document.createElement('button');
+    const btn=document.createElement('div');
     btn.className='team-btn'+(sel?' selected':'');
     // 口数ステッパー
     const canPlus=lot<MAX_LOT&&(used+cost<=COST_LIMIT);
@@ -1425,9 +1478,13 @@ function calcTeamStats(no){
       played=true;
       const d=parseInt(rd.scored||0)-parseInt(rd.lost||0);
       diffSum+=d;
-      if(d>0)wins++;
-      if(maxPlus===null||d>maxPlus)maxPlus=d;
-      if(maxMinus===null||d<maxMinus)maxMinus=d;
+      if(d>0){
+        wins++;
+        if(maxPlus===null||d>maxPlus)maxPlus=d;
+      }
+      if(d<0){
+        if(maxMinus===null||d<maxMinus)maxMinus=d;
+      }
     }
   });
   return played?{diffSum,wins,maxPlus,maxMinus}:null;
@@ -1438,6 +1495,7 @@ function calcTeamDiff(no){
   return s?s.diffSum:null;
 }
 // メンバー1人分の集計（口数を反映）
+// maxPlusはプラスの試合のみ、maxMinusはマイナスの試合のみを対象に集計する
 function calcMemberStats(m){
   const picks=getPicks(m);
   let total=0,wins=0,maxPlus=null,maxMinus=null,played=false;
@@ -1448,11 +1506,15 @@ function calcMemberStats(m){
       played=true;
       total+=s.diffSum*lot;
       wins+=s.wins*lot;
-      // 最大プラス/マイナスは口数を掛けた値で比較（1試合の最大インパクト）
-      const pp=s.maxPlus!==null?s.maxPlus*lot:null;
-      const mm=s.maxMinus!==null?s.maxMinus*lot:null;
-      if(pp!==null&&(maxPlus===null||pp>maxPlus))maxPlus=pp;
-      if(mm!==null&&(maxMinus===null||mm<maxMinus))maxMinus=mm;
+      // 口数を反映した値で比較（1試合の最大インパクト）。プラス/マイナスは既にcalcTeamStats側で分離済み
+      if(s.maxPlus!==null){
+        const pp=s.maxPlus*lot;
+        if(maxPlus===null||pp>maxPlus)maxPlus=pp;
+      }
+      if(s.maxMinus!==null){
+        const mm=s.maxMinus*lot;
+        if(maxMinus===null||mm<maxMinus)maxMinus=mm;
+      }
     }
   });
   return played?{total,wins,maxPlus,maxMinus}:null;
@@ -1533,10 +1595,10 @@ function renderRankings(){
     const ap=a.maxPlus===null?-Infinity:a.maxPlus;
     const bp=b.maxPlus===null?-Infinity:b.maxPlus;
     if(bp!==ap)return bp-ap;
-    // 4. 1試合での最大マイナス得失点差が小さい方（マイナスが浅い＝負けが軽い方が上位）
-    const am=a.maxMinus===null?Infinity:a.maxMinus;
-    const bm=b.maxMinus===null?Infinity:b.maxMinus;
-    if(am!==bm)return am-bm;
+    // 4. 1試合での最大マイナス得失点差が小さい方が上位（敗戦なしが最も上位、次に-1、-2、-5の順）
+    if(a.maxMinus===null&&b.maxMinus!==null)return -1;
+    if(a.maxMinus!==null&&b.maxMinus===null)return 1;
+    if(a.maxMinus!==null&&b.maxMinus!==null&&a.maxMinus!==b.maxMinus)return b.maxMinus-a.maxMinus;
     // 5. 完全に同じなら同順位（安定ソートに任せる）
     return 0;
   });
@@ -1585,9 +1647,7 @@ function renderAdminCost(){
   const costs=cloud.costs||{};
   const OPT=['','特A','A','B','C'];
 
-  // 全校の総合点でランキングを作る
-  const allPts=TEAMS.map(t=>calcTotalPoint(t).total).sort((a,b)=>b-a);
-  const third=allPts.length/3;
+  // コスト判定は固定閾値（45点以上=5点／33点以上=3点）
 
   TEAMS.forEach(t=>{
     const ov=teamData[String(t.no)]||{};
@@ -1596,8 +1656,7 @@ function renderAdminCost(){
     const manualCost=costs[String(t.no)]||'';
     const pt=calcTotalPoint(t);
     const y=getYosen(t.no);
-    const rank=allPts.findIndex(p=>p<=pt.total)+1;
-    const autoCost=rank<=Math.ceil(third)?5:rank<=Math.ceil(third*2)?3:1;
+    const autoCost=pt.total>=45?5:pt.total>=33?3:1;
 
     const row=document.createElement('div');row.className='admin-row';
     const paperSelects=PAPER_NAMES.map((pn,i)=>
@@ -1609,7 +1668,7 @@ function renderAdminCost(){
 
     row.innerHTML=`
       <div class="admin-team-name">No.${t.no} ${t.name} <span class="pref-small">${t.pref}</span>
-        <span style="margin-left:auto;font-size:11px;">大会${pt.tour}+紙${pt.paper}+地域${pt.region}+予選${pt.yosen!==null?pt.yosen:'('+pt.yosenUsed+')'}=<strong>${pt.total}</strong>　${rank}位→<strong>${autoCost}点</strong></span>
+        <span style="margin-left:auto;font-size:11px;">攻${pt.pr!==null?pt.pr:'('+pt.prUsed+')'}+守${pt.pa!==null?pt.pa:'('+pt.paUsed+')'}+大会${pt.tour}+紙${pt.paper}+地域${pt.region}=<strong>${pt.total}</strong>　→<strong>${autoCost}点</strong></span>
       </div>
       <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:6px;">${tourInputs}</div>
       <div style="display:flex;gap:4px;margin-bottom:6px;">${paperSelects}</div>
@@ -1618,7 +1677,7 @@ function renderAdminCost(){
         <label style="font-size:9px;display:flex;flex-direction:column;">試合数<input class="score-input" style="width:100%" type="number" id="yo-${t.no}-0" value="${y?y[0]:''}"></label>
         <label style="font-size:9px;display:flex;flex-direction:column;">総得点<input class="score-input" style="width:100%" type="number" id="yo-${t.no}-1" value="${y?y[1]:''}"></label>
         <label style="font-size:9px;display:flex;flex-direction:column;">総失点<input class="score-input" style="width:100%" type="number" id="yo-${t.no}-2" value="${y?y[2]:''}"></label>
-        <div style="font-size:9px;display:flex;flex-direction:column;justify-content:center;">評価<strong style="font-size:14px;color:var(--crimson);">${pt.yosen!==null?pt.yosen+'点':'－'}</strong></div>
+        <div style="font-size:9px;display:flex;flex-direction:column;justify-content:center;">攻${pt.pr!==null?pt.pr:'－'}/守${pt.pa!==null?pt.pa:'－'}</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:11px;font-weight:700;">コスト手動上書き:</span>
@@ -1653,7 +1712,7 @@ function renderAdminScore(){
       const dcls=diff===null?'zero':diff>0?'plus':diff<0?'minus':'zero';
       const dtxt=diff===null?'':diff>0?`+${diff}`:String(diff);
       const rrow=document.createElement('div');rrow.className='admin-round-row';
-      rrow.innerHTML=`<div class="admin-round-label">${r.label}</div><div class="score-inputs"><input class="score-input" type="number" min="0" max="99" placeholder="得" value="${rd.scored}" id="inp-${t.no}-${r.key}-s" oninput="updatePrev(${t.no},'${r.key}')"><span class="score-vs">対</span><input class="score-input" type="number" min="0" max="99" placeholder="失" value="${rd.lost}" id="inp-${t.no}-${r.key}-l" oninput="updatePrev(${t.no},'${r.key}')"><span class="score-diff-preview ${dcls}" id="prev-${t.no}-${r.key}">${dtxt}</span></div>`;
+      rrow.innerHTML=`<div class="admin-round-label">${r.label}</div><div class="score-inputs"><input class="score-input" type="number" min="0" max="99" step="1" placeholder="得" value="${rd.scored}" id="inp-${t.no}-${r.key}-s" oninput="updatePrev(${t.no},'${r.key}')"><span class="score-vs">対</span><input class="score-input" type="number" min="0" max="99" step="1" placeholder="失" value="${rd.lost}" id="inp-${t.no}-${r.key}-l" oninput="updatePrev(${t.no},'${r.key}')"><span class="score-diff-preview ${dcls}" id="prev-${t.no}-${r.key}">${dtxt}</span></div>`;
       roundsEl.appendChild(rrow);
     });
   });
@@ -1688,13 +1747,44 @@ async function saveAdmin(){
     });
   }else{
     const res=gr();
+    let invalidFound=false;
+    const updates=[]; // {no, roundKey, action:'set'|'delete', scored, lost}
     TEAMS.forEach(t=>{
       ROUNDS.forEach(r=>{
         const si=document.getElementById(`inp-${t.no}-${r.key}-s`),li=document.getElementById(`inp-${t.no}-${r.key}-l`);
         if(!si||!li)return;
-        if(!res[String(t.no)])res[String(t.no)]={};
-        res[String(t.no)][r.key]={scored:si.value,lost:li.value};
+        const sv=si.value.trim(),lv=li.value.trim();
+        // 空欄は未入力として扱う
+        if(sv===''&&lv===''){
+          updates.push({no:t.no,key:r.key,action:'delete'});
+          return;
+        }
+        // 片方だけ入力されている場合は保存しない
+        if((sv===''&&lv!=='')||(sv!==''&&lv==='')){
+          invalidFound=true;
+          return;
+        }
+        const home=Number(sv),away=Number(lv);
+        // 整数のみ、0以上99以下
+        if(!Number.isInteger(home)||!Number.isInteger(away)||home<0||away<0||home>99||away>99){
+          invalidFound=true;
+          return;
+        }
+        updates.push({no:t.no,key:r.key,action:'set',scored:String(home),lost:String(away)});
       });
+    });
+    if(invalidFound){
+      showToast('⚠️ 得点は0〜99の整数で、両方入力するか両方空欄にしてください');
+      return;
+    }
+    // ここまで来たら全項目が有効。まとめて反映する
+    updates.forEach(u=>{
+      if(u.action==='delete'){
+        if(res[String(u.no)]&&res[String(u.no)][u.key])delete res[String(u.no)][u.key];
+      }else{
+        if(!res[String(u.no)])res[String(u.no)]={};
+        res[String(u.no)][u.key]={scored:u.scored,lost:u.lost};
+      }
     });
   }
   setBtnDisabled('admin-save-btn',true);
@@ -1715,12 +1805,12 @@ function openModal(no){
   const cost=getTeamCost(no);
   document.getElementById('m-pref').textContent=t.pref;
   document.getElementById('m-name').textContent=t.name;
-  document.getElementById('m-sub').textContent=`${t.hist}　評価点 ${pt.total}/95`;
+  document.getElementById('m-sub').textContent=`${t.hist}　評価点 ${pt.total}/80`;
   document.getElementById('m-papers').innerHTML=
     `<div class="paper-item" style="flex:none;padding:6px 14px;background:var(--crimson);"><div class="paper-name" style="color:rgba(255,255,255,.7);">コスト</div><div class="paper-grade" style="font-size:18px;color:white;">${cost}点</div></div>`+
     PAPER_NAMES.map((pn,i)=>`<div class="paper-item"><div class="paper-name">${pn}</div><div class="paper-grade pg-${papers[i]==='特A'?'SA':papers[i]||'C'}">${papers[i]||'-'}</div></div>`).join('');
   const yy=getYosen(no);
-  const yTxt=yy?`${yy[0]}試合 ${yy[1]}得点 ${yy[2]}失点（${pt.yosen}点）`:'未入力';
+  const yTxt=yy?`${yy[0]}試合 ${yy[1]}得点 ${yy[2]}失点（攻${pt.pr}/守${pt.pa}）`:'未入力';
   document.getElementById('m-games').innerHTML=`<span style="color:var(--crimson);font-weight:900;">大会 ${pt.tour}</span>　新聞 ${pt.paper}　地域 ${pt.region}　予選 ${pt.yosen!==null?pt.yosen:'－'}<br><span style="font-size:10px;color:rgba(0,0,0,.5);">☀️夏予選: ${yTxt}</span>`;
   document.getElementById('m-stats').innerHTML=TOUR_NAMES.map((tn,i)=>
     `<div class="stat-item"><div class="stat-label">${tn}</div><div class="stat-value" style="font-size:16px;">${tour[i]||'－'}</div></div>`
@@ -1775,8 +1865,8 @@ function renderSchedule(){
       const scoreHtml=g.done
         ?`<div class="game-score">${g.score}</div>`
         :`<div class="game-score pending">${g.time||'TBD'}</div>`;
-      const homeChips=homeMembers.map(m=>`<span class="game-member-chip home-pick">${m}</span>`).join('');
-      const awayChips=awayMembers.map(m=>`<span class="game-member-chip away-pick">${m}</span>`).join('');
+      const homeChips=homeMembers.map(m=>{const lot=getPicks(m)[g.homeNo];return `<span class="game-member-chip home-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
+      const awayChips=awayMembers.map(m=>{const lot=getPicks(m)[g.awayNo];return `<span class="game-member-chip away-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
       const membersHtml=(homeMembers.length||awayMembers.length)?`<div class="game-members-split"><div class="game-members-home">${homeChips}</div><div class="game-members-away">${awayChips}</div></div>`:'';
       const row=document.createElement('div');
       row.className='game-row'+(g.done?'':' today-marker');
@@ -1811,8 +1901,8 @@ function renderSchedule(){
         const awayMembers=g.awayNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.awayNo)):[];
         const roundLabel={r1:'1回戦',r2:'2回戦',qf:'準々決勝',sf:'準決勝',f:'決勝'}[g.round]||g.round;
         const scoreHtml=g.done?`<div class="game-score">${g.score}</div>`:`<div class="game-score pending">${g.time||'TBD'}</div>`;
-        const homeChips=homeMembers.map(m=>`<span class="game-member-chip home-pick">${m}</span>`).join('');
-        const awayChips=awayMembers.map(m=>`<span class="game-member-chip away-pick">${m}</span>`).join('');
+        const homeChips=homeMembers.map(m=>{const lot=getPicks(m)[g.homeNo];return `<span class="game-member-chip home-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
+        const awayChips=awayMembers.map(m=>{const lot=getPicks(m)[g.awayNo];return `<span class="game-member-chip away-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
         const membersHtml=(homeMembers.length||awayMembers.length)?`<div class="game-members-split"><div class="game-members-home">${homeChips}</div><div class="game-members-away">${awayChips}</div></div>`:'';
         const row=document.createElement('div');
         row.className='game-row';
