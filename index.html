@@ -207,8 +207,8 @@
   /* ===== トーナメント表（横スクロール・通常向き） ===== */
   .bracket-scroll{overflow-x:auto;overflow-y:hidden;padding:10px 12px 16px;-webkit-overflow-scrolling:touch;}
   .bracket-rounds{display:flex;gap:10px;align-items:flex-start;min-width:max-content;}
-  .bracket-round{display:flex;flex-direction:column;gap:8px;min-width:170px;max-height:70vh;overflow-y:auto;}
-  .bracket-round-label{text-align:center;font-size:12px;font-weight:900;color:white;background:var(--sky);border-radius:8px;padding:6px;letter-spacing:1px;position:sticky;top:0;z-index:2;}
+  .bracket-round{display:flex;flex-direction:column;gap:8px;min-width:170px;max-height:70vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .bracket-round-label{text-align:center;font-size:12px;font-weight:900;color:white;background:var(--sky);border-radius:8px;padding:6px;letter-spacing:1px;}
   .bracket-card{background:white;border:1.5px solid var(--sand);border-radius:10px;padding:7px 9px;box-shadow:0 2px 6px rgba(0,0,0,.06);}
   .bracket-card.done{border-color:var(--crimson);}
   .bracket-team{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:900;padding:3px 0;gap:5px;}
@@ -219,6 +219,9 @@
   .bracket-team .bt-score{font-size:13px;min-width:18px;text-align:right;}
   .bracket-vs{border-top:1px dashed var(--sand);margin:2px 0;}
   .bracket-time{font-size:9px;color:rgba(0,0,0,.35);text-align:center;margin-bottom:2px;}
+  .bracket-next{font-size:9px;color:var(--sky);text-align:center;margin-top:5px;padding-top:5px;border-top:1px solid #f0e8d5;font-weight:700;}
+  .bt-tbd{color:rgba(0,0,0,.3);font-weight:400;}
+  .bracket-card-tbd{background:#faf6ea;}
   .bracket-members{display:flex;justify-content:space-between;margin-top:5px;padding-top:5px;border-top:1px solid #f0e8d5;gap:4px;}
   .bracket-members-side{display:flex;flex-wrap:wrap;gap:2px;}
   .bracket-members-side.away{justify-content:flex-end;}
@@ -316,7 +319,7 @@
   <div class="header-badge">49代表校・コスト制</div>
 </header>
 <div class="sync-bar" id="sync-bar">⏳ クラウドに接続中...</div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/07 14:19</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/07 15:25</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -378,8 +381,8 @@
     <div class="section-card">
       <div class="section-header">🏆 <span>トーナメント表</span></div>
       <div style="padding:8px 14px;font-size:11px;color:rgba(0,0,0,.5);line-height:1.6;">
-        横スクロール：登録済みラウンドを表示　　縦スクロール：同じラウンド内の対戦<br>
-        <span style="color:rgba(0,0,0,.35);">対戦カードが決まり次第、順次追加されます</span>
+        横スクロール：1回戦→決勝　　縦スクロール：同じラウンド内の対戦<br>
+        <span style="color:rgba(0,0,0,.35);">対戦校が未定の試合は「未定」と表示されます。勝ち上がりは自動で反映されます</span>
       </div>
       <div class="bracket-scroll" id="bracket-scroll"></div>
     </div>
@@ -1204,6 +1207,78 @@ const MAX_LOT=3; // 同一校の最大選択口数
 const ROUNDS=[{key:'r1',label:'1回戦'},{key:'r2',label:'2回戦'},{key:'r3',label:'3回戦'},{key:'qf',label:'準々決勝'},{key:'sf',label:'準決勝'},{key:'f',label:'決勝'}];
 
 // ===== 試合日程データ =====
+// ===== トーナメント表専用データ（試合番号・接続情報つき） =====
+// 各試合オブジェクトのフィールドについて：
+//   homeSrc / awaySrc : 実際の自動追跡に使う参照情報。前の試合の勝者をここから遡って解決する（getEffectiveBracketGameが利用）。
+//   next               : 画面表示専用（「勝者 → ◯回戦 第◯試合」の案内文言に使うだけ）。
+//                         自動追跡には使われないため、next を設定しても homeSrc/awaySrc 側を
+//                         別途設定しない限り、次の試合には自動反映されない。
+//                         （例：準々決勝以降は next はあるが homeSrc/awaySrc が null のため、
+//                         　3回戦の勝者は準々決勝カードへ自動的には入らない。組み合わせ抽選後に
+//                         　手動でqf/sf/finalのhomeSrc・awaySrcとhomeNo・awayNoを設定する運用）
+const BRACKET_DATA={
+  r1:[
+    {id:1,round:'r1',date:'8/5(水)',time:'17:30',homeNo:2,awayNo:7,home:'札幌日大',away:'仙台育英',homeSrc:null,awaySrc:null,next:{round:'r2',id:8}},
+    {id:2,round:'r1',date:'8/6(木)',time:'16:00',homeNo:42,awayNo:48,home:'東筑',away:'神村学園',homeSrc:null,awaySrc:null,next:{round:'r2',id:9}},
+    {id:3,round:'r1',date:'8/6(木)',time:'18:30',homeNo:23,awayNo:10,home:'聖隷クリストファー',away:'佐野日大',homeSrc:null,awaySrc:null,next:{round:'r2',id:9}},
+    {id:4,round:'r1',date:'8/7(金)',time:'8:00',homeNo:17,awayNo:6,home:'東海大甲府',away:'鶴岡東',homeSrc:null,awaySrc:null,next:{round:'r2',id:10}},
+    {id:5,round:'r1',date:'8/7(金)',time:'13:30',homeNo:27,awayNo:11,home:'八幡商',away:'健大高崎',homeSrc:null,awaySrc:null,next:{round:'r2',id:10}},
+    {id:6,round:'r1',date:'8/7(金)',time:'16:00',homeNo:28,awayNo:45,home:'立命館宇治',away:'有明',homeSrc:null,awaySrc:null,next:{round:'r2',id:11}},
+    {id:7,round:'r1',date:'8/7(金)',time:'18:30',homeNo:36,awayNo:44,home:'立正大淞南',away:'長崎日大',homeSrc:null,awaySrc:null,next:{round:'r2',id:11}},
+    {id:8,round:'r1',date:'8/8(土)',time:'8:00',homeNo:21,awayNo:3,home:'遊学館',away:'青森山田',homeSrc:null,awaySrc:null,next:{round:'r2',id:12}},
+    {id:9,round:'r1',date:'8/8(土)',time:'13:30',homeNo:1,awayNo:8,home:'白樺学園',away:'東日大昌平',homeSrc:null,awaySrc:null,next:{round:'r2',id:12}},
+    {id:10,round:'r1',date:'8/8(土)',time:'16:00',homeNo:18,awayNo:46,home:'日本文理',away:'大分商',homeSrc:null,awaySrc:null,next:{round:'r2',id:13}},
+    {id:11,round:'r1',date:'8/8(土)',time:'18:30',homeNo:38,awayNo:14,home:'英明',away:'関東第一',homeSrc:null,awaySrc:null,next:{round:'r2',id:13}},
+    {id:12,round:'r1',date:'8/9(日)',time:'8:00',homeNo:40,awayNo:4,home:'新田',away:'花巻東',homeSrc:null,awaySrc:null,next:{round:'r2',id:14}},
+    {id:13,round:'r1',date:'8/9(日)',time:'13:30',homeNo:33,awayNo:35,home:'岡山学芸館',away:'鳥取城北',homeSrc:null,awaySrc:null,next:{round:'r2',id:14}},
+    {id:14,round:'r1',date:'8/9(日)',time:'16:00',homeNo:39,awayNo:15,home:'鳴門渦潮',away:'八王子実践',homeSrc:null,awaySrc:null,next:{round:'r2',id:15}},
+    {id:15,round:'r1',date:'8/9(日)',time:'18:30',homeNo:25,awayNo:9,home:'中京',away:'霞ケ浦',homeSrc:null,awaySrc:null,next:{round:'r2',id:15}},
+    {id:16,round:'r1',date:'8/10(月)',time:'8:00',homeNo:41,awayNo:47,home:'明徳義塾',away:'日南学園',homeSrc:null,awaySrc:null,next:{round:'r2',id:16}},
+    {id:17,round:'r1',date:'8/10(月)',time:'13:30',homeNo:16,awayNo:49,home:'横浜',away:'沖縄尚学',homeSrc:null,awaySrc:null,next:{round:'r2',id:16}},
+  ],
+  r2:[
+    {id:1,round:'r2',date:'8/10(月)',time:'16:00',homeNo:20,awayNo:37,home:'高岡商',away:'高川学園',homeSrc:null,awaySrc:null,next:{round:'r3',id:1}},
+    {id:2,round:'r2',date:'8/10(月)',time:'18:30',homeNo:31,awayNo:34,home:'天理',away:'福山',homeSrc:null,awaySrc:null,next:{round:'r3',id:1}},
+    {id:3,round:'r2',date:'8/11(火)',time:'8:00',homeNo:5,awayNo:22,home:'横手',away:'敦賀気比',homeSrc:null,awaySrc:null,next:{round:'r3',id:2}},
+    {id:4,round:'r2',date:'8/11(火)',time:'13:30',homeNo:32,awayNo:30,home:'智辯和歌山',away:'社',homeSrc:null,awaySrc:null,next:{round:'r3',id:2}},
+    {id:5,round:'r2',date:'8/11(火)',time:'16:00',homeNo:29,awayNo:24,home:'履正社',away:'享栄',homeSrc:null,awaySrc:null,next:{round:'r3',id:3}},
+    {id:6,round:'r2',date:'8/11(火)',time:'18:30',homeNo:19,awayNo:26,home:'松商学園',away:'三重',homeSrc:null,awaySrc:null,next:{round:'r3',id:3}},
+    {id:7,round:'r2',date:'8/12(水)',time:'8:00',homeNo:13,awayNo:43,home:'拓大紅陵',away:'佐賀商',homeSrc:null,awaySrc:null,next:{round:'r3',id:4}},
+    {id:8,round:'r2',date:'8/12(水)',time:'13:30',homeNo:12,awayNo:0,home:'花咲徳栄',away:null,homeSrc:null,awaySrc:{round:'r1',id:1},next:{round:'r3',id:4}},
+    {id:9,round:'r2',date:'8/12(水)',time:'16:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:2},awaySrc:{round:'r1',id:3},next:{round:'r3',id:5}},
+    {id:10,round:'r2',date:'8/12(水)',time:'18:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:4},awaySrc:{round:'r1',id:5},next:{round:'r3',id:5}},
+    {id:11,round:'r2',date:'8/13(木)',time:'13:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:6},awaySrc:{round:'r1',id:7},next:{round:'r3',id:6}},
+    {id:12,round:'r2',date:'8/13(木)',time:'16:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:8},awaySrc:{round:'r1',id:9},next:{round:'r3',id:6}},
+    {id:13,round:'r2',date:'8/13(木)',time:'18:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:10},awaySrc:{round:'r1',id:11},next:{round:'r3',id:7}},
+    {id:14,round:'r2',date:'8/14(金)',time:'13:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:12},awaySrc:{round:'r1',id:13},next:{round:'r3',id:7}},
+    {id:15,round:'r2',date:'8/14(金)',time:'16:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:14},awaySrc:{round:'r1',id:15},next:{round:'r3',id:8}},
+    {id:16,round:'r2',date:'8/14(金)',time:'18:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:16},awaySrc:{round:'r1',id:17},next:{round:'r3',id:8}},
+  ],
+  r3:[
+    {id:1,round:'r3',date:'8/15(土)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:1},awaySrc:{round:'r2',id:2},next:{round:'qf',id:null}},
+    {id:2,round:'r3',date:'8/15(土)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:3},awaySrc:{round:'r2',id:4},next:{round:'qf',id:null}},
+    {id:3,round:'r3',date:'8/15(土)',time:'13:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:5},awaySrc:{round:'r2',id:6},next:{round:'qf',id:null}},
+    {id:4,round:'r3',date:'8/15(土)',time:'15:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:7},awaySrc:{round:'r2',id:8},next:{round:'qf',id:null}},
+    {id:5,round:'r3',date:'8/16(日)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:9},awaySrc:{round:'r2',id:10},next:{round:'qf',id:null}},
+    {id:6,round:'r3',date:'8/16(日)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:11},awaySrc:{round:'r2',id:12},next:{round:'qf',id:null}},
+    {id:7,round:'r3',date:'8/16(日)',time:'13:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:13},awaySrc:{round:'r2',id:14},next:{round:'qf',id:null}},
+    {id:8,round:'r3',date:'8/16(日)',time:'15:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:15},awaySrc:{round:'r2',id:16},next:{round:'qf',id:null}},
+  ],
+  qf:[
+    {id:1,round:'qf',date:'8/18(火)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+    {id:2,round:'qf',date:'8/18(火)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+    {id:3,round:'qf',date:'8/18(火)',time:'13:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+    {id:4,round:'qf',date:'8/18(火)',time:'15:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+  ],
+  sf:[
+    {id:1,round:'sf',date:'8/20(木)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'final',id:1}},
+    {id:2,round:'sf',date:'8/20(木)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'final',id:1}},
+  ],
+  final:[
+    {id:1,round:'final',date:'8/22(土)',time:'10:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:null},
+  ],
+};
+
 const SCHEDULE=[
   {date:'8/5(水)',day:1,today:false,games:[
     {time:'17:30',round:'r1',home:'札幌日大',away:'仙台育英',homeNo:2,awayNo:7}
@@ -2141,46 +2216,82 @@ function renderWinCondition(col){
   if(added)col.appendChild(panel);
 }
 
-// ===== BRACKET（トーナメント表・横スクロール） =====
-const ROUND_ORDER=['r1','r2','r3','qf','sf','f'];
-const ROUND_LABEL={r1:'1回戦',r2:'2回戦',r3:'3回戦',qf:'準々決勝',sf:'準決勝',f:'決勝'};
+// ===== BRACKET（トーナメント表・試合番号ベース、線で接続） =====
+const BRACKET_ROUND_ORDER=['r1','r2','r3','qf','sf','final'];
+const BRACKET_ROUND_LABEL={r1:'1回戦',r2:'2回戦',r3:'3回戦',qf:'準々決勝',sf:'準決勝',final:'決勝'};
+
+// 指定ラウンド・試合IDの試合オブジェクトを取得
+function getBracketGame(round,id){
+  const arr=BRACKET_DATA[round];
+  if(!arr)return null;
+  return arr.find(g=>g.id===id)||null;
+}
+
+// 試合の実効的な対戦カード・スコア・勝敗を導出する
+// 優先順位: 1)cloud.resultsに入力された結果 2)前の試合からの勝ち上がり(自動追跡) 3)元データの確定校
+function getEffectiveBracketGame(g){
+  let homeNo=g.homeNo,awayNo=g.awayNo,homeName=g.home,awayName=g.away;
+
+  // homeSrc/awaySrcがあれば、参照元の試合の勝者を再帰的に自動追跡する（多段階の勝ち上がりに対応）
+  if(g.homeSrc){
+    const srcGame=getBracketGame(g.homeSrc.round,g.homeSrc.id);
+    if(srcGame){
+      const srcEff=getEffectiveBracketGame(srcGame);
+      if(srcEff.winnerNo){homeNo=srcEff.winnerNo;homeName=srcEff.winnerName;}
+    }
+  }
+  if(g.awaySrc){
+    const srcGame=getBracketGame(g.awaySrc.round,g.awaySrc.id);
+    if(srcGame){
+      const srcEff=getEffectiveBracketGame(srcGame);
+      if(srcEff.winnerNo){awayNo=srcEff.winnerNo;awayName=srcEff.winnerName;}
+    }
+  }
+
+  return getEffectiveBracketGameRaw({...g,homeNo,awayNo,home:homeName,away:awayName});
+}
+
+// スコア・勝者判定のみ行う内部関数（再帰呼び出し用、homeNo/awayNoは呼び出し元で解決済みの値を使う）
+function getEffectiveBracketGameRaw(g){
+  let score='',done=false,winnerNo=null,winnerName=null;
+  if(g.homeNo&&g.awayNo){
+    const res=gr();
+    const hRes=res[String(g.homeNo)]&&res[String(g.homeNo)][g.round];
+    const aRes=res[String(g.awayNo)]&&res[String(g.awayNo)][g.round];
+    if(hRes&&hRes.scored!==''&&hRes.lost!==''&&hRes.done){
+      score=`${hRes.scored}-${hRes.lost}`;done=true;
+      if(parseInt(hRes.scored)>parseInt(hRes.lost)){winnerNo=g.homeNo;winnerName=g.home;}
+      else{winnerNo=g.awayNo;winnerName=g.away;}
+    }else if(aRes&&aRes.scored!==''&&aRes.lost!==''&&aRes.done){
+      score=`${aRes.lost}-${aRes.scored}`;done=true;
+      if(parseInt(aRes.scored)>parseInt(aRes.lost)){winnerNo=g.awayNo;winnerName=g.away;}
+      else{winnerNo=g.homeNo;winnerName=g.home;}
+    }
+  }
+  return {...g,score,done,winnerNo,winnerName};
+}
 
 function renderBracket(){
   const wrap=document.getElementById('bracket-scroll');
   if(!wrap)return;
   wrap.innerHTML='';
 
-  const byRound={};
-  SCHEDULE.forEach(day=>{
-    day.games.forEach(rawG=>{
-      if(rawG.rest)return;
-      if(!rawG.home&&!rawG.away)return;
-      if(!byRound[rawG.round])byRound[rawG.round]=[];
-      byRound[rawG.round].push({...rawG,date:day.date,day:day.day});
-    });
-  });
-
-  const roundsPresent=ROUND_ORDER.filter(r=>byRound[r]&&byRound[r].length>0);
-  if(roundsPresent.length===0){
-    wrap.innerHTML='<div class="no-data">まだ組み合わせが登録されていません</div>';
-    return;
-  }
-
   const container=document.createElement('div');
   container.className='bracket-rounds';
 
-  roundsPresent.forEach(rkey=>{
+  BRACKET_ROUND_ORDER.forEach(rkey=>{
+    const games=BRACKET_DATA[rkey];
+    if(!games||games.length===0)return;
+
     const roundCol=document.createElement('div');
     roundCol.className='bracket-round';
     const label=document.createElement('div');
     label.className='bracket-round-label';
-    label.textContent=ROUND_LABEL[rkey]||rkey;
+    label.textContent=BRACKET_ROUND_LABEL[rkey]||rkey;
     roundCol.appendChild(label);
 
-    const games=[...byRound[rkey]].sort((a,b)=>(a.day-b.day));
-
     games.forEach(rawG=>{
-      const g=getEffectiveGame(rawG);
+      const g=getEffectiveBracketGame(rawG);
       const homeMembers=g.homeNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.homeNo)):[];
       const awayMembers=g.awayNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.awayNo)):[];
 
@@ -2189,11 +2300,8 @@ function renderBracket(){
         const parts=g.score.split('-').map(s=>s.trim());
         if(parts.length===2){
           homeScore=parts[0];awayScore=parts[1];
-          const hn=parseInt(parts[0]),an=parseInt(parts[1]);
-          if(!isNaN(hn)&&!isNaN(an)){
-            if(hn>an){homeCls='winner';awayCls='loser';}
-            else if(an>hn){awayCls='winner';homeCls='loser';}
-          }
+          if(g.winnerNo===g.homeNo){homeCls='winner';awayCls='loser';}
+          else if(g.winnerNo===g.awayNo){awayCls='winner';homeCls='loser';}
         }
       }
 
@@ -2206,17 +2314,24 @@ function renderBracket(){
       const awayChips=awayMembers.map(m=>{const lot=getPicks(m)[g.awayNo];return `<span class="bracket-chip away-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
       const membersHtml=(homeMembers.length||awayMembers.length)?`<div class="bracket-members"><div class="bracket-members-side home">${homeChips}</div><div class="bracket-members-side away">${awayChips}</div></div>`:'';
 
-      const homeNameHtml=g.homeNo?`<span class="bt-name" onclick="openModal(${g.homeNo})">${g.home}</span>`:`<span class="bt-name">${g.home||'TBD'}</span>`;
-      const awayNameHtml=g.awayNo?`<span class="bt-name" onclick="openModal(${g.awayNo})">${g.away}</span>`:`<span class="bt-name">${g.away||'TBD'}</span>`;
+      const homeNameHtml=g.homeNo?`<span class="bt-name" onclick="openModal(${g.homeNo})">${g.home}</span>`:`<span class="bt-name bt-tbd">未定</span>`;
+      const awayNameHtml=g.awayNo?`<span class="bt-name" onclick="openModal(${g.awayNo})">${g.away}</span>`:`<span class="bt-name bt-tbd">未定</span>`;
+
+      let nextHtml='';
+      if(g.next){
+        const nextLabel=BRACKET_ROUND_LABEL[g.next.round]||g.next.round;
+        nextHtml=`<div class="bracket-next">勝者 → ${nextLabel}${g.next.id?` 第${g.next.id}試合`:''}</div>`;
+      }
 
       const card=document.createElement('div');
-      card.className='bracket-card'+(g.done?' done':'');
+      card.className='bracket-card'+(g.done?' done':'')+(rkey==='qf'||rkey==='sf'||rkey==='final'?' bracket-card-tbd':'');
       card.innerHTML=`
-        <div class="bracket-time">${g.date||''} ${g.time||''}</div>
+        <div class="bracket-time"><strong>第${g.id}試合</strong>　${g.date||''} ${g.time||''}</div>
         <div class="bracket-team ${homeCls}">${homeCost?`<span class="bt-cost ${homeCostCls}">${homeCost}</span>`:''}${homeNameHtml}<span class="bt-score">${homeScore}</span></div>
         <div class="bracket-vs"></div>
         <div class="bracket-team ${awayCls}">${awayCost?`<span class="bt-cost ${awayCostCls}">${awayCost}</span>`:''}${awayNameHtml}<span class="bt-score">${awayScore}</span></div>
         ${membersHtml}
+        ${nextHtml}
       `;
       roundCol.appendChild(card);
     });
