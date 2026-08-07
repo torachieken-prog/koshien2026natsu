@@ -25,6 +25,7 @@
   .sync-bar{background:var(--ink);color:rgba(255,255,255,.6);font-size:11px;text-align:center;padding:5px;letter-spacing:1px;transition:all .3s;}
   .sync-bar.ok{color:#a8d5a2;}
   .sync-bar.error{color:#ff8a8a;background:#5a1a1a;}
+  .sticky-header{position:sticky;top:0;z-index:50;}
   .tabs-wrapper{background:var(--ink);padding:0 8px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;}
   .tabs-wrapper::-webkit-scrollbar{display:none;}
   .tabs{display:inline-flex;gap:2px;padding:8px 0 0;}
@@ -63,6 +64,7 @@
   .grade-badge{display:inline-block;font-size:10px;font-weight:900;padding:1px 7px;border-radius:4px;margin-top:4px;letter-spacing:1px;}
   .grade-SA{background:#7a0a15;color:#f0c84a;}.grade-A{background:#1a3a5c;color:white;}.grade-B{background:#4a7c4e;color:white;}.grade-C{background:#888;color:white;}
   .cost-badge{display:inline-block;font-size:11px;font-weight:900;padding:2px 10px;border-radius:12px;margin-top:4px;letter-spacing:1px;}
+  .schedule-cost-badge{display:inline-block;font-size:9px;font-weight:900;padding:0 5px;border-radius:6px;letter-spacing:0;vertical-align:middle;}
   .cost-5{background:#7a0a15;color:#f0c84a;}
   .cost-3{background:#1a3a5c;color:white;}
   .cost-1{background:#4a7c4e;color:white;}
@@ -202,6 +204,28 @@
   .game-member-chip.away-pick{background:var(--sky);color:white;}
   .game-members-split{display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid #f0e8d5;gap:8px;align-items:flex-start;}
 
+  /* ===== トーナメント表（横スクロール・通常向き） ===== */
+  .bracket-scroll{overflow-x:auto;overflow-y:hidden;padding:10px 12px 16px;-webkit-overflow-scrolling:touch;}
+  .bracket-rounds{display:flex;gap:10px;align-items:flex-start;min-width:max-content;}
+  .bracket-round{display:flex;flex-direction:column;gap:8px;min-width:170px;max-height:70vh;overflow-y:auto;}
+  .bracket-round-label{text-align:center;font-size:12px;font-weight:900;color:white;background:var(--sky);border-radius:8px;padding:6px;letter-spacing:1px;position:sticky;top:0;z-index:2;}
+  .bracket-card{background:white;border:1.5px solid var(--sand);border-radius:10px;padding:7px 9px;box-shadow:0 2px 6px rgba(0,0,0,.06);}
+  .bracket-card.done{border-color:var(--crimson);}
+  .bracket-team{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:900;padding:3px 0;gap:5px;}
+  .bracket-team.winner{color:var(--crimson);}
+  .bracket-team.loser{color:rgba(0,0,0,.35);text-decoration:line-through;text-decoration-color:rgba(0,0,0,.2);}
+  .bracket-team .bt-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;}
+  .bracket-team .bt-cost{font-size:9px;padding:0 5px;border-radius:6px;font-weight:900;margin-right:3px;}
+  .bracket-team .bt-score{font-size:13px;min-width:18px;text-align:right;}
+  .bracket-vs{border-top:1px dashed var(--sand);margin:2px 0;}
+  .bracket-time{font-size:9px;color:rgba(0,0,0,.35);text-align:center;margin-bottom:2px;}
+  .bracket-members{display:flex;justify-content:space-between;margin-top:5px;padding-top:5px;border-top:1px solid #f0e8d5;gap:4px;}
+  .bracket-members-side{display:flex;flex-wrap:wrap;gap:2px;}
+  .bracket-members-side.away{justify-content:flex-end;}
+  .bracket-chip{font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;white-space:nowrap;}
+  .bracket-chip.home-pick{background:var(--crimson);color:white;}
+  .bracket-chip.away-pick{background:var(--sky);color:white;}
+
   .game-members-home{display:flex;flex-direction:row;flex-wrap:wrap;gap:3px;justify-content:flex-start;flex:1;max-width:48%;}
   .game-members-away{display:flex;flex-direction:row;flex-wrap:wrap;gap:3px;justify-content:flex-end;flex:1;max-width:48%;}
   .game-member-chip{display:inline-block!important;white-space:nowrap;}
@@ -285,14 +309,16 @@
   <div class="loading-text" id="loading-text">データを読み込み中...</div>
 </div>
 
+<div class="sticky-header" id="sticky-header">
 <header>
   <div class="header-sub">SUMMER TOURNAMENT 2026</div>
   <h1>🏆 夏の甲子園<br>優勝予想大会</h1>
   <div class="header-badge">49代表校・コスト制</div>
 </header>
 <div class="sync-bar" id="sync-bar">⏳ クラウドに接続中...</div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新日: 2026/08/06</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/07 14:19</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
+</div>
 
 <main>
   <div class="view active" id="view-member">
@@ -345,6 +371,17 @@
           <div class="rank-note">得失点差の合計で順位を決定</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="view" id="view-bracket">
+    <div class="section-card">
+      <div class="section-header">🏆 <span>トーナメント表</span></div>
+      <div style="padding:8px 14px;font-size:11px;color:rgba(0,0,0,.5);line-height:1.6;">
+        横スクロール：登録済みラウンドを表示　　縦スクロール：同じラウンド内の対戦<br>
+        <span style="color:rgba(0,0,0,.35);">対戦カードが決まり次第、順次追加されます</span>
+      </div>
+      <div class="bracket-scroll" id="bracket-scroll"></div>
     </div>
   </div>
 
@@ -1387,6 +1424,7 @@ async function saveCloud(options){
 function buildTabs(){
   const el=document.getElementById('tabs');el.innerHTML='';
   const schb=document.createElement('button');schb.className='tab tab-schedule';schb.textContent='📅 日程';schb.onclick=()=>switchView('schedule');el.appendChild(schb);
+  const brb=document.createElement('button');brb.className='tab tab-bracket';brb.textContent='🏆 トーナメント表';brb.onclick=()=>switchView('bracket');el.appendChild(brb);
   const rb=document.createElement('button');rb.className='tab tab-rankings';rb.textContent='🏅 順位表';rb.onclick=()=>switchView('rankings');el.appendChild(rb);
   const gb=document.createElement('button');gb.className='tab tab-guide';gb.textContent='📖 ガイド';gb.onclick=()=>switchView('guide');el.appendChild(gb);
   MEMBERS.forEach(m=>{const b=document.createElement('button');b.className='tab'+(m===cur?' active':'');b.textContent=m;b.onclick=()=>switchMember(m);el.appendChild(b);});
@@ -1411,14 +1449,16 @@ function switchView(v){
   cur='__'+v+'__';
   document.querySelectorAll('.tab').forEach(t=>{if(t&&t.classList)t.classList.remove('active');});
   const ts=document.querySelector('.tab-schedule');if(v==='schedule'&&ts)ts.classList.add('active');
+  const tbr=document.querySelector('.tab-bracket');if(v==='bracket'&&tbr)tbr.classList.add('active');
   const tr=document.querySelector('.tab-rankings');if(v==='rankings'&&tr)tr.classList.add('active');
   const ta=document.querySelector('.tab-admin');if(v==='admin'&&ta)ta.classList.add('active');
   const tg=document.querySelector('.tab-guide');if(v==='guide'&&tg)tg.classList.add('active');
-  ['member','rankings','admin','schedule','guide'].forEach(x=>{const el=document.getElementById('view-'+x);if(el)el.classList.remove('active');});
+  ['member','rankings','admin','schedule','guide','bracket'].forEach(x=>{const el=document.getElementById('view-'+x);if(el)el.classList.remove('active');});
   const vEl=document.getElementById('view-'+v);if(vEl)vEl.classList.add('active');
   if(v==='rankings')renderRankings();
   if(v==='admin')renderAdmin();
   if(v==='schedule')renderSchedule();
+  if(v==='bracket')renderBracket();
 }
 function renderCurrent(){
   buildTabs();
@@ -1426,12 +1466,13 @@ function renderCurrent(){
   if(cur==='__rankings__'){switchView('rankings');return;}
   if(cur==='__admin__'){switchView('admin');return;}
   if(cur==='__guide__'){switchView('guide');return;}
+  if(cur==='__bracket__'){switchView('bracket');return;}
   const m=MEMBERS.includes(cur)?cur:MEMBERS[0];
   cur=m;
   document.querySelectorAll('.tab').forEach(t=>{
     if(t&&t.classList)t.classList.toggle('active',t.textContent===m);
   });
-  ['member','rankings','admin','schedule','guide'].forEach(v=>{
+  ['member','rankings','admin','schedule','guide','bracket'].forEach(v=>{
     const el=document.getElementById('view-'+v);
     if(el)el.classList.remove('active');
   });
@@ -1948,9 +1989,15 @@ function renderSchedule(){
       const homeChips=homeMembers.map(m=>{const lot=getPicks(m)[g.homeNo];return `<span class="game-member-chip home-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
       const awayChips=awayMembers.map(m=>{const lot=getPicks(m)[g.awayNo];return `<span class="game-member-chip away-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
       const membersHtml=(homeMembers.length||awayMembers.length)?`<div class="game-members-split"><div class="game-members-home">${homeChips}</div><div class="game-members-away">${awayChips}</div></div>`:'';
+      const homeCost=g.homeNo?getTeamCost(g.homeNo):null;
+      const awayCost=g.awayNo?getTeamCost(g.awayNo):null;
+      const homeCostCls=homeCost===5?'cost-5':homeCost===3?'cost-3':'cost-1';
+      const awayCostCls=awayCost===5?'cost-5':awayCost===3?'cost-3':'cost-1';
+      const homeNameHtml=g.homeNo?`<span onclick="openModal(${g.homeNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.home}</span>`:g.home;
+      const awayNameHtml=g.awayNo?`<span onclick="openModal(${g.awayNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.away}</span>`:g.away;
       const row=document.createElement('div');
       row.className='game-row'+(g.done?'':' today-marker');
-      row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${g.home}</div>${scoreHtml}<div class="game-team away">${g.away}</div></div>${membersHtml}`;
+      row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${homeNameHtml}${homeCost?`<span class="schedule-cost-badge ${homeCostCls}" style="margin-left:4px;">${homeCost}</span>`:''}</div>${scoreHtml}<div class="game-team away">${awayCost?`<span class="schedule-cost-badge ${awayCostCls}" style="margin-right:4px;">${awayCost}</span>`:''}${awayNameHtml}</div></div>${membersHtml}`;
       block.appendChild(row);
     });
     col.appendChild(block);
@@ -1985,9 +2032,15 @@ function renderSchedule(){
         const homeChips=homeMembers.map(m=>{const lot=getPicks(m)[g.homeNo];return `<span class="game-member-chip home-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
         const awayChips=awayMembers.map(m=>{const lot=getPicks(m)[g.awayNo];return `<span class="game-member-chip away-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
         const membersHtml=(homeMembers.length||awayMembers.length)?`<div class="game-members-split"><div class="game-members-home">${homeChips}</div><div class="game-members-away">${awayChips}</div></div>`:'';
+        const homeCost=g.homeNo?getTeamCost(g.homeNo):null;
+        const awayCost=g.awayNo?getTeamCost(g.awayNo):null;
+        const homeCostCls=homeCost===5?'cost-5':homeCost===3?'cost-3':'cost-1';
+        const awayCostCls=awayCost===5?'cost-5':awayCost===3?'cost-3':'cost-1';
+        const homeNameHtml=g.homeNo?`<span onclick="openModal(${g.homeNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.home}</span>`:g.home;
+        const awayNameHtml=g.awayNo?`<span onclick="openModal(${g.awayNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.away}</span>`:g.away;
         const row=document.createElement('div');
         row.className='game-row';
-        row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${g.home}</div>${scoreHtml}<div class="game-team away">${g.away}</div></div>${membersHtml}`;
+        row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${homeNameHtml}${homeCost?`<span class="schedule-cost-badge ${homeCostCls}" style="margin-left:4px;">${homeCost}</span>`:''}</div>${scoreHtml}<div class="game-team away">${awayCost?`<span class="schedule-cost-badge ${awayCostCls}" style="margin-right:4px;">${awayCost}</span>`:''}${awayNameHtml}</div></div>${membersHtml}`;
         block.appendChild(row);
       });
       pastContent.appendChild(block);
@@ -2086,6 +2139,92 @@ function renderWinCondition(col){
   });
 
   if(added)col.appendChild(panel);
+}
+
+// ===== BRACKET（トーナメント表・横スクロール） =====
+const ROUND_ORDER=['r1','r2','r3','qf','sf','f'];
+const ROUND_LABEL={r1:'1回戦',r2:'2回戦',r3:'3回戦',qf:'準々決勝',sf:'準決勝',f:'決勝'};
+
+function renderBracket(){
+  const wrap=document.getElementById('bracket-scroll');
+  if(!wrap)return;
+  wrap.innerHTML='';
+
+  const byRound={};
+  SCHEDULE.forEach(day=>{
+    day.games.forEach(rawG=>{
+      if(rawG.rest)return;
+      if(!rawG.home&&!rawG.away)return;
+      if(!byRound[rawG.round])byRound[rawG.round]=[];
+      byRound[rawG.round].push({...rawG,date:day.date,day:day.day});
+    });
+  });
+
+  const roundsPresent=ROUND_ORDER.filter(r=>byRound[r]&&byRound[r].length>0);
+  if(roundsPresent.length===0){
+    wrap.innerHTML='<div class="no-data">まだ組み合わせが登録されていません</div>';
+    return;
+  }
+
+  const container=document.createElement('div');
+  container.className='bracket-rounds';
+
+  roundsPresent.forEach(rkey=>{
+    const roundCol=document.createElement('div');
+    roundCol.className='bracket-round';
+    const label=document.createElement('div');
+    label.className='bracket-round-label';
+    label.textContent=ROUND_LABEL[rkey]||rkey;
+    roundCol.appendChild(label);
+
+    const games=[...byRound[rkey]].sort((a,b)=>(a.day-b.day));
+
+    games.forEach(rawG=>{
+      const g=getEffectiveGame(rawG);
+      const homeMembers=g.homeNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.homeNo)):[];
+      const awayMembers=g.awayNo?MEMBERS.filter(m=>Object.prototype.hasOwnProperty.call(getPicks(m),g.awayNo)):[];
+
+      let homeScore='',awayScore='',homeCls='',awayCls='';
+      if(g.done&&g.score){
+        const parts=g.score.split('-').map(s=>s.trim());
+        if(parts.length===2){
+          homeScore=parts[0];awayScore=parts[1];
+          const hn=parseInt(parts[0]),an=parseInt(parts[1]);
+          if(!isNaN(hn)&&!isNaN(an)){
+            if(hn>an){homeCls='winner';awayCls='loser';}
+            else if(an>hn){awayCls='winner';homeCls='loser';}
+          }
+        }
+      }
+
+      const homeCost=g.homeNo?getTeamCost(g.homeNo):null;
+      const awayCost=g.awayNo?getTeamCost(g.awayNo):null;
+      const homeCostCls=homeCost===5?'cost-5':homeCost===3?'cost-3':'cost-1';
+      const awayCostCls=awayCost===5?'cost-5':awayCost===3?'cost-3':'cost-1';
+
+      const homeChips=homeMembers.map(m=>{const lot=getPicks(m)[g.homeNo];return `<span class="bracket-chip home-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
+      const awayChips=awayMembers.map(m=>{const lot=getPicks(m)[g.awayNo];return `<span class="bracket-chip away-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
+      const membersHtml=(homeMembers.length||awayMembers.length)?`<div class="bracket-members"><div class="bracket-members-side home">${homeChips}</div><div class="bracket-members-side away">${awayChips}</div></div>`:'';
+
+      const homeNameHtml=g.homeNo?`<span class="bt-name" onclick="openModal(${g.homeNo})">${g.home}</span>`:`<span class="bt-name">${g.home||'TBD'}</span>`;
+      const awayNameHtml=g.awayNo?`<span class="bt-name" onclick="openModal(${g.awayNo})">${g.away}</span>`:`<span class="bt-name">${g.away||'TBD'}</span>`;
+
+      const card=document.createElement('div');
+      card.className='bracket-card'+(g.done?' done':'');
+      card.innerHTML=`
+        <div class="bracket-time">${g.date||''} ${g.time||''}</div>
+        <div class="bracket-team ${homeCls}">${homeCost?`<span class="bt-cost ${homeCostCls}">${homeCost}</span>`:''}${homeNameHtml}<span class="bt-score">${homeScore}</span></div>
+        <div class="bracket-vs"></div>
+        <div class="bracket-team ${awayCls}">${awayCost?`<span class="bt-cost ${awayCostCls}">${awayCost}</span>`:''}${awayNameHtml}<span class="bt-score">${awayScore}</span></div>
+        ${membersHtml}
+      `;
+      roundCol.appendChild(card);
+    });
+
+    container.appendChild(roundCol);
+  });
+
+  wrap.appendChild(container);
 }
 
 function togglePast(){
