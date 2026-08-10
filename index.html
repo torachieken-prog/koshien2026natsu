@@ -319,7 +319,7 @@
   <div class="header-badge">49代表校・コスト制</div>
 </header>
 <div class="sync-bar" id="sync-bar">⏳ クラウドに接続中...</div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 14:09</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 14:36</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -1271,11 +1271,11 @@ const BRACKET_DATA={
     {id:4,round:'qf',date:'8/18(火)',time:'15:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
   ],
   sf:[
-    {id:1,round:'sf',date:'8/20(木)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'final',id:1}},
-    {id:2,round:'sf',date:'8/20(木)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'final',id:1}},
+    {id:1,round:'sf',date:'8/20(木)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
+    {id:2,round:'sf',date:'8/20(木)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
   ],
-  final:[
-    {id:1,round:'final',date:'8/22(土)',time:'10:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:null},
+  f:[
+    {id:1,round:'f',date:'8/22(土)',time:'10:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:null},
   ],
 };
 
@@ -1891,18 +1891,68 @@ function getFirstAppearance(no){
   return {roundIdx:99,gameId:9999,date:'',time:''};
 }
 
+// その校の現在の状態を判定する（getEffectiveBracketGameによる勝ち上がり自動追跡を利用）
+//   'pending'  : 対戦カードが確定していて、まだ結果が未入力（＝今すぐ入力すべき）
+//   'advancing': 直近の試合には結果が入っていて勝利しているが、次の対戦カードがまだ
+//                BRACKET_DATA上に存在しない、または未確定（＝今は入力対象なし・抽選待ち含む）
+//   'done'     : 敗退が確定している（直近の試合に負けている）
+function getTeamStatus(no){
+  let sawAnyGame=false;
+  let wonLastSeenGame=false; // 最後に見つかった（終了済みの）試合で、この校が勝っていたか
+  for(const rkey of BRACKET_ROUND_ORDER){
+    const games=BRACKET_DATA[rkey]||[];
+    for(const rawG of games){
+      const g=getEffectiveBracketGame(rawG);
+      if(g.homeNo===no||g.awayNo===no){
+        sawAnyGame=true;
+        if(g.done){
+          wonLastSeenGame=(g.winnerNo===no);
+          continue; // この試合はもう結果が入っている。次のラウンドも見る
+        }
+        if(g.homeNo&&g.awayNo)return 'pending';   // 対戦カード確定・未入力
+        return 'advancing';                        // 対戦カード未確定（TBD）＝勝ち進み中
+      }
+    }
+  }
+  // 全ラウンドを見終えて、この校が新たに登場する試合が見つからなかった場合。
+  // 直近の試合に勝っていたなら、次の試合（準々決勝以降など）がまだBRACKET_DATAに
+  // 登録されていないだけ＝勝ち進み中。負けていたなら敗退確定。
+  if(!sawAnyGame)return 'pending';
+  return wonLastSeenGame?'advancing':'done';
+}
+
+// 全49校の状態を1回だけまとめて計算し、Mapにキャッシュする（ソート処理の中で毎回呼ぶのを避けるため）
+function buildTeamStatusCache(){
+  const map=new Map();
+  TEAMS.forEach(t=>map.set(t.no,getTeamStatus(t.no)));
+  return map;
+}
+
 // --- 本大会スコア入力（既存方式） ---
-let adminSortOrder='schedule'; // 'schedule'（日程順）または 'no'（校番号順）。デフォルトは日程順
+let adminSortOrder='schedule'; // 'schedule'（未入力優先・日程順）または 'no'（校番号順）。デフォルトは日程順
 function renderAdminScore(){
   document.getElementById('admin-filter').innerHTML=`
-    <button class="filter-btn${adminSortOrder==='schedule'?' active':''}" onclick="setSortOrder('schedule')">📅 日程順</button>
+    <button class="filter-btn${adminSortOrder==='schedule'?' active':''}" onclick="setSortOrder('schedule')">📅 日程順（未入力優先）</button>
     <button class="filter-btn${adminSortOrder==='no'?' active':''}" onclick="setSortOrder('no')">🔢 校番号順</button>
   `+[{k:'all',l:'全チーム'},{k:'未入力',l:'未入力のみ'},{k:'入力済',l:'入力済のみ'}].map(f=>`<button class="filter-btn${adminFilter===f.k?' active':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('');
   const res=gr(),teamList=document.getElementById('admin-team-list');teamList.innerHTML='';
 
+  // 状態（未入力/勝ち進み中/入力済み）を1回だけまとめて計算（毎回の呼び出しコストを避ける）
+  const statusCache=buildTeamStatusCache();
+  const STATUS_ORDER={pending:0,done:1,advancing:2}; // 未入力→入力済み→勝ち進み中 の順
+  const STATUS_TAG={
+    pending:`<span style="font-size:10px;color:var(--crimson);font-weight:900;margin-left:6px;">未入力</span>`,
+    done:`<span style="font-size:10px;color:rgba(0,0,0,.3);margin-left:6px;">入力済み</span>`,
+    advancing:`<span style="font-size:10px;color:var(--sky);font-weight:900;margin-left:6px;">勝ち進み中（次の試合待ち）</span>`,
+  };
+
   let sortedTeams=[...TEAMS];
   if(adminSortOrder==='schedule'){
     sortedTeams.sort((a,b)=>{
+      // ① 状態（未入力→入力済み→勝ち進み中）で優先順位づけ
+      const sa=STATUS_ORDER[statusCache.get(a.no)],sb=STATUS_ORDER[statusCache.get(b.no)];
+      if(sa!==sb)return sa-sb;
+      // ② 同じ状態の中では日程順（試合が早い順）
       const fa=getFirstAppearance(a.no),fb=getFirstAppearance(b.no);
       if(fa.roundIdx!==fb.roundIdx)return fa.roundIdx-fb.roundIdx;
       return fa.gameId-fb.gameId;
@@ -1911,13 +1961,16 @@ function renderAdminScore(){
 
   sortedTeams.forEach(t=>{
     const tRes=res[String(t.no)]||{};
-    const hasAny=ROUNDS.some(r=>{const rd=tRes[r.key];return rd&&(rd.scored!==''||rd.lost!='');});
-    if(adminFilter==='未入力'&&hasAny)return;
-    if(adminFilter==='入力済'&&!hasAny)return;
+    const status=statusCache.get(t.no);
+    // フィルターも新しい3状態（pending/done/advancing）を基準にする
+    // 「未入力のみ」= pending、「入力済のみ」= done または advancing（今は入力対象がないもの全て）
+    if(adminFilter==='未入力'&&status!=='pending')return;
+    if(adminFilter==='入力済'&&status==='pending')return;
     const firstApp=adminSortOrder==='schedule'?getFirstAppearance(t.no):null;
     const scheduleTag=firstApp&&firstApp.date?`<span style="font-size:10px;color:var(--sky);font-weight:700;margin-left:6px;">${firstApp.date} ${firstApp.time}〜</span>`:'';
+    const statusTag=STATUS_TAG[status]||'';
     const row=document.createElement('div');row.className='admin-row';
-    row.innerHTML=`<div class="admin-team-name">No.${t.no} ${t.name} <span class="pref-small">（${t.pref}代表）</span>${scheduleTag}</div><div class="admin-rounds" id="ar-${t.no}"></div>`;
+    row.innerHTML=`<div class="admin-team-name">No.${t.no} ${t.name} <span class="pref-small">（${t.pref}代表）</span>${scheduleTag}${statusTag}</div><div class="admin-rounds" id="ar-${t.no}"></div>`;
     teamList.appendChild(row);
     const roundsEl=row.querySelector(`#ar-${t.no}`);
     ROUNDS.forEach(r=>{
@@ -2282,8 +2335,8 @@ function renderWinCondition(col){
 }
 
 // ===== BRACKET（トーナメント表・試合番号ベース、線で接続） =====
-const BRACKET_ROUND_ORDER=['r1','r2','r3','qf','sf','final'];
-const BRACKET_ROUND_LABEL={r1:'1回戦',r2:'2回戦',r3:'3回戦',qf:'準々決勝',sf:'準決勝',final:'決勝'};
+const BRACKET_ROUND_ORDER=['r1','r2','r3','qf','sf','f'];
+const BRACKET_ROUND_LABEL={r1:'1回戦',r2:'2回戦',r3:'3回戦',qf:'準々決勝',sf:'準決勝',f:'決勝'};
 
 // 指定ラウンド・試合IDの試合オブジェクトを取得
 function getBracketGame(round,id){
@@ -2325,12 +2378,16 @@ function getEffectiveBracketGameRaw(g){
     const aRes=res[String(g.awayNo)]&&res[String(g.awayNo)][g.round];
     if(hRes&&hRes.scored!==''&&hRes.lost!==''&&hRes.done){
       score=`${hRes.scored}-${hRes.lost}`;done=true;
-      if(parseInt(hRes.scored)>parseInt(hRes.lost)){winnerNo=g.homeNo;winnerName=g.home;}
-      else{winnerNo=g.awayNo;winnerName=g.away;}
+      const hs=parseInt(hRes.scored),hl=parseInt(hRes.lost);
+      // 同点データ（入力ミスの可能性）は勝者を確定させず null のままにする
+      if(hs>hl){winnerNo=g.homeNo;winnerName=g.home;}
+      else if(hs<hl){winnerNo=g.awayNo;winnerName=g.away;}
     }else if(aRes&&aRes.scored!==''&&aRes.lost!==''&&aRes.done){
       score=`${aRes.lost}-${aRes.scored}`;done=true;
-      if(parseInt(aRes.scored)>parseInt(aRes.lost)){winnerNo=g.awayNo;winnerName=g.away;}
-      else{winnerNo=g.homeNo;winnerName=g.home;}
+      const as_=parseInt(aRes.scored),al=parseInt(aRes.lost);
+      // 同点データ（入力ミスの可能性）は勝者を確定させず null のままにする
+      if(as_>al){winnerNo=g.awayNo;winnerName=g.away;}
+      else if(as_<al){winnerNo=g.homeNo;winnerName=g.home;}
     }
   }
   return {...g,score,done,winnerNo,winnerName};
@@ -2389,7 +2446,7 @@ function renderBracket(){
       }
 
       const card=document.createElement('div');
-      card.className='bracket-card'+(g.done?' done':'')+(rkey==='qf'||rkey==='sf'||rkey==='final'?' bracket-card-tbd':'');
+      card.className='bracket-card'+(g.done?' done':'')+(rkey==='qf'||rkey==='sf'||rkey==='f'?' bracket-card-tbd':'');
       card.innerHTML=`
         <div class="bracket-time"><strong>第${g.id}試合</strong>　${g.date||''} ${g.time||''}</div>
         <div class="bracket-team ${homeCls}">${homeCost?`<span class="bt-cost ${homeCostCls}">${homeCost}</span>`:''}${homeNameHtml}<span class="bt-score">${homeScore}</span></div>
