@@ -193,6 +193,7 @@
   .game-time{font-size:10px;color:rgba(0,0,0,.4);font-weight:700;margin-bottom:4px;}
   .game-teams{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:900;}
   .game-team{flex:1;}
+  .game-team-pref{font-size:9px;color:rgba(0,0,0,.4);font-weight:400;margin-top:1px;}
   .game-team.home{text-align:right;}
   .game-team.away{text-align:left;}
   .game-score{font-size:16px;font-weight:900;min-width:60px;text-align:center;color:var(--crimson);}
@@ -215,6 +216,7 @@
   .bracket-team.winner{color:var(--crimson);}
   .bracket-team.loser{color:rgba(0,0,0,.35);text-decoration:line-through;text-decoration-color:rgba(0,0,0,.2);}
   .bracket-team .bt-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;}
+  .bt-pref{font-size:8px;color:rgba(0,0,0,.35);font-weight:400;margin-left:4px;text-decoration:none;display:inline-block;}
   .bracket-team .bt-cost{font-size:9px;padding:0 5px;border-radius:6px;font-weight:900;margin-right:3px;}
   .bracket-team .bt-score{font-size:13px;min-width:18px;text-align:right;}
   .bracket-vs{border-top:1px dashed var(--sand);margin:2px 0;}
@@ -319,7 +321,7 @@
   <div class="header-badge">49代表校・コスト制</div>
 </header>
 <div class="sync-bar" id="sync-bar">⏳ クラウドに接続中...</div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 14:52</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 15:04</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -2207,9 +2209,13 @@ function renderSchedule(){
       const awayCostCls=awayCost===5?'cost-5':awayCost===3?'cost-3':'cost-1';
       const homeNameHtml=g.homeNo?`<span onclick="openModal(${g.homeNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.home}</span>`:g.home;
       const awayNameHtml=g.awayNo?`<span onclick="openModal(${g.awayNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.away}</span>`:g.away;
+      const homePref=g.homeNo?(TEAMS.find(t=>t.no===g.homeNo)||{}).pref:null;
+      const awayPref=g.awayNo?(TEAMS.find(t=>t.no===g.awayNo)||{}).pref:null;
+      const homePrefHtml=homePref?`<div class="game-team-pref">${homePref}</div>`:'';
+      const awayPrefHtml=awayPref?`<div class="game-team-pref">${awayPref}</div>`:'';
       const row=document.createElement('div');
       row.className='game-row'+(g.done?'':' today-marker');
-      row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${homeNameHtml}${homeCost?`<span class="schedule-cost-badge ${homeCostCls}" style="margin-left:4px;">${homeCost}</span>`:''}</div>${scoreHtml}<div class="game-team away">${awayCost?`<span class="schedule-cost-badge ${awayCostCls}" style="margin-right:4px;">${awayCost}</span>`:''}${awayNameHtml}</div></div>${membersHtml}`;
+      row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${homeNameHtml}${homeCost?`<span class="schedule-cost-badge ${homeCostCls}" style="margin-left:4px;">${homeCost}</span>`:''}${homePrefHtml}</div>${scoreHtml}<div class="game-team away">${awayCost?`<span class="schedule-cost-badge ${awayCostCls}" style="margin-right:4px;">${awayCost}</span>`:''}${awayNameHtml}${awayPrefHtml}</div></div>${membersHtml}`;
       block.appendChild(row);
     });
     col.appendChild(block);
@@ -2250,9 +2256,13 @@ function renderSchedule(){
         const awayCostCls=awayCost===5?'cost-5':awayCost===3?'cost-3':'cost-1';
         const homeNameHtml=g.homeNo?`<span onclick="openModal(${g.homeNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.home}</span>`:g.home;
         const awayNameHtml=g.awayNo?`<span onclick="openModal(${g.awayNo})" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${g.away}</span>`:g.away;
+        const homePref=g.homeNo?(TEAMS.find(t=>t.no===g.homeNo)||{}).pref:null;
+        const awayPref=g.awayNo?(TEAMS.find(t=>t.no===g.awayNo)||{}).pref:null;
+        const homePrefHtml=homePref?`<div class="game-team-pref">${homePref}</div>`:'';
+        const awayPrefHtml=awayPref?`<div class="game-team-pref">${awayPref}</div>`:'';
         const row=document.createElement('div');
         row.className='game-row';
-        row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${homeNameHtml}${homeCost?`<span class="schedule-cost-badge ${homeCostCls}" style="margin-left:4px;">${homeCost}</span>`:''}</div>${scoreHtml}<div class="game-team away">${awayCost?`<span class="schedule-cost-badge ${awayCostCls}" style="margin-right:4px;">${awayCost}</span>`:''}${awayNameHtml}</div></div>${membersHtml}`;
+        row.innerHTML=`<div class="game-round">${roundLabel}</div><div class="game-teams"><div class="game-team home">${homeNameHtml}${homeCost?`<span class="schedule-cost-badge ${homeCostCls}" style="margin-left:4px;">${homeCost}</span>`:''}${homePrefHtml}</div>${scoreHtml}<div class="game-team away">${awayCost?`<span class="schedule-cost-badge ${awayCostCls}" style="margin-right:4px;">${awayCost}</span>`:''}${awayNameHtml}${awayPrefHtml}</div></div>${membersHtml}`;
         block.appendChild(row);
       });
       pastContent.appendChild(block);
@@ -2455,8 +2465,10 @@ function renderBracket(){
       const awayChips=awayMembers.map(m=>{const lot=getPicks(m)[g.awayNo];return `<span class="bracket-chip away-pick">${m}${lot>1?`×${lot}`:''}</span>`;}).join('');
       const membersHtml=(homeMembers.length||awayMembers.length)?`<div class="bracket-members"><div class="bracket-members-side home">${homeChips}</div><div class="bracket-members-side away">${awayChips}</div></div>`:'';
 
-      const homeNameHtml=g.homeNo?`<span class="bt-name" onclick="openModal(${g.homeNo})">${g.home}</span>`:`<span class="bt-name bt-tbd">未定</span>`;
-      const awayNameHtml=g.awayNo?`<span class="bt-name" onclick="openModal(${g.awayNo})">${g.away}</span>`:`<span class="bt-name bt-tbd">未定</span>`;
+      const homePref=g.homeNo?(TEAMS.find(t=>t.no===g.homeNo)||{}).pref:null;
+      const awayPref=g.awayNo?(TEAMS.find(t=>t.no===g.awayNo)||{}).pref:null;
+      const homeNameHtml=g.homeNo?`<span class="bt-name" onclick="openModal(${g.homeNo})">${g.home}${homePref?`<span class="bt-pref">${homePref}</span>`:''}</span>`:`<span class="bt-name bt-tbd">未定</span>`;
+      const awayNameHtml=g.awayNo?`<span class="bt-name" onclick="openModal(${g.awayNo})">${g.away}${awayPref?`<span class="bt-pref">${awayPref}</span>`:''}</span>`:`<span class="bt-name bt-tbd">未定</span>`;
 
       let nextHtml='';
       if(g.next){
