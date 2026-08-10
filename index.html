@@ -319,7 +319,7 @@
   <div class="header-badge">49代表校・コスト制</div>
 </header>
 <div class="sync-bar" id="sync-bar">⏳ クラウドに接続中...</div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 14:36</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 14:52</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -1928,18 +1928,36 @@ function buildTeamStatusCache(){
   return map;
 }
 
+// 日程タブ（renderSchedule）と全く同じ順序ロジックで、SCHEDULEに登場する校の出現順リストを作る。
+// 「未来の試合（今日以降、まだ終わっていない試合がある日）→過去の試合」の順で、
+// 日程タブに表示される試合順そのままに校番号を並べる。
+function getScheduleOrderMap(){
+  const map=new Map(); // no -> 出現順のインデックス（若いほど先に表示される）
+  let idx=0;
+  const futureDays=SCHEDULE.filter(d=>d.games.some(g=>!getEffectiveGame(g).done&&!g.rest)).sort((a,b)=>a.day-b.day);
+  const pastDays=SCHEDULE.filter(d=>!d.games.some(g=>!getEffectiveGame(g).done&&!g.rest)).reverse();
+  [...futureDays,...pastDays].forEach(day=>{
+    day.games.forEach(rawG=>{
+      if(rawG.rest)return;
+      const g=getEffectiveGame(rawG);
+      if(g.homeNo&&!map.has(g.homeNo))map.set(g.homeNo,idx++);
+      if(g.awayNo&&!map.has(g.awayNo))map.set(g.awayNo,idx++);
+    });
+  });
+  return map;
+}
+
 // --- 本大会スコア入力（既存方式） ---
-let adminSortOrder='schedule'; // 'schedule'（未入力優先・日程順）または 'no'（校番号順）。デフォルトは日程順
+let adminSortOrder='schedule'; // 'schedule'（日程タブと同じ表示順）または 'no'（校番号順）。デフォルトは日程順
 function renderAdminScore(){
   document.getElementById('admin-filter').innerHTML=`
-    <button class="filter-btn${adminSortOrder==='schedule'?' active':''}" onclick="setSortOrder('schedule')">📅 日程順（未入力優先）</button>
+    <button class="filter-btn${adminSortOrder==='schedule'?' active':''}" onclick="setSortOrder('schedule')">📅 日程順</button>
     <button class="filter-btn${adminSortOrder==='no'?' active':''}" onclick="setSortOrder('no')">🔢 校番号順</button>
   `+[{k:'all',l:'全チーム'},{k:'未入力',l:'未入力のみ'},{k:'入力済',l:'入力済のみ'}].map(f=>`<button class="filter-btn${adminFilter===f.k?' active':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('');
   const res=gr(),teamList=document.getElementById('admin-team-list');teamList.innerHTML='';
 
-  // 状態（未入力/勝ち進み中/入力済み）を1回だけまとめて計算（毎回の呼び出しコストを避ける）
+  // 状態（未入力/勝ち進み中/入力済み）はフィルター・タグ表示にのみ使う（並び順には使わない）
   const statusCache=buildTeamStatusCache();
-  const STATUS_ORDER={pending:0,done:1,advancing:2}; // 未入力→入力済み→勝ち進み中 の順
   const STATUS_TAG={
     pending:`<span style="font-size:10px;color:var(--crimson);font-weight:900;margin-left:6px;">未入力</span>`,
     done:`<span style="font-size:10px;color:rgba(0,0,0,.3);margin-left:6px;">入力済み</span>`,
@@ -1948,11 +1966,12 @@ function renderAdminScore(){
 
   let sortedTeams=[...TEAMS];
   if(adminSortOrder==='schedule'){
+    // 日程タブ（renderSchedule）に表示される試合順そのままで校を並べる
+    const orderMap=getScheduleOrderMap();
     sortedTeams.sort((a,b)=>{
-      // ① 状態（未入力→入力済み→勝ち進み中）で優先順位づけ
-      const sa=STATUS_ORDER[statusCache.get(a.no)],sb=STATUS_ORDER[statusCache.get(b.no)];
-      if(sa!==sb)return sa-sb;
-      // ② 同じ状態の中では日程順（試合が早い順）
+      const oa=orderMap.has(a.no)?orderMap.get(a.no):99999;
+      const ob=orderMap.has(b.no)?orderMap.get(b.no):99999;
+      if(oa!==ob)return oa-ob;
       const fa=getFirstAppearance(a.no),fb=getFirstAppearance(b.no);
       if(fa.roundIdx!==fb.roundIdx)return fa.roundIdx-fb.roundIdx;
       return fa.gameId-fb.gameId;
