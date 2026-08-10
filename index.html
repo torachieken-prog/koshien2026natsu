@@ -319,7 +319,7 @@
   <div class="header-badge">49代表校・コスト制</div>
 </header>
 <div class="sync-bar" id="sync-bar">⏳ クラウドに接続中...</div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/07 15:25</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 14:09</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -329,7 +329,7 @@
       <div class="lock-banner">
         <div class="lock-banner-icon">🔒</div>
         <div class="lock-banner-text">チーム選択はロック中です</div>
-        <button class="lock-unlock-btn" onclick="showPwModal(()=>{cloud.locked=false;saveCloud({top:['locked']}).then(ok=>{if(ok){renderLockState();showToast('🔓 ロック解除しました');}});})">解除</button>
+        <button class="lock-unlock-btn" onclick="showPwModal(()=>{cloud.locked=false;saveCloud({top:['locked']}).then(ok=>{if(ok){tempUnlocked=true;renderLockState();showToast('🔓 ロック解除しました');}else{cloud.locked=true;renderLockState();}});})">解除</button>
       </div>
       <div class="locked-overlay">管理者によってチーム選択がロックされています。<br>変更するにはパスワードが必要です。</div>
     </div>
@@ -1345,6 +1345,25 @@ function getUsedCostByPicks(picks){
 }
 function gr(){if(!cloud.results)cloud.results={};return cloud.results;}
 function isLocked(){return !!cloud.locked;}
+
+// ロックを一時解除した状態で、別画面（他の参加者タブ・日程・順位表など）に
+// 移動した場合、自動的に元のロック状態（かかっている状態）に戻すための仕組み
+let tempUnlocked=false;
+function reLockIfNeeded(){
+  if(tempUnlocked&&!isLocked()){
+    cloud.locked=true;
+    saveCloud({top:['locked']}).then(ok=>{
+      if(ok){
+        tempUnlocked=false; // 保存成功後にリセット（失敗時は再試行できるようtrueのまま残す）
+        renderLockState();
+        showToast('🔒 画面を離れたので再ロックしました');
+      }else{
+        cloud.locked=false; // 保存に失敗したのでローカルの状態も解除中のままに戻す
+        renderLockState();
+      }
+    });
+  }
+}
 function getPassword(){return localStorage.getItem('koshien_admin_pw')||'';}
 
 // ===== ロック機能 =====
@@ -1398,12 +1417,25 @@ async function toggleLock(){
   if(!isLocked()){
     cloud.locked=true;
     const ok=await saveCloud({top:['locked']});
-    if(ok){renderLockState();showToast('🔒 チーム選択をロックしました');}
+    if(ok){
+      renderLockState();
+      showToast('🔒 チーム選択をロックしました');
+    }else{
+      cloud.locked=false; // 保存に失敗したのでローカルの状態も元に戻す
+      renderLockState();
+    }
   }else{
     showPwModal(()=>{
       cloud.locked=false;
       saveCloud({top:['locked']}).then(ok=>{
-        if(ok){renderLockState();showToast('🔓 ロックを解除しました');}
+        if(ok){
+          tempUnlocked=true; // 保存成功後にセット。別画面に移動したら自動で再ロックする一時フラグ
+          renderLockState();
+          showToast('🔓 ロックを解除しました');
+        }else{
+          cloud.locked=true; // 保存に失敗したのでローカルの状態も元に戻す
+          renderLockState();
+        }
       });
     });
   }
@@ -1506,6 +1538,7 @@ function buildTabs(){
   const ab=document.createElement('button');ab.className='tab tab-admin';ab.textContent='⚙️ 管理';ab.onclick=()=>switchView('admin');el.appendChild(ab);
 }
 function switchMember(m){
+  reLockIfNeeded();
   cur=m;
   document.querySelectorAll('.tab').forEach(t=>{
     if(t&&t.classList)t.classList.toggle('active',t.textContent===m);
@@ -1521,6 +1554,7 @@ function switchMember(m){
   renderSelectedList();
 }
 function switchView(v){
+  reLockIfNeeded();
   cur='__'+v+'__';
   document.querySelectorAll('.tab').forEach(t=>{if(t&&t.classList)t.classList.remove('active');});
   const ts=document.querySelector('.tab-schedule');if(v==='schedule'&&ts)ts.classList.add('active');
@@ -1843,17 +1877,47 @@ function renderAdminCost(){
   });
 }
 
+// 各校が最初に登場する試合（ラウンド・日付・時刻）を調べて、日程順ソート用のキーを作る
+function getFirstAppearance(no){
+  for(const rkey of BRACKET_ROUND_ORDER){
+    const games=BRACKET_DATA[rkey]||[];
+    for(const g of games){
+      if(g.homeNo===no||g.awayNo===no){
+        const roundIdx=BRACKET_ROUND_ORDER.indexOf(rkey);
+        return {roundIdx,gameId:g.id,date:g.date||'',time:g.time||''};
+      }
+    }
+  }
+  return {roundIdx:99,gameId:9999,date:'',time:''};
+}
+
 // --- 本大会スコア入力（既存方式） ---
+let adminSortOrder='schedule'; // 'schedule'（日程順）または 'no'（校番号順）。デフォルトは日程順
 function renderAdminScore(){
-  document.getElementById('admin-filter').innerHTML=[{k:'all',l:'全チーム'},{k:'未入力',l:'未入力のみ'},{k:'入力済',l:'入力済のみ'}].map(f=>`<button class="filter-btn${adminFilter===f.k?' active':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('');
+  document.getElementById('admin-filter').innerHTML=`
+    <button class="filter-btn${adminSortOrder==='schedule'?' active':''}" onclick="setSortOrder('schedule')">📅 日程順</button>
+    <button class="filter-btn${adminSortOrder==='no'?' active':''}" onclick="setSortOrder('no')">🔢 校番号順</button>
+  `+[{k:'all',l:'全チーム'},{k:'未入力',l:'未入力のみ'},{k:'入力済',l:'入力済のみ'}].map(f=>`<button class="filter-btn${adminFilter===f.k?' active':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('');
   const res=gr(),teamList=document.getElementById('admin-team-list');teamList.innerHTML='';
-  TEAMS.forEach(t=>{
+
+  let sortedTeams=[...TEAMS];
+  if(adminSortOrder==='schedule'){
+    sortedTeams.sort((a,b)=>{
+      const fa=getFirstAppearance(a.no),fb=getFirstAppearance(b.no);
+      if(fa.roundIdx!==fb.roundIdx)return fa.roundIdx-fb.roundIdx;
+      return fa.gameId-fb.gameId;
+    });
+  }
+
+  sortedTeams.forEach(t=>{
     const tRes=res[String(t.no)]||{};
     const hasAny=ROUNDS.some(r=>{const rd=tRes[r.key];return rd&&(rd.scored!==''||rd.lost!='');});
     if(adminFilter==='未入力'&&hasAny)return;
     if(adminFilter==='入力済'&&!hasAny)return;
+    const firstApp=adminSortOrder==='schedule'?getFirstAppearance(t.no):null;
+    const scheduleTag=firstApp&&firstApp.date?`<span style="font-size:10px;color:var(--sky);font-weight:700;margin-left:6px;">${firstApp.date} ${firstApp.time}〜</span>`:'';
     const row=document.createElement('div');row.className='admin-row';
-    row.innerHTML=`<div class="admin-team-name">No.${t.no} ${t.name} <span class="pref-small">${t.pref}</span></div><div class="admin-rounds" id="ar-${t.no}"></div>`;
+    row.innerHTML=`<div class="admin-team-name">No.${t.no} ${t.name} <span class="pref-small">（${t.pref}代表）</span>${scheduleTag}</div><div class="admin-rounds" id="ar-${t.no}"></div>`;
     teamList.appendChild(row);
     const roundsEl=row.querySelector(`#ar-${t.no}`);
     ROUNDS.forEach(r=>{
@@ -1867,6 +1931,7 @@ function renderAdminScore(){
     });
   });
 }
+function setSortOrder(o){adminSortOrder=o;renderAdminScore();}
 function setFilter(f){adminFilter=f;renderAdminScore();}
 function updatePrev(no,rkey){
   const s=document.getElementById(`inp-${no}-${rkey}-s`).value,l=document.getElementById(`inp-${no}-${rkey}-l`).value;
