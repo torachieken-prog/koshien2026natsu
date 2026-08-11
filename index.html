@@ -97,6 +97,8 @@
   .no-data{text-align:center;padding:40px 20px;color:rgba(0,0,0,.35);font-size:14px;line-height:2;}
   .rank-note{padding:0 12px 12px;font-size:11px;color:rgba(0,0,0,.4);text-align:center;line-height:1.8;}
   .reload-btn{display:block;margin:8px auto;padding:8px 20px;background:var(--sky);color:white;border:none;border-radius:20px;font-family:'M PLUS 1p',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;}
+  .header-reload-btn{display:inline-block;padding:6px 18px;background:var(--gold);color:var(--ink);border:none;border-radius:20px;font-family:'M PLUS 1p',sans-serif;font-size:12px;font-weight:900;cursor:pointer;letter-spacing:1px;}
+  .header-reload-btn:active{transform:scale(.97);}
   .admin-intro{padding:12px 16px;font-size:12px;color:rgba(0,0,0,.5);line-height:1.8;border-bottom:1px solid var(--sand);}
   .admin-team-list{padding:8px 12px 16px;}
   .admin-row{background:var(--cream);border-radius:10px;padding:10px 12px;margin-bottom:8px;border:1px solid var(--sand);}
@@ -321,7 +323,10 @@
   <div class="header-badge">49代表校・コスト制</div>
 </header>
 <div class="sync-bar" id="sync-bar">⏳ クラウドに接続中...</div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/10 15:04</div>
+<div style="text-align:center;background:var(--ink);padding-bottom:6px;">
+  <button class="header-reload-btn" onclick="loadCloud(true)">🔄 最新の状態に更新</button>
+</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/12 05:12</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -393,7 +398,6 @@
   <div class="view" id="view-rankings">
     <div class="section-card">
       <div class="section-header">🏅 <span>現在の順位表</span></div>
-      <button class="reload-btn" onclick="loadCloud(true)">🔄 最新データに更新</button>
       <div class="ranking-view" id="ranking-view"></div>
       <div class="rank-note">得失点差の合計で順位を決定<br>試合結果は管理者タブから入力</div>
     </div>
@@ -1246,15 +1250,15 @@ const BRACKET_DATA={
     {id:5,round:'r2',date:'8/11(火)',time:'16:00',homeNo:29,awayNo:24,home:'履正社',away:'享栄',homeSrc:null,awaySrc:null,next:{round:'r3',id:3}},
     {id:6,round:'r2',date:'8/11(火)',time:'18:30',homeNo:19,awayNo:26,home:'松商学園',away:'三重',homeSrc:null,awaySrc:null,next:{round:'r3',id:3}},
     {id:7,round:'r2',date:'8/12(水)',time:'8:00',homeNo:13,awayNo:43,home:'拓大紅陵',away:'佐賀商',homeSrc:null,awaySrc:null,next:{round:'r3',id:4}},
-    {id:8,round:'r2',date:'8/12(水)',time:'13:30',homeNo:12,awayNo:0,home:'花咲徳栄',away:null,homeSrc:null,awaySrc:{round:'r1',id:1},next:{round:'r3',id:4}},
-    {id:9,round:'r2',date:'8/12(水)',time:'16:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:2},awaySrc:{round:'r1',id:3},next:{round:'r3',id:5}},
-    {id:10,round:'r2',date:'8/12(水)',time:'18:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:4},awaySrc:{round:'r1',id:5},next:{round:'r3',id:5}},
-    {id:11,round:'r2',date:'8/13(木)',time:'13:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:6},awaySrc:{round:'r1',id:7},next:{round:'r3',id:6}},
-    {id:12,round:'r2',date:'8/13(木)',time:'16:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:8},awaySrc:{round:'r1',id:9},next:{round:'r3',id:6}},
-    {id:13,round:'r2',date:'8/13(木)',time:'18:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:10},awaySrc:{round:'r1',id:11},next:{round:'r3',id:7}},
-    {id:14,round:'r2',date:'8/14(金)',time:'13:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:12},awaySrc:{round:'r1',id:13},next:{round:'r3',id:7}},
-    {id:15,round:'r2',date:'8/14(金)',time:'16:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:14},awaySrc:{round:'r1',id:15},next:{round:'r3',id:8}},
-    {id:16,round:'r2',date:'8/14(金)',time:'18:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r1',id:16},awaySrc:{round:'r1',id:17},next:{round:'r3',id:8}},
+    {id:8,round:'r2',date:'8/12(水)',time:'13:30',homeNo:12,awayNo:7,home:'花咲徳栄',away:'仙台育英',homeSrc:null,awaySrc:null,next:{round:'r3',id:4}},
+    {id:9,round:'r2',date:'8/12(水)',time:'16:00',homeNo:48,awayNo:10,home:'神村学園',away:'佐野日大',homeSrc:null,awaySrc:null,next:{round:'r3',id:5}},
+    {id:10,round:'r2',date:'8/12(水)',time:'18:30',homeNo:17,awayNo:11,home:'東海大甲府',away:'健大高崎',homeSrc:null,awaySrc:null,next:{round:'r3',id:5}},
+    {id:11,round:'r2',date:'8/13(木)',time:'13:30',homeNo:45,awayNo:44,home:'有明',away:'長崎日大',homeSrc:null,awaySrc:null,next:{round:'r3',id:6}},
+    {id:12,round:'r2',date:'8/13(木)',time:'16:00',homeNo:3,awayNo:8,home:'青森山田',away:'東日大昌平',homeSrc:null,awaySrc:null,next:{round:'r3',id:6}},
+    {id:13,round:'r2',date:'8/13(木)',time:'18:30',homeNo:46,awayNo:38,home:'大分商',away:'英明',homeSrc:null,awaySrc:null,next:{round:'r3',id:7}},
+    {id:14,round:'r2',date:'8/14(金)',time:'13:30',homeNo:4,awayNo:33,home:'花巻東',away:'岡山学芸館',homeSrc:null,awaySrc:null,next:{round:'r3',id:7}},
+    {id:15,round:'r2',date:'8/14(金)',time:'16:00',homeNo:39,awayNo:9,home:'鳴門渦潮',away:'霞ケ浦',homeSrc:null,awaySrc:null,next:{round:'r3',id:8}},
+    {id:16,round:'r2',date:'8/14(金)',time:'18:30',homeNo:47,awayNo:16,home:'日南学園',away:'横浜',homeSrc:null,awaySrc:null,next:{round:'r3',id:8}},
   ],
   r3:[
     {id:1,round:'r3',date:'8/15(土)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:{round:'r2',id:1},awaySrc:{round:'r2',id:2},next:{round:'qf',id:null}},
@@ -1321,7 +1325,19 @@ const SCHEDULE=[
   ]},
   {date:'8/12(水)',day:8,today:false,games:[
     {time:'8:00',round:'r2',home:'拓大紅陵',away:'佐賀商',homeNo:13,awayNo:43},
-    {time:'13:30',round:'r2',home:'花咲徳栄',away:'TBD',homeNo:12,awayNo:0}
+    {time:'13:30',round:'r2',home:'花咲徳栄',away:'仙台育英',homeNo:12,awayNo:7},
+    {time:'16:00',round:'r2',home:'神村学園',away:'佐野日大',homeNo:48,awayNo:10},
+    {time:'18:30',round:'r2',home:'東海大甲府',away:'健大高崎',homeNo:17,awayNo:11}
+  ]},
+  {date:'8/13(木)',day:9,today:false,games:[
+    {time:'13:30',round:'r2',home:'有明',away:'長崎日大',homeNo:45,awayNo:44},
+    {time:'16:00',round:'r2',home:'青森山田',away:'東日大昌平',homeNo:3,awayNo:8},
+    {time:'18:30',round:'r2',home:'大分商',away:'英明',homeNo:46,awayNo:38}
+  ]},
+  {date:'8/14(金)',day:10,today:false,games:[
+    {time:'13:30',round:'r2',home:'花巻東',away:'岡山学芸館',homeNo:4,awayNo:33},
+    {time:'16:00',round:'r2',home:'鳴門渦潮',away:'霞ケ浦',homeNo:39,awayNo:9},
+    {time:'18:30',round:'r2',home:'日南学園',away:'横浜',homeNo:47,awayNo:16}
   ]},
 ];
 const MEMBERS=['しんちゃん','かっちゃん','だいちゃん','まさちゃん','くろさん','ゆっきー','とみー','うっちー','みたにさん'];
@@ -2137,6 +2153,80 @@ function closeModalBtn(){document.getElementById('modal-overlay').classList.remo
 // ===== SCHEDULE =====
 // 試合結果の唯一の情報源はcloud.results（管理タブ入力）。SCHEDULE自体にはスコアを持たせない。
 // 管理タブの「試合終了」チェックが入っている試合だけ、日程画面で終了扱いにする
+
+// ===== 開発用：SCHEDULEとBRACKET_DATAの同期漏れを検出するチェック =====
+// 本番UIには一切表示しない。コード修正後、ブラウザのコンソールで
+// validateScheduleAgainstBracket() を手動実行して確認する開発ツール。
+// SCHEDULEに登録済みの試合が、すべて同じ内容でBRACKET_DATAにも存在するかを検査する（片方向）。
+
+// SCHEDULEに「どのラウンドまで登録済みであるべきか」を1箇所で管理する。
+// 3回戦をSCHEDULEへ追加したら 'r3' に変更するだけでよい（BRACKET_ROUND_ORDERから対象ラウンドを自動算出）。
+const SCHEDULE_COMPLETE_THROUGH='r2';
+
+function validateScheduleAgainstBracket(){
+  const problems=[];
+  let checked=0;
+
+  // SCHEDULE側の重複チェック（同じround/date/timeが複数登録されていないか）
+  const scheduleKeyCount=new Map();
+  SCHEDULE.forEach(day=>{
+    day.games.forEach(sg=>{
+      if(sg.rest)return;
+      const key=`${sg.round}|${day.date}|${sg.time}`;
+      scheduleKeyCount.set(key,(scheduleKeyCount.get(key)||0)+1);
+    });
+  });
+  scheduleKeyCount.forEach((count,key)=>{
+    if(count>1)problems.push(`[SCHEDULE重複] ${key} が${count}件登録されています`);
+  });
+
+  // 順方向：SCHEDULEの各試合が、同じround/date/timeでBRACKET_DATAに一意に存在するか
+  SCHEDULE.forEach(day=>{
+    day.games.forEach(sg=>{
+      if(sg.rest)return;
+      checked++;
+      const bgList=BRACKET_DATA[sg.round]||[];
+      const matches=bgList.filter(x=>x.date===day.date&&x.time===sg.time);
+      if(matches.length===0){
+        problems.push(`[未検出] SCHEDULE ${day.date} ${sg.time} ${sg.home}vs${sg.away}(round:${sg.round}) がBRACKET_DATAに見つからない`);
+        return;
+      }
+      if(matches.length>1){
+        problems.push(`[BRACKET_DATA重複] round:${sg.round} ${day.date} ${sg.time} がBRACKET_DATAに${matches.length}件あります`);
+        return;
+      }
+      const bg=matches[0];
+      if(bg.homeNo!==sg.homeNo)problems.push(`[homeNo不一致] ${day.date} ${sg.time}: SCHEDULE=${sg.homeNo} BRACKET_DATA=${bg.homeNo}`);
+      if(bg.awayNo!==sg.awayNo)problems.push(`[awayNo不一致] ${day.date} ${sg.time}: SCHEDULE=${sg.awayNo} BRACKET_DATA=${bg.awayNo}`);
+      if(bg.home!==sg.home)problems.push(`[home名不一致] ${day.date} ${sg.time}: SCHEDULE="${sg.home}" BRACKET_DATA="${bg.home}"`);
+      if(bg.away!==sg.away)problems.push(`[away名不一致] ${day.date} ${sg.time}: SCHEDULE="${sg.away}" BRACKET_DATA="${bg.away}"`);
+    });
+  });
+
+  // 逆方向：SCHEDULE_COMPLETE_THROUGHまでの各ラウンドについて、
+  // BRACKET_DATA側にある試合が全てSCHEDULEにも存在するか（追加忘れの検出が主目的）
+  const completeIdx=BRACKET_ROUND_ORDER.indexOf(SCHEDULE_COMPLETE_THROUGH);
+  if(completeIdx<0){
+    problems.push(`[設定エラー] SCHEDULE_COMPLETE_THROUGH="${SCHEDULE_COMPLETE_THROUGH}" はBRACKET_ROUND_ORDERに存在しません（タイプミスの可能性。正しい値: ${BRACKET_ROUND_ORDER.join(', ')}）`);
+  }
+  const scheduledRounds=completeIdx>=0?BRACKET_ROUND_ORDER.slice(0,completeIdx+1):[];
+  scheduledRounds.forEach(rkey=>{
+    (BRACKET_DATA[rkey]||[]).forEach(bg=>{
+      const found=SCHEDULE.some(day=>day.games.some(sg=>!sg.rest&&sg.round===rkey&&day.date===bg.date&&sg.time===bg.time));
+      if(!found)problems.push(`[SCHEDULE欠落] BRACKET_DATA ${bg.date} ${bg.time} ${bg.home}vs${bg.away}(round:${rkey}) がSCHEDULEに見つからない`);
+    });
+  });
+
+  console.log(`validateScheduleAgainstBracket: SCHEDULE ${checked}試合を検査（SCHEDULE_COMPLETE_THROUGH=${SCHEDULE_COMPLETE_THROUGH}）`);
+  if(problems.length===0){
+    console.log('✅ 不一致なし');
+  }else{
+    console.warn(`⚠️ ${problems.length}件の不一致:`);
+    problems.forEach(p=>console.warn('  '+p));
+  }
+  return problems;
+}
+
 function getEffectiveGame(g){
   const base={...g,score:'',done:false};
   if(!g.homeNo||!g.awayNo)return base; // 片方TBDの試合は常に「予定」扱い
