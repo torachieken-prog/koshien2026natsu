@@ -326,7 +326,7 @@
 <div style="text-align:center;background:var(--ink);padding-bottom:6px;">
   <button class="header-reload-btn" onclick="loadCloud(true)">🔄 最新の状態に更新</button>
 </div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/15 05:02</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/17 11:28</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -1271,10 +1271,10 @@ const BRACKET_DATA={
     {id:8,round:'r3',date:'8/16(日)',time:'15:30',homeNo:9,awayNo:16,home:'霞ケ浦',away:'横浜',homeSrc:null,awaySrc:null,next:{round:'qf',id:null}},
   ],
   qf:[
-    {id:1,round:'qf',date:'8/18(火)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
-    {id:2,round:'qf',date:'8/18(火)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
-    {id:3,round:'qf',date:'8/18(火)',time:'13:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
-    {id:4,round:'qf',date:'8/18(火)',time:'15:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+    {id:1,round:'qf',date:'8/18(火)',time:'8:00',homeNo:31,awayNo:26,home:'天理',away:'三重',homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+    {id:2,round:'qf',date:'8/18(火)',time:'10:30',homeNo:7,awayNo:32,home:'仙台育英',away:'智辯和歌山',homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+    {id:3,round:'qf',date:'8/18(火)',time:'13:00',homeNo:4,awayNo:16,home:'花巻東',away:'横浜',homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
+    {id:4,round:'qf',date:'8/18(火)',time:'15:30',homeNo:11,awayNo:45,home:'健大高崎',away:'有明',homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
   ],
   sf:[
     {id:1,round:'sf',date:'8/20(木)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
@@ -1339,7 +1339,7 @@ const SCHEDULE=[
     {time:'16:00',round:'r2',home:'鳴門渦潮',away:'霞ケ浦',homeNo:39,awayNo:9},
     {time:'18:30',round:'r2',home:'日南学園',away:'横浜',homeNo:47,awayNo:16}
   ]},
-  {date:'8/15(土)',day:11,today:true,games:[
+  {date:'8/15(土)',day:11,today:false,games:[
     {time:'8:00',round:'r3',home:'高川学園',away:'天理',homeNo:37,awayNo:31},
     {time:'10:30',round:'r3',home:'敦賀気比',away:'智辯和歌山',homeNo:22,awayNo:32},
     {time:'13:00',round:'r3',home:'履正社',away:'三重',homeNo:29,awayNo:26},
@@ -1350,6 +1350,12 @@ const SCHEDULE=[
     {time:'10:30',round:'r3',home:'有明',away:'東日大昌平',homeNo:45,awayNo:8},
     {time:'13:00',round:'r3',home:'英明',away:'花巻東',homeNo:38,awayNo:4},
     {time:'15:30',round:'r3',home:'霞ケ浦',away:'横浜',homeNo:9,awayNo:16}
+  ]},
+  {date:'8/18(火)',day:14,today:false,games:[
+    {time:'8:00',round:'qf',home:'天理',away:'三重',homeNo:31,awayNo:26},
+    {time:'10:30',round:'qf',home:'仙台育英',away:'智辯和歌山',homeNo:7,awayNo:32},
+    {time:'13:00',round:'qf',home:'花巻東',away:'横浜',homeNo:4,awayNo:16},
+    {time:'15:30',round:'qf',home:'健大高崎',away:'有明',homeNo:11,awayNo:45}
   ]},
 ];
 const MEMBERS=['しんちゃん','かっちゃん','だいちゃん','まさちゃん','くろさん','ゆっきー','とみー','うっちー','みたにさん'];
@@ -2173,7 +2179,7 @@ function closeModalBtn(){document.getElementById('modal-overlay').classList.remo
 
 // SCHEDULEに「どのラウンドまで登録済みであるべきか」を1箇所で管理する。
 // 3回戦をSCHEDULEへ追加したら 'r3' に変更するだけでよい（BRACKET_ROUND_ORDERから対象ラウンドを自動算出）。
-const SCHEDULE_COMPLETE_THROUGH='r3';
+const SCHEDULE_COMPLETE_THROUGH='qf';
 
 function validateScheduleAgainstBracket(){
   const problems=[];
