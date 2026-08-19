@@ -134,6 +134,9 @@
   .lottery-result{font-size:12px;font-weight:900;text-align:center;color:var(--crimson);min-height:18px;margin-bottom:10px;}
   .lottery-run-btn{display:block;width:100%;padding:11px;background:linear-gradient(135deg,#1a3a5c,#2d5a8c);color:#fff;border:none;border-radius:10px;font-family:'M PLUS 1p',sans-serif;font-size:13px;font-weight:900;cursor:pointer;letter-spacing:1px;}
   .lottery-run-btn:disabled{opacity:.5;}
+  .lottery-stop-btn{display:block;width:100%;padding:15px;margin-top:8px;background:linear-gradient(135deg,#B01020,#7a0a15);color:#fff;border:none;border-radius:10px;font-family:'M PLUS 1p',sans-serif;font-size:16px;font-weight:900;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 14px rgba(176,16,32,.4);animation:stopBtnPulse 1s ease-in-out infinite;}
+  @keyframes stopBtnPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.03);}}
+  .lottery-stop-btn:active{transform:scale(.96);animation:none;}
 
   /* --- 抽選中の弾む/光るエフェクト --- */
   .lottery-slot.pop{animation:lotteryPop .4s ease;}
@@ -419,7 +422,7 @@
 <div style="text-align:center;background:var(--ink);padding-bottom:6px;">
   <button class="header-reload-btn" onclick="loadCloud(true)">🔄 最新の状態に更新</button>
 </div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/19 15:29</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/19 16:01</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -1071,6 +1074,7 @@
             </div>
             <div class="lottery-result" id="lot-result"></div>
             <button class="lottery-run-btn" id="lottery-run-btn" onclick="runDaigyakutenLottery()">🎲 抽選する（シミュレーション）</button>
+            <button class="lottery-stop-btn" id="lottery-stop-btn" onclick="lotteryStopCurrentSpin()" style="display:none;">🛑 ストップ！</button>
             <button class="lottery-reveal-btn" id="lottery-reveal-btn" onclick="revealFinalStandings()" style="display:none;">🏆 もし発動したら？</button>
           </div>
 
@@ -2203,26 +2207,55 @@ function lotterySetStep(n){
   }
 }
 
-function lotterySpinText(el,pool,duration,cb){
-  let t=0;
-  const iv=setInterval(()=>{
-    el.textContent=pool[Math.floor(Math.random()*pool.length)];
-    t+=80;
-    if(t>=duration){clearInterval(iv);cb();}
-  },80);
+// 現在回転中のスロットを止めるための関数。lotterySpinUntilStop実行中のみセットされる。
+let lotteryCurrentStopFn=null;
+
+function lotteryStopCurrentSpin(){
+  if(lotteryCurrentStopFn){
+    const fn=lotteryCurrentStopFn;
+    lotteryCurrentStopFn=null;
+    document.getElementById('lottery-stop-btn').style.display='none';
+    fn();
+  }
 }
 
-function lotterySpinTextSlowdown(el,pool,cb){
-  let delay=45,n=0;
-  const fastSteps=14,maxDelay=550;
-  const step=()=>{
-    el.textContent=pool[Math.floor(Math.random()*pool.length)];
-    n++;
-    if(n>fastSteps)delay=Math.min(delay*1.22,maxDelay);
-    if(delay>=maxDelay){setTimeout(cb,300);}else{setTimeout(step,delay);}
-  };
-  step();
+// 「ストップ！」ボタンが押されるまで無限に値が切り替わり続け、押された瞬間から
+// ゆっくり減速して最終的に1つの値に止まるスロット演出。Promiseで最終値を返す。
+// forcedIndex を指定すると、減速の終盤で必ずその値に収束して止まる（表示と実際の結果を一致させたい場合に使う）。
+// 指定しない場合は、これまで通り完全ランダムな値で止まる。
+function lotterySpinUntilStop(el,pool,forcedIndex){
+  return new Promise((resolve)=>{
+    let intervalId=null;
+    const spin=()=>{el.textContent=pool[Math.floor(Math.random()*pool.length)];};
+    spin();
+    intervalId=setInterval(spin,80);
+
+    document.getElementById('lottery-stop-btn').style.display='block';
+    lotteryCurrentStopFn=()=>{
+      clearInterval(intervalId);
+      // ストップされた瞬間からゆっくり減速していく（かなりゆっくりめに調整）
+      let delay=90,n=0;
+      const fastSteps=2,maxDelay=900;
+      const step=()=>{
+        n++;
+        if(n>fastSteps)delay=Math.min(delay*1.32,maxDelay);
+        // 終盤（十分減速してから）は、forcedIndexが指定されていればその値に固定して表示する
+        const settling=forcedIndex!==undefined&&delay>=maxDelay*0.55;
+        const idx=settling?forcedIndex:Math.floor(Math.random()*pool.length);
+        el.textContent=pool[idx];
+        if(delay>=maxDelay){
+          const finalIdx=forcedIndex!==undefined?forcedIndex:idx;
+          el.textContent=pool[finalIdx];
+          setTimeout(()=>resolve(finalIdx),450);
+        }else{
+          setTimeout(step,delay);
+        }
+      };
+      step();
+    };
+  });
 }
+
 
 function lotteryWeightedMultiplier(){
   const r=Math.random();
@@ -2301,10 +2334,12 @@ function spawnConfetti(){
   }, 3200);
 }
 
-function runDaigyakutenLottery(){
+async function runDaigyakutenLottery(){
   const btn=document.getElementById('lottery-run-btn');
   const revealBtn=document.getElementById('lottery-reveal-btn');
+  const stopBtn=document.getElementById('lottery-stop-btn');
   btn.disabled=true;
+  btn.style.display='none';
   revealBtn.style.display='none';
   document.getElementById('lottery-standings').style.display='none';
   document.getElementById('lottery-box').style.display='block';
@@ -2324,72 +2359,82 @@ function runDaigyakutenLottery(){
   multEl.style.opacity=0;
   resultEl.textContent='';
   lotterySetStep(1);
-  statusEl.textContent='STEP 1　誰が当たる？';
+  statusEl.textContent='STEP 1　誰が当たる？　ストップで止めよう';
 
   // 抽選対象は「選択している校が1つ以上ある参加者」に限る
   const eligibleMembers=MEMBERS.filter(m=>Object.keys(getPicks(m)).length>0);
   if(eligibleMembers.length===0){
     statusEl.textContent='まだ誰もチームを選んでいません';
     btn.disabled=false;
+    btn.style.display='block';
+    stopBtn.style.display='none';
     return;
   }
 
-  lotterySpinText(personEl,eligibleMembers,1200,()=>{
-    const person=eligibleMembers[Math.floor(Math.random()*eligibleMembers.length)];
-    personEl.textContent=person;
-    lotteryPopEffect(personBox);
-    lotterySetStep(2);
-    statusEl.textContent='STEP 2　どの校？';
-    teamBox.style.opacity=1;
+  // STEP1: 誰が当たるか
+  const personIdx=await lotterySpinUntilStop(personEl,eligibleMembers);
+  const person=eligibleMembers[personIdx];
+  personEl.textContent=person;
+  lotteryPopEffect(personBox);
+  lotterySetStep(2);
+  statusEl.textContent='STEP 2　どの校？　ストップで止めよう';
+  teamBox.style.opacity=1;
 
-    const picks=getPicks(person);
-    const teamNos=Object.keys(picks).map(Number);
-    const teamNames=teamNos.map(no=>{const t=TEAMS.find(x=>x.no===no);return t?t.name:'?';});
+  // STEP2: どの校か
+  const picks=getPicks(person);
+  const teamNos=Object.keys(picks).map(Number);
+  const teamNames=teamNos.map(no=>{const t=TEAMS.find(x=>x.no===no);return t?t.name:'?';});
+  const teamIdx=await lotterySpinUntilStop(teamEl,teamNames);
+  const teamNo=teamNos[teamIdx];
+  const teamName=teamNames[teamIdx];
+  teamEl.textContent=teamName;
+  lotteryPopEffect(teamBox);
+  lotterySetStep(3);
+  statusEl.textContent='STEP 3　プラスかマイナスか？　ストップで止めよう';
+  signEl.style.opacity=1;
 
-    lotterySpinText(teamEl,teamNames,1200,()=>{
-      const idx=Math.floor(Math.random()*teamNos.length);
-      const teamNo=teamNos[idx];
-      const teamName=teamNames[idx];
-      teamEl.textContent=teamName;
-      lotteryPopEffect(teamBox);
-      lotterySetStep(3);
-      statusEl.textContent='STEP 3　プラスかマイナスか？';
-
-      // 符号だけは、スロット演出の代わりに全画面演出で見せる
-      setTimeout(()=>{
-        const sign=Math.random()<0.5?1:-1;
-        if(sign<0)box.classList.add('shake');
-        showSignOverlay(sign,()=>{
-          box.classList.remove('shake');
-          signEl.style.opacity=1;
-          signEl.textContent=sign>0?'＋':'－';
-          lotterySetStep(4);
-          statusEl.textContent='STEP 4　倍率は？';
-          multEl.style.opacity=1;
-
-          lotterySpinTextSlowdown(multEl,['x2','x3','x5'],()=>{
-            const mult=lotteryWeightedMultiplier();
-            multEl.textContent='x'+mult;
-            lotteryPopEffect(document.getElementById('lottery-box'));
-
-            const lot=picks[teamNo]||1;
-            const stats=calcTeamStats(teamNo);
-            const baseAbs=stats?Math.abs(stats.diffSum):0;
-            const bonus=baseAbs*sign*mult*lot;
-            const bonusTxt=bonus>=0?`+${bonus}`:`${bonus}`;
-
-            statusEl.textContent=`${person} の ${teamName}（${lot}口）が ${sign>0?'＋':'－'} × x${mult}`;
-            resultEl.textContent=`得失点差 ${baseAbs} → ボーナス ${bonusTxt}（※シミュレーションのみ・未反映）`;
-            btn.disabled=false;
-
-            lastLotteryResult={person,teamName,teamNo,lot,sign,mult,baseAbs,bonus};
-            revealBtn.style.display='block';
-          });
-        });
-      }, 500);
+  // STEP3: 符号（プラス/マイナス）。スロットで止めた後、全画面演出で見せる
+  const signIdx=await lotterySpinUntilStop(signEl,['＋','－']);
+  const sign=signIdx===0?1:-1;
+  signEl.textContent=sign>0?'＋':'－';
+  if(sign<0)box.classList.add('shake');
+  await new Promise(resolve=>{
+    showSignOverlay(sign,()=>{
+      box.classList.remove('shake');
+      resolve();
     });
   });
+
+  lotterySetStep(4);
+  statusEl.textContent='STEP 4　倍率は？　ストップで止めよう';
+  multEl.style.opacity=1;
+
+  // STEP4: 倍率（2倍60%/3倍30%/5倍10%の重み付き抽選）。
+  // 先に確定倍率を決めてからスロットに渡すことで、ストップした瞬間の表示と
+  // 最終的に確定する倍率が必ず一致するようにする。
+  const multPool=['x2','x3','x5'];
+  const mult=lotteryWeightedMultiplier();
+  const forcedMultIdx=multPool.indexOf('x'+mult);
+  const multIdx=await lotterySpinUntilStop(multEl,multPool,forcedMultIdx);
+  multEl.textContent=multPool[multIdx];
+  lotteryPopEffect(document.getElementById('lottery-box'));
+
+  const lot=picks[teamNo]||1;
+  const stats=calcTeamStats(teamNo);
+  const baseAbs=stats?Math.abs(stats.diffSum):0;
+  const bonus=baseAbs*sign*mult*lot;
+  const bonusTxt=bonus>=0?`+${bonus}`:`${bonus}`;
+
+  statusEl.textContent=`${person} の ${teamName}（${lot}口）が ${sign>0?'＋':'－'} × x${mult}`;
+  resultEl.textContent=`得失点差 ${baseAbs} → ボーナス ${bonusTxt}（※シミュレーションのみ・未反映）`;
+  btn.disabled=false;
+  btn.style.display='block';
+  stopBtn.style.display='none';
+
+  lastLotteryResult={person,teamName,teamNo,lot,sign,mult,baseAbs,bonus};
+  revealBtn.style.display='block';
 }
+
 
 // 「もし発動したら？」：抽選結果を反映した仮の最終順位表を表示する
 // renderRankingsと大逆転抽選シミュレーションの両方で使う、共通の順位付けロジック。
@@ -2498,6 +2543,8 @@ function revealFinalStandings(){
 function backToLotteryBox(){
   document.getElementById('lottery-standings').style.display='none';
   document.getElementById('lottery-box').style.display='block';
+  document.getElementById('lottery-run-btn').style.display='block';
+  document.getElementById('lottery-stop-btn').style.display='none';
 }
 
 async function saveAdmin(){
