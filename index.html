@@ -114,6 +114,99 @@
   .score-diff-preview{font-size:13px;font-weight:900;min-width:40px;text-align:center;}
   .score-diff-preview.plus{color:var(--crimson);}.score-diff-preview.minus{color:#1a3a5c;}.score-diff-preview.zero{color:#888;}
   .admin-save-btn{display:block;width:calc(100% - 24px);margin:0 12px 16px;padding:13px;background:linear-gradient(135deg,#2d5a27,#4a7c4e);color:white;border:none;border-radius:10px;font-family:'M PLUS 1p',sans-serif;font-size:15px;font-weight:900;letter-spacing:2px;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(45,90,39,.3);}
+
+  /* ===== 大逆転抽選（テスト用） ===== */
+  .lottery-section{margin:8px 12px 20px;border-top:1px dashed var(--sand);padding-top:14px;}
+  .lottery-toggle-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 14px;background:#f0e5c8;color:var(--ink);border:1.5px dashed #c9a876;border-radius:10px;font-family:'M PLUS 1p',sans-serif;font-size:13px;font-weight:900;cursor:pointer;}
+  .lottery-note{font-size:10px;color:rgba(0,0,0,.45);margin:10px 2px;line-height:1.6;}
+  .lottery-box{background:#fff;border:1.5px solid var(--sand);border-radius:12px;padding:16px;margin-top:6px;}
+  .lottery-dots{display:flex;justify-content:center;gap:6px;margin-bottom:14px;}
+  .lottery-dot{width:8px;height:8px;border-radius:50%;background:var(--sand);transition:background .3s;}
+  .lottery-dot.active{background:var(--crimson);}
+  .lottery-status{font-size:12px;color:rgba(0,0,0,.55);text-align:center;margin-bottom:10px;font-weight:700;min-height:16px;}
+  .lottery-slot{background:#1a0f08;border-radius:10px;padding:14px;text-align:center;margin-bottom:10px;height:58px;display:flex;flex-direction:column;justify-content:center;transition:opacity .3s;}
+  .lottery-slot-label{font-size:9px;color:var(--gold-light);letter-spacing:1px;margin-bottom:4px;font-weight:700;}
+  .lottery-slot-value{font-size:17px;font-weight:900;color:#fff;}
+  .lottery-badges{display:flex;justify-content:center;gap:8px;margin:12px 0;height:38px;align-items:center;}
+  .lottery-sign-badge,.lottery-mult-badge{border-radius:999px;padding:7px 18px;font-size:17px;font-weight:900;opacity:0;transition:opacity .3s;}
+  .lottery-sign-badge{background:#e8f2e6;color:#2d5a27;}
+  .lottery-mult-badge{background:var(--gold);color:var(--ink);}
+  .lottery-result{font-size:12px;font-weight:900;text-align:center;color:var(--crimson);min-height:18px;margin-bottom:10px;}
+  .lottery-run-btn{display:block;width:100%;padding:11px;background:linear-gradient(135deg,#1a3a5c,#2d5a8c);color:#fff;border:none;border-radius:10px;font-family:'M PLUS 1p',sans-serif;font-size:13px;font-weight:900;cursor:pointer;letter-spacing:1px;}
+  .lottery-run-btn:disabled{opacity:.5;}
+
+  /* --- 抽選中の弾む/光るエフェクト --- */
+  .lottery-slot.pop{animation:lotteryPop .4s ease;}
+  @keyframes lotteryPop{
+    0%{transform:scale(1);}
+    40%{transform:scale(1.08);box-shadow:0 0 18px 4px rgba(240,200,74,.6);}
+    100%{transform:scale(1);}
+  }
+  .lottery-box.shake{animation:lotteryShake .4s ease;}
+  @keyframes lotteryShake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-6px);}
+    40%{transform:translateX(6px);}
+    60%{transform:translateX(-4px);}
+    80%{transform:translateX(4px);}
+  }
+
+  /* --- 「もし発動したら？」ボタン --- */
+  .lottery-reveal-btn{display:block;width:100%;padding:13px;margin-top:10px;background:linear-gradient(135deg,#D4A017,#f0c84a);color:var(--ink);border:none;border-radius:10px;font-family:'M PLUS 1p',sans-serif;font-size:14px;font-weight:900;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 14px rgba(212,160,23,.35);}
+
+  /* --- 符号の全画面演出オーバーレイ --- */
+  .sign-overlay{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;
+    background:rgba(0,0,0,.55);backdrop-filter:blur(2px);}
+  .sign-overlay.show{display:flex;}
+  .sign-overlay-inner{font-size:180px;font-weight:900;line-height:1;font-family:'M PLUS 1p',sans-serif;
+    transform:scale(0.3);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s;}
+  .sign-overlay-inner.pop-in{transform:scale(1);opacity:1;}
+  .sign-overlay-inner.plus{color:#f0c84a;text-shadow:0 0 40px rgba(240,200,74,.9),0 0 80px rgba(240,200,74,.5);}
+  .sign-overlay-inner.minus{color:#6b7280;text-shadow:0 0 30px rgba(0,0,0,.8);animation:signSink .5s ease forwards .35s;}
+  @keyframes signSink{
+    0%{transform:scale(1) translateY(0);}
+    100%{transform:scale(.92) translateY(14px);}
+  }
+  .sign-sparkle{position:absolute;width:6px;height:6px;border-radius:50%;background:#f0c84a;
+    box-shadow:0 0 8px 2px rgba(240,200,74,.8);animation:sparkleFly .8s ease-out forwards;}
+  @keyframes sparkleFly{
+    0%{transform:translate(0,0) scale(1);opacity:1;}
+    100%{transform:translate(var(--sx),var(--sy)) scale(0);opacity:0;}
+  }
+
+  /* --- 仮の最終順位表 --- */
+  .lottery-standings{margin-top:14px;animation:standingsFadeIn .4s ease;}
+  @keyframes standingsFadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .lottery-standings-title{font-size:15px;font-weight:900;color:var(--crimson);text-align:center;margin-bottom:10px;}
+  .lottery-standings-list{display:flex;flex-direction:column;gap:6px;}
+  .lottery-standing-row{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--sand);
+    border-radius:10px;padding:9px 12px;transition:all .3s;}
+  .lottery-standing-row.affected{border-color:var(--gold);background:#fff9e6;box-shadow:0 0 0 2px rgba(212,160,23,.25);}
+  .lottery-standing-row.rank-up{animation:rankFlash .6s ease;}
+  @keyframes rankFlash{
+    0%{background:#e8f5e9;}
+    100%{background:inherit;}
+  }
+  .lottery-rank-change{font-size:11px;font-weight:900;min-width:52px;text-align:center;padding:2px 6px;border-radius:6px;}
+  .lottery-rank-change.up{background:#e8f5e9;color:#2d5a27;}
+  .lottery-rank-change.down{background:#fbe9e9;color:#7a0a15;}
+  .lottery-rank-change.same{background:#f0f0f0;color:#999;}
+  .lottery-standing-name{flex:1;font-size:13px;font-weight:900;}
+  .lottery-standing-score{font-size:15px;font-weight:900;}
+  .lottery-standing-score.plus{color:var(--crimson);}
+  .lottery-standing-score.minus{color:#1a3a5c;}
+  .lottery-back-btn{display:block;width:100%;padding:11px;margin-top:12px;background:var(--sky);color:#fff;
+    border:none;border-radius:10px;font-family:'M PLUS 1p',sans-serif;font-size:13px;font-weight:900;cursor:pointer;}
+
+  /* --- 紙吹雪エフェクト --- */
+  .confetti-container{position:fixed;inset:0;z-index:310;pointer-events:none;overflow:hidden;display:none;}
+  .confetti-container.show{display:block;}
+  .confetti-piece{position:absolute;top:-20px;width:9px;height:14px;opacity:.9;
+    animation:confettiFall linear forwards;}
+  @keyframes confettiFall{
+    0%{transform:translateY(0) rotate(0deg);opacity:1;}
+    100%{transform:translateY(110vh) rotate(600deg);opacity:.3;}
+  }
   .admin-save-btn:hover{transform:translateY(-2px);}
   .admin-save-btn:disabled{opacity:.5;transform:none;cursor:not-allowed;}
   .admin-filter{display:flex;gap:6px;padding:10px 12px 4px;flex-wrap:wrap;}
@@ -326,7 +419,7 @@
 <div style="text-align:center;background:var(--ink);padding-bottom:6px;">
   <button class="header-reload-btn" onclick="loadCloud(true)">🔄 最新の状態に更新</button>
 </div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/17 11:28</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/19 15:29</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -950,7 +1043,54 @@
       <div class="admin-filter" id="admin-filter"></div>
       <div class="admin-team-list" id="admin-team-list"></div>
       <button class="admin-save-btn" id="admin-save-btn" onclick="saveAdmin()">☁️ 結果をクラウドに保存</button>
+
+      <!-- 大逆転抽選（テスト用、本番実行はしない。シミュレーションのみ） -->
+      <div class="lottery-section">
+        <button class="lottery-toggle-btn" onclick="toggleLotterySection()">🎲 大逆転抽選（テスト用） <span id="lottery-toggle-arrow">▼</span></button>
+        <div id="lottery-body" style="display:none;">
+          <div class="lottery-note">※このボタンは全試合終了後の演出用です。今は動作確認のシミュレーションのみで、実際のスコアには反映されません。</div>
+          <div class="lottery-box" id="lottery-box">
+            <div class="lottery-dots">
+              <div class="lottery-dot active" id="lot-dot1"></div>
+              <div class="lottery-dot" id="lot-dot2"></div>
+              <div class="lottery-dot" id="lot-dot3"></div>
+              <div class="lottery-dot" id="lot-dot4"></div>
+            </div>
+            <div class="lottery-status" id="lot-status">STEP 1　誰が当たる？</div>
+            <div class="lottery-slot" id="lot-person-box">
+              <div class="lottery-slot-label">対象者</div>
+              <div class="lottery-slot-value" id="lot-person">-</div>
+            </div>
+            <div class="lottery-slot" id="lot-team-box" style="opacity:.25;">
+              <div class="lottery-slot-label">当選校</div>
+              <div class="lottery-slot-value" id="lot-team">-</div>
+            </div>
+            <div class="lottery-badges">
+              <div class="lottery-sign-badge" id="lot-sign">±</div>
+              <div class="lottery-mult-badge" id="lot-mult">x?</div>
+            </div>
+            <div class="lottery-result" id="lot-result"></div>
+            <button class="lottery-run-btn" id="lottery-run-btn" onclick="runDaigyakutenLottery()">🎲 抽選する（シミュレーション）</button>
+            <button class="lottery-reveal-btn" id="lottery-reveal-btn" onclick="revealFinalStandings()" style="display:none;">🏆 もし発動したら？</button>
+          </div>
+
+          <!-- 仮の最終順位表（抽選後に表示） -->
+          <div class="lottery-standings" id="lottery-standings" style="display:none;">
+            <div class="lottery-standings-title">🏆 もし発動したら…（シミュレーション）</div>
+            <div class="lottery-standings-list" id="lottery-standings-list"></div>
+            <button class="lottery-back-btn" onclick="backToLotteryBox()">🔄 もう一度シミュレーションする</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- 符号（プラス/マイナス）演出の全画面オーバーレイ -->
+    <div class="sign-overlay" id="sign-overlay">
+      <div class="sign-overlay-inner" id="sign-overlay-inner">＋</div>
+    </div>
+
+    <!-- 紙吹雪エフェクト用コンテナ（1位交代時） -->
+    <div class="confetti-container" id="confetti-container"></div>
   </div>
 </main>
 
@@ -1277,8 +1417,8 @@ const BRACKET_DATA={
     {id:4,round:'qf',date:'8/18(火)',time:'15:30',homeNo:11,awayNo:45,home:'健大高崎',away:'有明',homeSrc:null,awaySrc:null,next:{round:'sf',id:null}},
   ],
   sf:[
-    {id:1,round:'sf',date:'8/20(木)',time:'8:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
-    {id:2,round:'sf',date:'8/20(木)',time:'10:30',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
+    {id:1,round:'sf',date:'8/20(木)',time:'8:00',homeNo:32,awayNo:16,home:'智辯和歌山',away:'横浜',homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
+    {id:2,round:'sf',date:'8/20(木)',time:'10:30',homeNo:31,awayNo:11,home:'天理',away:'健大高崎',homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
   ],
   f:[
     {id:1,round:'f',date:'8/22(土)',time:'10:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:null},
@@ -1356,6 +1496,10 @@ const SCHEDULE=[
     {time:'10:30',round:'qf',home:'仙台育英',away:'智辯和歌山',homeNo:7,awayNo:32},
     {time:'13:00',round:'qf',home:'花巻東',away:'横浜',homeNo:4,awayNo:16},
     {time:'15:30',round:'qf',home:'健大高崎',away:'有明',homeNo:11,awayNo:45}
+  ]},
+  {date:'8/20(木)',day:16,today:false,games:[
+    {time:'8:00',round:'sf',home:'智辯和歌山',away:'横浜',homeNo:32,awayNo:16},
+    {time:'10:30',round:'sf',home:'天理',away:'健大高崎',homeNo:31,awayNo:11}
   ]},
 ];
 const MEMBERS=['しんちゃん','かっちゃん','だいちゃん','まさちゃん','くろさん','ゆっきー','とみー','うっちー','みたにさん'];
@@ -1803,35 +1947,13 @@ function renderRankings(){
       teams:names,
       count:Object.keys(picks).length
     };
-  }).sort((a,b)=>{
-    // 1. 得失点差合計（多い方が上位）。null(未消化)は最下位扱い
-    if(a.total===null&&b.total===null)return 0;
-    if(a.total===null)return 1;
-    if(b.total===null)return -1;
-    if(b.total!==a.total)return b.total-a.total;
-    // 2. 口数を反映した合計勝利数が多い方
-    if(b.wins!==a.wins)return b.wins-a.wins;
-    // 3. 1試合での最大プラス得失点差が大きい方
-    const ap=a.maxPlus===null?-Infinity:a.maxPlus;
-    const bp=b.maxPlus===null?-Infinity:b.maxPlus;
-    if(bp!==ap)return bp-ap;
-    // 4. 1試合での最大マイナス得失点差が小さい方が上位（敗戦なしが最も上位、次に-1、-2、-5の順）
-    if(a.maxMinus===null&&b.maxMinus!==null)return -1;
-    if(a.maxMinus!==null&&b.maxMinus===null)return 1;
-    if(a.maxMinus!==null&&b.maxMinus!==null&&a.maxMinus!==b.maxMinus)return b.maxMinus-a.maxMinus;
-    // 5. 完全に同じなら同順位（安定ソートに任せる）
-    return 0;
   });
+  // ソート・同順位判定は共通関数rankMembers()に一本化（大逆転抽選シミュレーションと同じロジックを使う）
+  const {sorted,rankMap}=rankMembers(scores);
   if(!scores.some(s=>s.count>0)){view.innerHTML='<div class="no-data">まだ誰も選択していません 🌸<br>各参加者のタブからチームを選んでください</div>';return;}
   view.innerHTML='';
-  // 同順位判定のため、直前と全指標が同じ場合は同じ順位番号を振る
-  let dispRank=1;
-  scores.forEach((s,i)=>{
-    if(i>0){
-      const p=scores[i-1];
-      const same = p.total===s.total && p.wins===s.wins && p.maxPlus===s.maxPlus && p.maxMinus===s.maxMinus;
-      if(!same) dispRank=i+1;
-    }
+  sorted.forEach((s)=>{
+    const dispRank=rankMap.get(s.member);
     const row=document.createElement('div');
     row.className='rank-row'+(dispRank===1?' rank-1':dispRank===2?' rank-2':dispRank===3?' rank-3':'');
     const disp=s.total===null?'試合待':s.total>0?`+${s.total}`:String(s.total);
@@ -2060,6 +2182,324 @@ function findOpponent(no,round){
   return null;
 }
 
+// ===== 大逆転抽選（テスト用シミュレーション） =====
+// 全試合終了後の演出用に検討している仕組み。今はシミュレーション実行のみで、
+// 実際のスコア（cloud.results / cloud.members）には一切書き込まない。
+// ①誰が当たるか(9人均等) → ②その人の選択校(口数無視・均等抽選)
+// → ③符号(プラス/マイナス、50/50) → ④倍率(2倍60%/3倍30%/5倍10%)
+// 反映式: その校の得失点差の絶対値 × 符号 × 倍率 × 口数
+function toggleLotterySection(){
+  const body=document.getElementById('lottery-body');
+  const arrow=document.getElementById('lottery-toggle-arrow');
+  const isOpen=body.style.display!=='none';
+  body.style.display=isOpen?'none':'block';
+  arrow.textContent=isOpen?'▼':'▲';
+}
+
+function lotterySetStep(n){
+  for(let i=1;i<=4;i++){
+    const dot=document.getElementById('lot-dot'+i);
+    if(dot)dot.classList.toggle('active', i<=n);
+  }
+}
+
+function lotterySpinText(el,pool,duration,cb){
+  let t=0;
+  const iv=setInterval(()=>{
+    el.textContent=pool[Math.floor(Math.random()*pool.length)];
+    t+=80;
+    if(t>=duration){clearInterval(iv);cb();}
+  },80);
+}
+
+function lotterySpinTextSlowdown(el,pool,cb){
+  let delay=45,n=0;
+  const fastSteps=14,maxDelay=550;
+  const step=()=>{
+    el.textContent=pool[Math.floor(Math.random()*pool.length)];
+    n++;
+    if(n>fastSteps)delay=Math.min(delay*1.22,maxDelay);
+    if(delay>=maxDelay){setTimeout(cb,300);}else{setTimeout(step,delay);}
+  };
+  step();
+}
+
+function lotteryWeightedMultiplier(){
+  const r=Math.random();
+  if(r<0.60)return 2;
+  if(r<0.90)return 3;
+  return 5;
+}
+
+// 直近の抽選結果を保持しておく（「もし発動したら？」ボタンで使う）
+let lastLotteryResult=null;
+
+function lotteryPopEffect(el){
+  el.classList.remove('pop');
+  void el.offsetWidth; // reflow強制でアニメーションを再生させる
+  el.classList.add('pop');
+}
+
+// 符号（プラス/マイナス）を画面いっぱいに表示する演出
+function showSignOverlay(sign,cb){
+  const overlay=document.getElementById('sign-overlay');
+  const inner=document.getElementById('sign-overlay-inner');
+  inner.className='sign-overlay-inner'+(sign>0?' plus':' minus');
+  inner.textContent=sign>0?'＋':'－';
+  overlay.classList.add('show');
+
+  requestAnimFrame(()=>{
+    inner.classList.add('pop-in');
+    if(sign>0)spawnSparkles();
+  });
+
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    inner.classList.remove('pop-in');
+    if(cb)cb();
+  }, sign>0?1300:1500);
+}
+function requestAnimFrame(fn){
+  if(typeof requestAnimationFrame!=='undefined')requestAnimationFrame(fn);
+  else setTimeout(fn,16);
+}
+
+// プラス演出のときだけ、周囲に光の粒を飛ばす簡易パーティクル
+function spawnSparkles(){
+  const overlay=document.getElementById('sign-overlay');
+  for(let i=0;i<14;i++){
+    const s=document.createElement('div');
+    s.className='sign-sparkle';
+    const angle=Math.random()*Math.PI*2;
+    const dist=80+Math.random()*140;
+    s.style.setProperty('--sx',(Math.cos(angle)*dist)+'px');
+    s.style.setProperty('--sy',(Math.sin(angle)*dist)+'px');
+    s.style.left='50%';
+    s.style.top='50%';
+    overlay.appendChild(s);
+    setTimeout(()=>s.remove(),900);
+  }
+}
+
+// 紙吹雪を降らせる（1位交代時の演出）
+function spawnConfetti(){
+  const container=document.getElementById('confetti-container');
+  container.classList.add('show');
+  const colors=['#B01020','#f0c84a','#1a3a5c','#4a7c4e','#D4A017'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'%';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration=(1.8+Math.random()*1.4)+'s';
+    p.style.animationDelay=(Math.random()*0.5)+'s';
+    container.appendChild(p);
+  }
+  setTimeout(()=>{
+    container.classList.remove('show');
+    container.innerHTML='';
+  }, 3200);
+}
+
+function runDaigyakutenLottery(){
+  const btn=document.getElementById('lottery-run-btn');
+  const revealBtn=document.getElementById('lottery-reveal-btn');
+  btn.disabled=true;
+  revealBtn.style.display='none';
+  document.getElementById('lottery-standings').style.display='none';
+  document.getElementById('lottery-box').style.display='block';
+
+  const box=document.getElementById('lottery-box');
+  const personBox=document.getElementById('lot-person-box');
+  const personEl=document.getElementById('lot-person');
+  const teamEl=document.getElementById('lot-team');
+  const teamBox=document.getElementById('lot-team-box');
+  const signEl=document.getElementById('lot-sign');
+  const multEl=document.getElementById('lot-mult');
+  const statusEl=document.getElementById('lot-status');
+  const resultEl=document.getElementById('lot-result');
+
+  teamBox.style.opacity=0.25;
+  signEl.style.opacity=0;
+  multEl.style.opacity=0;
+  resultEl.textContent='';
+  lotterySetStep(1);
+  statusEl.textContent='STEP 1　誰が当たる？';
+
+  // 抽選対象は「選択している校が1つ以上ある参加者」に限る
+  const eligibleMembers=MEMBERS.filter(m=>Object.keys(getPicks(m)).length>0);
+  if(eligibleMembers.length===0){
+    statusEl.textContent='まだ誰もチームを選んでいません';
+    btn.disabled=false;
+    return;
+  }
+
+  lotterySpinText(personEl,eligibleMembers,1200,()=>{
+    const person=eligibleMembers[Math.floor(Math.random()*eligibleMembers.length)];
+    personEl.textContent=person;
+    lotteryPopEffect(personBox);
+    lotterySetStep(2);
+    statusEl.textContent='STEP 2　どの校？';
+    teamBox.style.opacity=1;
+
+    const picks=getPicks(person);
+    const teamNos=Object.keys(picks).map(Number);
+    const teamNames=teamNos.map(no=>{const t=TEAMS.find(x=>x.no===no);return t?t.name:'?';});
+
+    lotterySpinText(teamEl,teamNames,1200,()=>{
+      const idx=Math.floor(Math.random()*teamNos.length);
+      const teamNo=teamNos[idx];
+      const teamName=teamNames[idx];
+      teamEl.textContent=teamName;
+      lotteryPopEffect(teamBox);
+      lotterySetStep(3);
+      statusEl.textContent='STEP 3　プラスかマイナスか？';
+
+      // 符号だけは、スロット演出の代わりに全画面演出で見せる
+      setTimeout(()=>{
+        const sign=Math.random()<0.5?1:-1;
+        if(sign<0)box.classList.add('shake');
+        showSignOverlay(sign,()=>{
+          box.classList.remove('shake');
+          signEl.style.opacity=1;
+          signEl.textContent=sign>0?'＋':'－';
+          lotterySetStep(4);
+          statusEl.textContent='STEP 4　倍率は？';
+          multEl.style.opacity=1;
+
+          lotterySpinTextSlowdown(multEl,['x2','x3','x5'],()=>{
+            const mult=lotteryWeightedMultiplier();
+            multEl.textContent='x'+mult;
+            lotteryPopEffect(document.getElementById('lottery-box'));
+
+            const lot=picks[teamNo]||1;
+            const stats=calcTeamStats(teamNo);
+            const baseAbs=stats?Math.abs(stats.diffSum):0;
+            const bonus=baseAbs*sign*mult*lot;
+            const bonusTxt=bonus>=0?`+${bonus}`:`${bonus}`;
+
+            statusEl.textContent=`${person} の ${teamName}（${lot}口）が ${sign>0?'＋':'－'} × x${mult}`;
+            resultEl.textContent=`得失点差 ${baseAbs} → ボーナス ${bonusTxt}（※シミュレーションのみ・未反映）`;
+            btn.disabled=false;
+
+            lastLotteryResult={person,teamName,teamNo,lot,sign,mult,baseAbs,bonus};
+            revealBtn.style.display='block';
+          });
+        });
+      }, 500);
+    });
+  });
+}
+
+// 「もし発動したら？」：抽選結果を反映した仮の最終順位表を表示する
+// renderRankingsと大逆転抽選シミュレーションの両方で使う、共通の順位付けロジック。
+// scores: [{member, total, wins, maxPlus, maxMinus, ...}] の配列を受け取り、
+// 正式なタイブレークルールでソートした配列と、各メンバー→正式な順位番号(同順位対応)のMapを返す。
+function rankMembers(scores){
+  const sorted=[...scores].sort((a,b)=>{
+    // 1. 得失点差合計（多い方が上位）。null(未消化)は最下位扱い
+    if(a.total===null&&b.total===null)return 0;
+    if(a.total===null)return 1;
+    if(b.total===null)return -1;
+    if(b.total!==a.total)return b.total-a.total;
+    // 2. 口数を反映した合計勝利数が多い方
+    if(b.wins!==a.wins)return b.wins-a.wins;
+    // 3. 1試合での最大プラス得失点差が大きい方
+    const ap=a.maxPlus===null?-Infinity:a.maxPlus;
+    const bp=b.maxPlus===null?-Infinity:b.maxPlus;
+    if(bp!==ap)return bp-ap;
+    // 4. 1試合での最大マイナス得失点差が小さい方が上位（敗戦なしが最も上位、次に-1、-2、-5の順）
+    if(a.maxMinus===null&&b.maxMinus!==null)return -1;
+    if(a.maxMinus!==null&&b.maxMinus===null)return 1;
+    if(a.maxMinus!==null&&b.maxMinus!==null&&a.maxMinus!==b.maxMinus)return b.maxMinus-a.maxMinus;
+    // 5. 完全に同じなら同順位（安定ソートに任せる）
+    return 0;
+  });
+  // 同順位判定：直前と全指標が同じなら同じ順位番号を振る
+  const rankMap=new Map();
+  let dispRank=1;
+  sorted.forEach((s,i)=>{
+    if(i>0){
+      const p=sorted[i-1];
+      const same=(s.total===p.total)&&(s.wins===p.wins)&&(s.maxPlus===p.maxPlus)&&(s.maxMinus===p.maxMinus);
+      if(!same)dispRank=i+1;
+    }
+    rankMap.set(s.member,dispRank);
+  });
+  return {sorted,rankMap};
+}
+
+function revealFinalStandings(){
+  if(!lastLotteryResult)return;
+  document.getElementById('lottery-box').style.display='none';
+  const standingsEl=document.getElementById('lottery-standings');
+  const listEl=document.getElementById('lottery-standings-list');
+  standingsEl.style.display='block';
+  listEl.innerHTML='';
+
+  // 現在の順位（ボーナスなし）。renderRankingsと同じ指標・同じタイブレークルールを使う
+  const beforeScores=MEMBERS.map(m=>{
+    const s=calcMemberStats(m);
+    return {member:m,total:s?s.total:null,wins:s?s.wins:0,maxPlus:s?s.maxPlus:null,maxMinus:s?s.maxMinus:null};
+  });
+  const {rankMap:beforeRankMap}=rankMembers(beforeScores);
+
+  // ボーナス反映後の順位。ボーナスはtotalだけに加算し、wins/maxPlus/maxMinus等の
+  // 実際の試合統計は変更しない（架空の演出ボーナスであって、実試合の勝敗ではないため）
+  const afterScores=MEMBERS.map(m=>{
+    const s=calcMemberStats(m);
+    const base=s?s.total:null;
+    const bonus=(m===lastLotteryResult.person)?lastLotteryResult.bonus:0;
+    const total=(base===null)?(bonus||null):base+bonus;
+    return {
+      member:m, total,
+      wins:s?s.wins:0, maxPlus:s?s.maxPlus:null, maxMinus:s?s.maxMinus:null,
+      affected:m===lastLotteryResult.person
+    };
+  });
+  const {sorted:afterRanked,rankMap:afterRankMap}=rankMembers(afterScores);
+
+  // 「1位が入れ替わったか」は、同順位を考慮した正式な1位グループ同士を比較する
+  const beforeTopGroup=new Set([...beforeRankMap.entries()].filter(([,r])=>r===1).map(([m])=>m));
+  const afterTopGroup=new Set([...afterRankMap.entries()].filter(([,r])=>r===1).map(([m])=>m));
+  let topChanged=false;
+  if(beforeTopGroup.size!==afterTopGroup.size){
+    topChanged=true;
+  }else{
+    for(const m of afterTopGroup){if(!beforeTopGroup.has(m)){topChanged=true;break;}}
+  }
+
+  afterRanked.forEach((s)=>{
+    const newRank=afterRankMap.get(s.member);
+    const oldRank=beforeRankMap.get(s.member)||MEMBERS.length;
+    const diff=oldRank-newRank; // 正なら順位アップ
+    const changeCls=diff>0?'up':diff<0?'down':'same';
+    const changeTxt=diff>0?`▲${diff}`:diff<0?`▼${Math.abs(diff)}`:'→';
+    const scoreCls=(s.total===null)?'':(s.total>0?'plus':s.total<0?'minus':'');
+    const scoreTxt=s.total===null?'試合待':(s.total>0?`+${s.total}`:String(s.total));
+    const medal=newRank===1?'🥇':newRank===2?'🥈':newRank===3?'🥉':newRank;
+
+    const row=document.createElement('div');
+    row.className='lottery-standing-row'+(s.affected?' affected':'')+(diff>0?' rank-up':'');
+    row.innerHTML=`
+      <div style="font-size:15px;font-weight:900;min-width:28px;text-align:center;">${medal}</div>
+      <div class="lottery-standing-name">${s.member}${s.affected?' 🎯':''}</div>
+      <div class="lottery-rank-change ${changeCls}">${changeTxt}</div>
+      <div class="lottery-standing-score ${scoreCls}">${scoreTxt}</div>
+    `;
+    listEl.appendChild(row);
+  });
+
+  if(topChanged){
+    setTimeout(()=>spawnConfetti(), 200);
+  }
+}
+
+function backToLotteryBox(){
+  document.getElementById('lottery-standings').style.display='none';
+  document.getElementById('lottery-box').style.display='block';
+}
+
 async function saveAdmin(){
   if(adminMode==='cost'){
     if(!cloud.teamData)cloud.teamData={};
@@ -2179,7 +2619,7 @@ function closeModalBtn(){document.getElementById('modal-overlay').classList.remo
 
 // SCHEDULEに「どのラウンドまで登録済みであるべきか」を1箇所で管理する。
 // 3回戦をSCHEDULEへ追加したら 'r3' に変更するだけでよい（BRACKET_ROUND_ORDERから対象ラウンドを自動算出）。
-const SCHEDULE_COMPLETE_THROUGH='qf';
+const SCHEDULE_COMPLETE_THROUGH='sf';
 
 function validateScheduleAgainstBracket(){
   const problems=[];
