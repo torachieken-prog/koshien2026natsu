@@ -422,7 +422,7 @@
 <div style="text-align:center;background:var(--ink);padding-bottom:6px;">
   <button class="header-reload-btn" onclick="loadCloud(true)">🔄 最新の状態に更新</button>
 </div>
-<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/19 16:01</div>
+<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);background:var(--ink);padding:2px 0 4px;letter-spacing:1px;">更新: 2026/08/21 13:28</div>
 <div class="tabs-wrapper"><div class="tabs" id="tabs"></div></div>
 </div>
 
@@ -1425,7 +1425,7 @@ const BRACKET_DATA={
     {id:2,round:'sf',date:'8/20(木)',time:'10:30',homeNo:31,awayNo:11,home:'天理',away:'健大高崎',homeSrc:null,awaySrc:null,next:{round:'f',id:1}},
   ],
   f:[
-    {id:1,round:'f',date:'8/22(土)',time:'10:00',homeNo:0,awayNo:0,home:null,away:null,homeSrc:null,awaySrc:null,next:null},
+    {id:1,round:'f',date:'8/22(土)',time:'10:00',homeNo:32,awayNo:11,home:'智辯和歌山',away:'健大高崎',homeSrc:null,awaySrc:null,next:null},
   ],
 };
 
@@ -1504,6 +1504,9 @@ const SCHEDULE=[
   {date:'8/20(木)',day:16,today:false,games:[
     {time:'8:00',round:'sf',home:'智辯和歌山',away:'横浜',homeNo:32,awayNo:16},
     {time:'10:30',round:'sf',home:'天理',away:'健大高崎',homeNo:31,awayNo:11}
+  ]},
+  {date:'8/22(土)',day:18,today:false,games:[
+    {time:'10:00',round:'f',home:'智辯和歌山',away:'健大高崎',homeNo:32,awayNo:11}
   ]},
 ];
 const MEMBERS=['しんちゃん','かっちゃん','だいちゃん','まさちゃん','くろさん','ゆっきー','とみー','うっちー','みたにさん'];
@@ -2057,7 +2060,8 @@ function getFirstAppearance(no){
 //   'pending'  : 対戦カードが確定していて、まだ結果が未入力（＝今すぐ入力すべき）
 //   'advancing': 直近の試合には結果が入っていて勝利しているが、次の対戦カードがまだ
 //                BRACKET_DATA上に存在しない、または未確定（＝今は入力対象なし・抽選待ち含む）
-//   'done'     : 敗退が確定している（直近の試合に負けている）
+//   'done'     : 敗退が確定している（直近の試合に負けている）。または決勝(f)が終了した校
+//                （優勝校・準優勝校とも、大会が終わっているので入力対象ではないためdone扱い）
 function getTeamStatus(no){
   let sawAnyGame=false;
   let wonLastSeenGame=false; // 最後に見つかった（終了済みの）試合で、この校が勝っていたか
@@ -2069,6 +2073,9 @@ function getTeamStatus(no){
         sawAnyGame=true;
         if(g.done){
           wonLastSeenGame=(g.winnerNo===no);
+          // 決勝が終了していれば、勝敗にかかわらずここで大会終了＝doneが確定する
+          // （優勝校が次のラウンド不在により「勝ち進み中」と誤表示されるのを防ぐ）
+          if(rkey==='f')return 'done';
           continue; // この試合はもう結果が入っている。次のラウンドも見る
         }
         if(g.homeNo&&g.awayNo)return 'pending';   // 対戦カード確定・未入力
@@ -2666,7 +2673,7 @@ function closeModalBtn(){document.getElementById('modal-overlay').classList.remo
 
 // SCHEDULEに「どのラウンドまで登録済みであるべきか」を1箇所で管理する。
 // 3回戦をSCHEDULEへ追加したら 'r3' に変更するだけでよい（BRACKET_ROUND_ORDERから対象ラウンドを自動算出）。
-const SCHEDULE_COMPLETE_THROUGH='sf';
+const SCHEDULE_COMPLETE_THROUGH='f';
 
 function validateScheduleAgainstBracket(){
   const problems=[];
